@@ -45,3 +45,12 @@ extension UIView
         }
     }
 }
+
+
+extension UIColor
+{
+    var AppColor: UIColor
+    {
+        return UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
+    }
+}

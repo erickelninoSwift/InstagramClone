@@ -10,6 +10,33 @@ import UIKit
 
 class LoginViewController: UIViewController
 {
+    
+   
+    
+    lazy var headerView: UIView =
+        {
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.heightAnchor.constraint(equalToConstant: 150).isActive = true
+             view.backgroundColor = UIColor(red: 0/255, green: 120/255, blue: 175/255, alpha: 1)
+            
+            var imageLogoView = UIImageView(image: UIImage(named: "Instagram_logo_white")?.withRenderingMode(.alwaysOriginal))
+            imageLogoView.translatesAutoresizingMaskIntoConstraints = false
+            imageLogoView.contentMode = .scaleAspectFill
+            
+            
+            view.addSubview(imageLogoView)
+            
+            NSLayoutConstraint.activate([imageLogoView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                                         imageLogoView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                                         imageLogoView.heightAnchor.constraint(equalToConstant: 50),
+                                         imageLogoView.widthAnchor.constraint(equalToConstant: 200)
+            ])
+            
+           
+            return view
+    }()
+    
     let emailtextfield: UITextField =
     {
         let tf = UITextField()
@@ -47,11 +74,26 @@ class LoginViewController: UIViewController
         button.setTitle("Login", for: .normal)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
+        button.backgroundColor = UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         button.layer.cornerRadius = 5
         
         return button
+    }()
+    
+    
+    private var dontHaveAccountButton: UIButton =
+    {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        let attributted = NSAttributedString(string: "Sign Up", attributes: [.font: UIFont.boldSystemFont(ofSize: 14),.foregroundColor: UIColor(red: 0/255, green: 120/255, blue: 175/255, alpha: 1)])
+        let MuttableAttributed = NSMutableAttributedString(string: "Don't have an account ?", attributes: [.font:UIFont.preferredFont(forTextStyle: .caption1), .foregroundColor: UIColor.darkGray])
+        MuttableAttributed.append(attributted)
+        button.setAttributedTitle(MuttableAttributed, for: .normal)
+        
+        return button
+        
     }()
     
     
@@ -60,6 +102,14 @@ class LoginViewController: UIViewController
         style()
         layout()
         buttonActions()
+        navigationcontroller()
+    }
+    
+    
+    func navigationcontroller()
+    {
+        navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.barStyle = .black
     }
 }
 
@@ -78,13 +128,26 @@ extension LoginViewController
         stackController.distribution = .fillEqually
         stackController.spacing = 10
         
+        view.addSubview(headerView)
         view.addSubview(stackController)
+        view.addSubview(dontHaveAccountButton)
+        
+        NSLayoutConstraint.activate([headerView.topAnchor.constraint(equalTo: view.topAnchor),
+                                     headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                                     headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
         
         
-        NSLayoutConstraint.activate([stackController.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 10),
+        
+        NSLayoutConstraint.activate([stackController.topAnchor.constraint(equalToSystemSpacingBelow: headerView.bottomAnchor, multiplier: 5),
                                      stackController.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 4),
                                      view.trailingAnchor.constraint(equalToSystemSpacingAfter: stackController.trailingAnchor, multiplier: 4),
                                      
+        ])
+        
+        
+        NSLayoutConstraint.activate([view.bottomAnchor.constraint(equalToSystemSpacingBelow: dontHaveAccountButton.bottomAnchor, multiplier: 2),
+                                     dontHaveAccountButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
 }
@@ -93,11 +156,21 @@ extension LoginViewController
 {
     func buttonActions()
     {
+        
         loginBUtton.addTarget(self, action: #selector(HandleloginAction), for: .primaryActionTriggered)
+        dontHaveAccountButton.addTarget(self, action: #selector(HandleSignupButtonAction), for: .primaryActionTriggered)
     }
     
     @objc func HandleloginAction()
     {
         print("DEBUG: LOGIN !!!")
     }
+    
+    @objc func HandleSignupButtonAction()
+    {
+        let controller = SignUpViewController()
+        controller.modalPresentationStyle = .fullScreen
+        navigationController?.pushViewController(controller, animated: true)
+    }
 }
+
