@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
 
 class SignUpViewController: UIViewController {
     
@@ -78,6 +80,7 @@ class SignUpViewController: UIViewController {
         tf.backgroundColor = .init(white: 0, alpha: 0.04)
         tf.font = UIFont.preferredFont(forTextStyle: .body)
         tf.textColor = .darkGray
+        tf.isSecureTextEntry = true
         tf.heightAnchor.constraint(equalToConstant: 40).isActive = true
         return tf
         
@@ -175,6 +178,8 @@ extension SignUpViewController
         PlusPhotoButton.addTarget(self, action: #selector(HandlePhotoPlusAction), for: .primaryActionTriggered)
         signUpButton.addTarget(self, action: #selector(HandlesignUpButtonPressed), for: .primaryActionTriggered)
         AlreadyHaveanAccountButton.addTarget(self,action: #selector(HandleLoginAccountPressed), for: .primaryActionTriggered)
+        signUpButton.isEnabled = false
+        
     }
     
     @objc func HandlePhotoPlusAction()
@@ -184,14 +189,18 @@ extension SignUpViewController
     
     @objc func HandlesignUpButtonPressed()
     {
-        print("DEBUG: SIGN UP!!!!")
+        guard let email = Emailtextfield.text else {return}
+        guard let password = Passwordtetxfield.text else {return}
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (Results, Error) in
+         
+        }
     }
     
     @objc func HandleLoginAccountPressed()
     {
-        let controller = LoginViewController()
-        controller.modalPresentationStyle = .fullScreen
-        self.navigationController?.popToRootViewController(animated: true)
+        _ = navigationController?.popToRootViewController(animated: true)
+        
     }
 }
 

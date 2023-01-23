@@ -11,14 +11,12 @@ import UIKit
 class LoginViewController: UIViewController
 {
     
-   
-    
     lazy var headerView: UIView =
         {
             let view = UIView()
             view.translatesAutoresizingMaskIntoConstraints = false
             view.heightAnchor.constraint(equalToConstant: 150).isActive = true
-             view.backgroundColor = UIColor(red: 0/255, green: 120/255, blue: 175/255, alpha: 1)
+            view.backgroundColor = UIColor(red: 0/255, green: 120/255, blue: 175/255, alpha: 1)
             
             var imageLogoView = UIImageView(image: UIImage(named: "Instagram_logo_white")?.withRenderingMode(.alwaysOriginal))
             imageLogoView.translatesAutoresizingMaskIntoConstraints = false
@@ -33,7 +31,7 @@ class LoginViewController: UIViewController
                                          imageLogoView.widthAnchor.constraint(equalToConstant: 200)
             ])
             
-           
+            
             return view
     }()
     
@@ -47,6 +45,7 @@ class LoginViewController: UIViewController
         tf.font = UIFont.preferredFont(forTextStyle: .body)
         tf.textColor = .darkGray
         tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        tf.addTarget(self, action: #selector(HandleValidation), for: .editingChanged)
         return tf
         
     }()
@@ -61,9 +60,24 @@ class LoginViewController: UIViewController
         tf.backgroundColor = .init(white: 0, alpha: 0.04)
         tf.font = UIFont.preferredFont(forTextStyle: .body)
         tf.textColor = .darkGray
+        tf.isSecureTextEntry = true
+         tf.addTarget(self, action: #selector(HandleValidation), for: .editingChanged)
         tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return tf
         
+    }()
+    
+    private var messageLabel: UILabel =
+    {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.textColor = .systemRed
+        label.textAlignment = .center
+        label.text = "Email address/ Password failed!"
+        label.numberOfLines = 0
+        label.alpha = 0
+        return label
     }()
     
     
@@ -118,11 +132,12 @@ extension LoginViewController
     private func style()
     {
         view.backgroundColor = .white
+//        view.addSubview(messageLabel)
     }
     
     private func layout()
     {
-        let stackController = UIStackView(arrangedSubviews: [emailtextfield,passwordTextfield,loginBUtton])
+        let stackController = UIStackView(arrangedSubviews: [emailtextfield,passwordTextfield,loginBUtton,messageLabel])
         stackController.translatesAutoresizingMaskIntoConstraints = false
         stackController.axis = .vertical
         stackController.distribution = .fillEqually
@@ -158,6 +173,7 @@ extension LoginViewController
     {
         
         loginBUtton.addTarget(self, action: #selector(HandleloginAction), for: .primaryActionTriggered)
+        loginBUtton.isEnabled = false
         dontHaveAccountButton.addTarget(self, action: #selector(HandleSignupButtonAction), for: .primaryActionTriggered)
     }
     
@@ -171,6 +187,32 @@ extension LoginViewController
         let controller = SignUpViewController()
         controller.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(controller, animated: true)
+    }
+}
+
+extension LoginViewController
+{
+    @objc func HandleValidation()
+    {
+        guard emailtextfield.hasText,
+            passwordTextfield.hasText else{
+              validation(buttonisEnable: false)
+                return
+        }
+        validation(buttonisEnable: true)
+    }
+
+    
+    func validation(buttonisEnable: Bool)
+    {
+        loginBUtton.isEnabled = buttonisEnable
+        if buttonisEnable
+        {
+            loginBUtton.backgroundColor = loginBUtton.isEnabled ? UIColor(red: 0/255, green: 120/255, blue: 175/255, alpha: 1) : UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
+        }else
+        {
+            loginBUtton.backgroundColor = loginBUtton.isEnabled ? UIColor(red: 0/255, green: 120/255, blue: 175/255, alpha: 1) : UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
+        }
     }
 }
 
