@@ -36,6 +36,7 @@ class SignUpViewController: UIViewController {
         tf.backgroundColor = .init(white: 0, alpha: 0.04)
         tf.font = UIFont.preferredFont(forTextStyle: .body)
         tf.textColor = .darkGray
+        tf.addTarget(self, action: #selector(Handlevalidation), for: .editingChanged)
         tf.heightAnchor.constraint(equalToConstant: 40).isActive = true
         return tf
         
@@ -51,6 +52,7 @@ class SignUpViewController: UIViewController {
         tf.backgroundColor = .init(white: 0, alpha: 0.04)
         tf.font = UIFont.preferredFont(forTextStyle: .body)
         tf.textColor = .darkGray
+         tf.addTarget(self, action: #selector(Handlevalidation), for: .editingChanged)
         tf.heightAnchor.constraint(equalToConstant: 40).isActive = true
         return tf
         
@@ -65,6 +67,7 @@ class SignUpViewController: UIViewController {
         tf.backgroundColor = .init(white: 0, alpha: 0.04)
         tf.font = UIFont.preferredFont(forTextStyle: .body)
         tf.textColor = .darkGray
+         tf.addTarget(self, action: #selector(Handlevalidation), for: .editingChanged)
         tf.heightAnchor.constraint(equalToConstant: 40).isActive = true
         return tf
         
@@ -81,6 +84,7 @@ class SignUpViewController: UIViewController {
         tf.font = UIFont.preferredFont(forTextStyle: .body)
         tf.textColor = .darkGray
         tf.isSecureTextEntry = true
+         tf.addTarget(self, action: #selector(Handlevalidation), for: .editingChanged)
         tf.heightAnchor.constraint(equalToConstant: 40).isActive = true
         return tf
         
@@ -202,6 +206,21 @@ extension SignUpViewController
         _ = navigationController?.popToRootViewController(animated: true)
         
     }
+    
+    @objc func Handlevalidation(textfield: UITextField)
+    {
+        guard Emailtextfield.hasText,Usernametextfield.hasText,FullnameTextfield.hasText,Passwordtetxfield.hasText
+        else
+        {
+            signUpButton.isEnabled = false
+            signUpButton.backgroundColor = signUpButton.isEnabled ? UIColor(red: 0/255, green: 120/255, blue: 175/255, alpha: 1) : UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
+            return
+        }
+        
+        signUpButton.isEnabled = true
+        signUpButton.backgroundColor = signUpButton.isEnabled ? UIColor(red: 0/255, green: 120/255, blue: 175/255, alpha: 1) : UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
+    }
+    
 }
 
 extension SignUpViewController

@@ -61,7 +61,7 @@ class LoginViewController: UIViewController
         tf.font = UIFont.preferredFont(forTextStyle: .body)
         tf.textColor = .darkGray
         tf.isSecureTextEntry = true
-         tf.addTarget(self, action: #selector(HandleValidation), for: .editingChanged)
+        tf.addTarget(self, action: #selector(HandleValidation), for: .editingChanged)
         tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return tf
         
@@ -132,7 +132,7 @@ extension LoginViewController
     private func style()
     {
         view.backgroundColor = .white
-//        view.addSubview(messageLabel)
+        //        view.addSubview(messageLabel)
     }
     
     private func layout()
@@ -196,12 +196,12 @@ extension LoginViewController
     {
         guard emailtextfield.hasText,
             passwordTextfield.hasText else{
-              validation(buttonisEnable: false)
+                validation(buttonisEnable: false)
                 return
         }
         validation(buttonisEnable: true)
     }
-
+    
     
     func validation(buttonisEnable: Bool)
     {
