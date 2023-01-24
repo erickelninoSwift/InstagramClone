@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+
 
 class LoginViewController: UIViewController
 {
@@ -171,7 +173,6 @@ extension LoginViewController
 {
     func buttonActions()
     {
-        
         loginBUtton.addTarget(self, action: #selector(HandleloginAction), for: .primaryActionTriggered)
         loginBUtton.isEnabled = false
         dontHaveAccountButton.addTarget(self, action: #selector(HandleSignupButtonAction), for: .primaryActionTriggered)
@@ -179,7 +180,22 @@ extension LoginViewController
     
     @objc func HandleloginAction()
     {
-        print("DEBUG: LOGIN !!!")
+        guard let username = emailtextfield.text else {return}
+        guard let password = passwordTextfield.text else {return}
+        
+        Auth.auth().signIn(withEmail: username, password: password) { (Dataresult, Error) in
+            if let error = Error
+            {
+                self.messageLabel.alpha = 1
+                self.messageLabel.text = "\(error.localizedDescription)"
+                return
+            }
+            
+            self.messageLabel.alpha = 0
+            print("DEBUG: User is logged In !!!")
+            
+        }
+        
     }
     
     @objc func HandleSignupButtonAction()
