@@ -12,6 +12,10 @@ import FirebaseAuth
 
 class SignUpViewController: UIViewController {
     
+    
+    
+    private var imageSelected: Bool = false
+    
     private lazy var PlusPhotoButton: UIButton =
     {
         let button = UIButton(type: .system)
@@ -23,6 +27,7 @@ class SignUpViewController: UIViewController {
         button.heightAnchor.constraint(equalToConstant: 150).isActive = true
         button.widthAnchor.constraint(equalToConstant: 150).isActive = true
         button.layer.cornerRadius = 150 / 2
+        
         
         return button
     }()
@@ -52,7 +57,7 @@ class SignUpViewController: UIViewController {
         tf.backgroundColor = .init(white: 0, alpha: 0.04)
         tf.font = UIFont.preferredFont(forTextStyle: .body)
         tf.textColor = .darkGray
-         tf.addTarget(self, action: #selector(Handlevalidation), for: .editingChanged)
+        tf.addTarget(self, action: #selector(Handlevalidation), for: .editingChanged)
         tf.heightAnchor.constraint(equalToConstant: 40).isActive = true
         return tf
         
@@ -67,7 +72,7 @@ class SignUpViewController: UIViewController {
         tf.backgroundColor = .init(white: 0, alpha: 0.04)
         tf.font = UIFont.preferredFont(forTextStyle: .body)
         tf.textColor = .darkGray
-         tf.addTarget(self, action: #selector(Handlevalidation), for: .editingChanged)
+        tf.addTarget(self, action: #selector(Handlevalidation), for: .editingChanged)
         tf.heightAnchor.constraint(equalToConstant: 40).isActive = true
         return tf
         
@@ -84,10 +89,23 @@ class SignUpViewController: UIViewController {
         tf.font = UIFont.preferredFont(forTextStyle: .body)
         tf.textColor = .darkGray
         tf.isSecureTextEntry = true
-         tf.addTarget(self, action: #selector(Handlevalidation), for: .editingChanged)
+        tf.addTarget(self, action: #selector(Handlevalidation), for: .editingChanged)
         tf.heightAnchor.constraint(equalToConstant: 40).isActive = true
         return tf
         
+    }()
+    
+    private lazy var errorLabel: UILabel =
+    {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.preferredFont(forTextStyle: .caption1)
+        label.textColor = .systemRed
+        label.textAlignment = .center
+        label.text = "Error while saving data"
+        label.numberOfLines = 0
+        label.alpha = 0
+        return label
     }()
     
     private let signUpButton: UIButton =
@@ -149,7 +167,7 @@ extension SignUpViewController
     
     private func layout()
     {
-        let stack = UIStackView(arrangedSubviews: [Emailtextfield,Usernametextfield,FullnameTextfield,Passwordtetxfield,signUpButton])
+        let stack = UIStackView(arrangedSubviews: [Emailtextfield,Usernametextfield,FullnameTextfield,Passwordtetxfield,signUpButton,errorLabel])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.spacing = 8
         stack.axis = .vertical
@@ -198,16 +216,64 @@ extension SignUpViewController
     
     @objc func HandlesignUpButtonPressed()
     {
-        guard let email = Emailtextfield.text else {return}
+        guard let email = Emailtextfield.text?.lowercased() else {return}
         guard let password = Passwordtetxfield.text else {return}
+        guard let fullname = FullnameTextfield.text?.lowercased() else {return}
+        guard let userName = Usernametextfield.text?.lowercased() else {return }
         
-        Auth.auth().createUser(withEmail: email, password: password) { (Results, Error) in
-            guard Error == nil else
-            { print("DEBUG: There was an Error \(Error!.localizedDescription)")
-                return
+        
+        if imageSelected == true
+        {
+            Auth.auth().createUser(withEmail: email, password: password) { (Results, Error) in
+                guard Error == nil else
+                { print("DEBUG: There was an Error \(Error!.localizedDescription)")
+                    self.errorLabel.alpha = 1
+                    self.errorLabel.text = "\(Error!.localizedDescription)"
+                    return
+                }
+                 self.errorLabel.alpha = 0
+                guard let profileImage = self.PlusPhotoButton.imageView?.image else {return}
+                guard let ImageData = profileImage.jpegData(compressionQuality: 0.3) else {return}
+                
+                let fileName = NSUUID().uuidString
+                
+                let Reference =  Storage.storage().reference().child("Profile_Image").child(fileName)
+                
+                 Reference.putData(ImageData) { metadata, Error in
+                    if let error  = Error
+                    {
+                        self.errorLabel.alpha = 1
+                        self.errorLabel.text = "\(error.localizedDescription)"
+                        return
+                    }
+                     self.errorLabel.alpha = 0
+                    guard let currentUserid = Auth.auth().currentUser?.uid else {return }
+                    
+                    Reference.downloadURL { (url, Error) in
+                        
+                        guard let profilepictureUrl = url?.absoluteString else {return}
+                        let userdictionary = ["UserId":currentUserid,"Username": userName,"Fullname": fullname,"Email":email,"Password":password,"ProfileImageURL":profilepictureUrl] as [String:Any]
+                        Database.database().reference().child("Users").child(currentUserid).updateChildValues(userdictionary) { (Error, Databaseref) in
+                            if let error  =  Error
+                            {
+                                self.errorLabel.alpha = 1
+                                self.errorLabel.text = "\(error.localizedDescription)"
+                                return
+                            }
+                            
+                            print("DEBUG: User was saved Successfully")
+                            self.errorLabel.alpha = 0
+                        }
+                    }
+                
+                }
+                
+                
+                print("DEBUG: User was successfully saved in the Database")
             }
-            
-            print("DEBUG: User was successfully saved in the Database")
+        }else
+        {
+            print("DEBUG: You need To select an Image for your profile picrture Before proceeding ")
         }
     }
     
@@ -219,8 +285,8 @@ extension SignUpViewController
     
     @objc func Handlevalidation(textfield: UITextField)
     {
-        guard Emailtextfield.hasText,Usernametextfield.hasText,FullnameTextfield.hasText,Passwordtetxfield.hasText
-        else
+        guard Emailtextfield.hasText,Usernametextfield.hasText,FullnameTextfield.hasText,Passwordtetxfield.hasText,imageSelected == true
+            else
         {
             signUpButton.isEnabled = false
             signUpButton.backgroundColor = signUpButton.isEnabled ? UIColor(red: 0/255, green: 120/255, blue: 175/255, alpha: 1) : UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
@@ -236,7 +302,17 @@ extension SignUpViewController
 extension SignUpViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let imageSelected = info[.originalImage] as? UIImage else {return}
-        print("DEBUG: Picture selected : \(imageSelected)")
+        guard let pcitureSelected = info[.editedImage] as? UIImage else
+        {
+            imageSelected = false
+            return
+            
+        }
+        
+        imageSelected = true
+        PlusPhotoButton.layer.borderColor = UIColor.white.cgColor
+        PlusPhotoButton.layer.borderWidth = 2
+        PlusPhotoButton.setImage(pcitureSelected.withRenderingMode(.alwaysOriginal), for: .normal)
+        self.dismiss(animated: true, completion: nil)
     }
 }
