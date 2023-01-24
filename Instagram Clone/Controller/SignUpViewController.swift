@@ -188,7 +188,12 @@ extension SignUpViewController
     
     @objc func HandlePhotoPlusAction()
     {
-        print("DEBUG: ADD PHOTO")
+        let controller = UIImagePickerController()
+        
+        controller.delegate = self
+        controller.modalPresentationStyle = .fullScreen
+        controller.allowsEditing = true
+        self.present(controller, animated: true, completion: nil)
     }
     
     @objc func HandlesignUpButtonPressed()
@@ -197,7 +202,12 @@ extension SignUpViewController
         guard let password = Passwordtetxfield.text else {return}
         
         Auth.auth().createUser(withEmail: email, password: password) { (Results, Error) in
-         
+            guard Error == nil else
+            { print("DEBUG: There was an Error \(Error!.localizedDescription)")
+                return
+            }
+            
+            print("DEBUG: User was successfully saved in the Database")
         }
     }
     
@@ -223,7 +233,10 @@ extension SignUpViewController
     
 }
 
-extension SignUpViewController
+extension SignUpViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
-    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let imageSelected = info[.originalImage] as? UIImage else {return}
+        print("DEBUG: Picture selected : \(imageSelected)")
+    }
 }
