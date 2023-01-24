@@ -14,5 +14,6 @@ class SearchFeedController: UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemGray
     }
 }
