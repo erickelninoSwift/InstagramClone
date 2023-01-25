@@ -23,6 +23,7 @@
 		94C4B2B7297C413D00B44056 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C4B2B6297C413D00B44056 /* Extensions.swift */; };
 		94C4B2B9297CF39B00B44056 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C4B2B8297CF39B00B44056 /* SignUpViewController.swift */; };
 		94C4B2BB297D4C9B00B44056 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94C4B2BA297D4C9B00B44056 /* GoogleService-Info.plist */; };
+		94E8395829815B05002B365C /* ProfileCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E8395729815B05002B365C /* ProfileCollectionViewHeader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		94C4B2B6297C413D00B44056 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		94C4B2B8297CF39B00B44056 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		94C4B2BA297D4C9B00B44056 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		94E8395729815B05002B365C /* ProfileCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewHeader.swift; sourceTree = "<group>"; };
 		9B738775C7C66D85EB099DAA /* Pods-Instagram Clone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instagram Clone.release.xcconfig"; path = "Target Support Files/Pods-Instagram Clone/Pods-Instagram Clone.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,6 +123,7 @@
 		94C4B2AE297B73CE00B44056 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				94E8395729815B05002B365C /* ProfileCollectionViewHeader.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				94C4B2B9297CF39B00B44056 /* SignUpViewController.swift in Sources */,
 				943E3DD3298067A3000CAA98 /* SearchFeedController.swift in Sources */,
 				943E3DCF29806742000CAA98 /* FeedController.swift in Sources */,
+				94E8395829815B05002B365C /* ProfileCollectionViewHeader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

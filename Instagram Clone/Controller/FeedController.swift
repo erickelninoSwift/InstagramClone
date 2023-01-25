@@ -27,7 +27,7 @@ class FeedController: UICollectionViewController
         style()
         Controllerlayout()
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewID)
-        self.title = "Feed"
+        navigationItem.title = "Feed"
     }
     
     required init?(coder: NSCoder) {

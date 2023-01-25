@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 
 private let profileIDcell = "ProfileViewcontrollerID"
-
+private let headerprofileID = "ProfileviewHeader"
 class ProfileController: UICollectionViewController
 {
     
@@ -25,6 +25,7 @@ class ProfileController: UICollectionViewController
         super.viewDidLoad()
          style()
          self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: profileIDcell)
+         self.collectionView.register(ProfileCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerprofileID)
     }
     
     required init?(coder: NSCoder) {
@@ -38,14 +39,14 @@ extension ProfileController
     private func style()
     {
         self.collectionView.backgroundColor = .white
-        self.title = "Profile"
+        
     }
 }
 extension ProfileController
 {
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return  0
+        return  1
     }
     
     
@@ -53,6 +54,14 @@ extension ProfileController
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: profileIDcell, for: indexPath)
         return cell
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerprofileID, for: indexPath) as? ProfileCollectionViewHeader else {return UICollectionReusableView()}
+        
+        return header
+    }
+    
+    
 }
 // API CALLS
 
@@ -61,10 +70,18 @@ extension ProfileController
     private func fetchCurrentuser()
     {
         guard let currentUSerID = Auth.auth().currentUser?.uid else {return}
-        print("DEBUG: Current User ID: \(currentUSerID)")
-        Database.database().reference().child("Users").child(currentUSerID).observeSingleEvent(of: .childAdded) { snapshots in
-            
+
+        Database.database().reference().child("Users").child(currentUSerID).observeSingleEvent(of: .value) { snapshots in
+            guard let datadictionary = snapshots.value as? [String:Any] else {return}
+            guard let currentusername = datadictionary["Username"] as? String else {return}
+            self.navigationItem.title = "\(currentusername)"
         }
     }
 }
 
+extension ProfileController: UICollectionViewDelegateFlowLayout
+{
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.width, height: 250)
+    }
+}
