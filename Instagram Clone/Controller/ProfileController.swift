@@ -9,18 +9,22 @@
 import UIKit
 import Firebase
 
+private let profileIDcell = "ProfileViewcontrollerID"
+
 class ProfileController: UICollectionViewController
 {
     
+
+    
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
-       
-        
+       fetchCurrentuser()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
          style()
+         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: profileIDcell)
     }
     
     required init?(coder: NSCoder) {
@@ -33,9 +37,34 @@ extension ProfileController
 {
     private func style()
     {
-        self.collectionView.backgroundColor = .systemYellow
+        self.collectionView.backgroundColor = .white
         self.title = "Profile"
     }
 }
+extension ProfileController
+{
+    
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return  0
+    }
+    
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: profileIDcell, for: indexPath)
+        return cell
+    }
+}
+// API CALLS
 
+extension ProfileController
+{
+    private func fetchCurrentuser()
+    {
+        guard let currentUSerID = Auth.auth().currentUser?.uid else {return}
+        print("DEBUG: Current User ID: \(currentUSerID)")
+        Database.database().reference().child("Users").child(currentUSerID).observeSingleEvent(of: .childAdded) { snapshots in
+            
+        }
+    }
+}
 

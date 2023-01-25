@@ -15,7 +15,6 @@ class FeedController: UICollectionViewController
 {
     
     
-    
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
         style()

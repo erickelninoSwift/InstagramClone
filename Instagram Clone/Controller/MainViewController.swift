@@ -11,6 +11,7 @@ import Firebase
 
 class MainViewController: UITabBarController
 {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         style()
@@ -86,4 +87,14 @@ extension MainViewController
             }
         }
     }
+}
+// API CALLS
+extension MainViewController
+{
+    
+    func fetchCurrentUserData()
+    {
+        
+    }
+    
 }
