@@ -34,7 +34,7 @@ extension MainViewController: UITabBarControllerDelegate
     }
     
     
-    private func viewcontrollers()
+     func viewcontrollers()
     {
         let feedController = buildnavigationController(selectedImage: UIImage(named: "home_selected"), unselctedImage: UIImage(named: "home_unselected"), rootViewController: FeedController(collectionViewLayout: UICollectionViewFlowLayout()))
         
@@ -56,8 +56,10 @@ extension MainViewController: UITabBarControllerDelegate
         let navigation = UINavigationController(rootViewController: rootViewController)
         navigation.tabBarItem.image = unselctedImage
         navigation.tabBarItem.selectedImage = selectedImage
-        navigation.navigationBar.barTintColor = .black
- 
+        navigation.navigationBar.barTintColor = .white
+        
+        
+        
         return navigation
     }
 }
@@ -73,14 +75,15 @@ extension MainViewController
 
 extension MainViewController
 {
-    private func checkUserifloggedIn()
+    func checkUserifloggedIn()
     {
-        if Auth.auth().currentUser?.uid != nil
+        if Auth.auth().currentUser?.uid == nil
         {
-            print("DEBUG: User is Logged In ")
-        }else
-        {
-            print("DEBUG: No user Please go back to loggin")
+            DispatchQueue.main.async {
+                let controller = UINavigationController(rootViewController: LoginViewController())
+                controller.modalPresentationStyle = .fullScreen
+                self.present(controller, animated: true, completion: nil)
+            }
         }
     }
 }

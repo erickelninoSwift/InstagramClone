@@ -125,7 +125,7 @@ class LoginViewController: UIViewController
     func navigationcontroller()
     {
         navigationController?.navigationBar.isHidden = true
-        navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.barStyle = .default
     }
 }
 
@@ -193,10 +193,11 @@ extension LoginViewController
             
             self.messageLabel.alpha = 0
             print("DEBUG: User is logged In !!!")
-            
-            let maintabbarVC = MainViewController()
-            maintabbarVC.modalPresentationStyle = .fullScreen
-            self.present(maintabbarVC, animated: true, completion: nil)
+            guard let mainVC = UIApplication.shared.windows.first(where: {$0.isKeyWindow}) else {return}
+            guard let tab = mainVC.rootViewController as? MainViewController else {return}
+            tab.viewcontrollers()
+            tab.checkUserifloggedIn()
+            self.dismiss(animated: true, completion: nil)
             
         }
         

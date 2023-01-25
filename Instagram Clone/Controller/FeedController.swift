@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 private let collectionViewID = "CollectionViewID"
 
@@ -18,7 +19,7 @@ class FeedController: UICollectionViewController
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
         style()
-      
+        
         
     }
     
@@ -27,6 +28,7 @@ class FeedController: UICollectionViewController
         style()
         Controllerlayout()
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewID)
+        self.title = "Feed"
     }
     
     required init?(coder: NSCoder) {
@@ -50,8 +52,9 @@ extension FeedController
 {
     private func style()
     {
-       
-        self.navigationController?.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(handlelogOut))
+        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handlelogOut))
+        self.navigationController?.navigationBar.tintColor = .black
     }
     
     
@@ -62,6 +65,29 @@ extension FeedController
     
     @objc func handlelogOut()
     {
-        print("DEBUG: Loggout button")
+        self.alertMessage(Message: "Are you sure you want to Logout ?", title: "Logout") { (alertAction) in
+            do
+            {
+                try Auth.auth().signOut()
+                let loginVC = LoginViewController()
+                loginVC.modalPresentationStyle = .fullScreen
+                self.present(loginVC, animated: true, completion: nil)
+            }catch
+            {
+                print("DEBUG: Errpr Found :")
+            }
+        }
+    }
+    
+    func alertMessage(Message: String, title: String, completion: @escaping(UIAlertAction) -> Void)
+    {
+        let alert = UIAlertController(title: title, message: Message, preferredStyle: .actionSheet)
+        let action = UIAlertAction(title: "Logout", style: .destructive, handler: completion)
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alertAction) in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(action)
+        alert.addAction(cancel)
+        self.present(alert, animated: true, completion: nil)
     }
 }

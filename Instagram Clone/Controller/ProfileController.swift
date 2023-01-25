@@ -34,6 +34,7 @@ extension ProfileController
     private func style()
     {
         self.collectionView.backgroundColor = .systemYellow
+        self.title = "Profile"
     }
 }
 
