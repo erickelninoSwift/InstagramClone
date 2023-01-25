@@ -194,6 +194,10 @@ extension LoginViewController
             self.messageLabel.alpha = 0
             print("DEBUG: User is logged In !!!")
             
+            let maintabbarVC = MainViewController()
+            maintabbarVC.modalPresentationStyle = .fullScreen
+            self.present(maintabbarVC, animated: true, completion: nil)
+            
         }
         
     }

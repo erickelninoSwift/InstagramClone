@@ -7,14 +7,33 @@
 //
 
 import UIKit
+import Firebase
 
-
-class ProfileController: UIViewController
+class ProfileController: UICollectionViewController
 {
+    
+    override init(collectionViewLayout layout: UICollectionViewLayout) {
+        super.init(collectionViewLayout: layout)
+       
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGreen
+         style()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}
+
+extension ProfileController
+{
+    private func style()
+    {
+        self.collectionView.backgroundColor = .systemYellow
     }
 }
 

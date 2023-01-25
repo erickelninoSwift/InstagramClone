@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class MainViewController: UITabBarController
 {
@@ -14,6 +15,7 @@ class MainViewController: UITabBarController
         super.viewDidLoad()
         style()
         layout()
+        checkUserifloggedIn()
     }
 }
 
@@ -38,13 +40,14 @@ extension MainViewController: UITabBarControllerDelegate
         
         let searchfeedController = buildnavigationController(selectedImage: UIImage(named:"search_selected"), unselctedImage: UIImage(named:"search_unselected"), rootViewController: SearchFeedController())
         
-        let postcontroller = buildnavigationController(selectedImage: UIImage(named: ""), unselctedImage: UIImage(named: ""), rootViewController: PostController())
+        let postcontroller = buildnavigationController(selectedImage: UIImage(named: "plus_unselected"), unselctedImage: UIImage(named: "plus_unselected"), rootViewController: PostController())
         
-        let notificationController = buildnavigationController(selectedImage: UIImage(named: ""), unselctedImage: UIImage(named: ""), rootViewController: NotificationController())
+        let notificationController = buildnavigationController(selectedImage: UIImage(named: "like_selected"), unselctedImage: UIImage(named: "like_unselected"), rootViewController: NotificationController())
         
-        let profilecontroller = buildnavigationController(selectedImage: UIImage(named: "profile_selected"), unselctedImage: UIImage(named: "profile_unselected"), rootViewController: ProfileController())
+        let profilecontroller = buildnavigationController(selectedImage: UIImage(named: "profile_selected"), unselctedImage: UIImage(named: "profile_unselected"), rootViewController: ProfileController(collectionViewLayout: UICollectionViewFlowLayout()))
         
         self.viewControllers = [feedController,searchfeedController,postcontroller,notificationController,profilecontroller]
+        self.tabBar.tintColor = .black
     }
     
     
@@ -54,6 +57,30 @@ extension MainViewController: UITabBarControllerDelegate
         navigation.tabBarItem.image = unselctedImage
         navigation.tabBarItem.selectedImage = selectedImage
         navigation.navigationBar.barTintColor = .black
+ 
         return navigation
+    }
+}
+extension MainViewController
+{
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if let index = viewControllers?.firstIndex(of: viewController)
+        {
+            print("DEBUG: Index : \(index)")
+        }
+    }
+}
+
+extension MainViewController
+{
+    private func checkUserifloggedIn()
+    {
+        if Auth.auth().currentUser?.uid != nil
+        {
+            print("DEBUG: User is Logged In ")
+        }else
+        {
+            print("DEBUG: No user Please go back to loggin")
+        }
     }
 }
