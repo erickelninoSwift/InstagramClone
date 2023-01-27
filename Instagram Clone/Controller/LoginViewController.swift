@@ -180,7 +180,7 @@ extension LoginViewController
     
     @objc func HandleloginAction()
     {
-        guard let username = emailtextfield.text else {return}
+        guard let username = emailtextfield.text?.lowercased() else {return}
         guard let password = passwordTextfield.text else {return}
         
         Auth.auth().signIn(withEmail: username, password: password) { (Dataresult, Error) in

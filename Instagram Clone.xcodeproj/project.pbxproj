@@ -25,6 +25,7 @@
 		94C4B2BB297D4C9B00B44056 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94C4B2BA297D4C9B00B44056 /* GoogleService-Info.plist */; };
 		94E8395829815B05002B365C /* ProfileCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E8395729815B05002B365C /* ProfileCollectionViewHeader.swift */; };
 		94E8395A2982AE11002B365C /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E839592982AE11002B365C /* UserModel.swift */; };
+		94E8395C29840182002B365C /* SearchViewControllerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E8395B29840182002B365C /* SearchViewControllerCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 		94C4B2BA297D4C9B00B44056 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94E8395729815B05002B365C /* ProfileCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewHeader.swift; sourceTree = "<group>"; };
 		94E839592982AE11002B365C /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		94E8395B29840182002B365C /* SearchViewControllerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewControllerCell.swift; sourceTree = "<group>"; };
 		9B738775C7C66D85EB099DAA /* Pods-Instagram Clone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instagram Clone.release.xcconfig"; path = "Target Support Files/Pods-Instagram Clone/Pods-Instagram Clone.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -126,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				94E8395729815B05002B365C /* ProfileCollectionViewHeader.swift */,
+				94E8395B29840182002B365C /* SearchViewControllerCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 				94E8395A2982AE11002B365C /* UserModel.swift in Sources */,
 				943E3DD5298067CC000CAA98 /* PostController.swift in Sources */,
 				94C4B2B7297C413D00B44056 /* Extensions.swift in Sources */,
+				94E8395C29840182002B365C /* SearchViewControllerCell.swift in Sources */,
 				943E3DD7298067F0000CAA98 /* ProfileController.swift in Sources */,
 				94C4B2B9297CF39B00B44056 /* SignUpViewController.swift in Sources */,
 				943E3DD3298067A3000CAA98 /* SearchFeedController.swift in Sources */,

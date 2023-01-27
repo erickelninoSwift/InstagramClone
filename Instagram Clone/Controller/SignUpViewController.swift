@@ -261,7 +261,13 @@ extension SignUpViewController
                                 return
                             }
                             
-                            print("DEBUG: User was saved Successfully")
+                            guard let controller = UIApplication.shared.windows.first(where: {$0.isKeyWindow}) else {return}
+                            guard let tab = controller.rootViewController as? MainViewController else {return}
+                            
+                            tab.checkUserifloggedIn()
+                            tab.fetchCurrentUserData()
+                            tab.viewcontrollers()
+                            self.dismiss(animated: true, completion: nil)
                             self.errorLabel.alpha = 0
                         }
                     }

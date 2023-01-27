@@ -61,6 +61,9 @@ extension UIImageView
 {
     func loadImage(with ImageURL: URL)
     {
+        
+        self.sd_setImage(with: ImageURL, completed: nil)
+        
         DispatchQueue.main.async {
             URLSession.shared.dataTask(with: ImageURL) { (data, response , error) in
                 guard let ImageData = data else {return}
