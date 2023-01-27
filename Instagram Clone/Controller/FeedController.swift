@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+typealias AlertFunction = (UIAlertAction) -> Void
 
 private let collectionViewID = "CollectionViewID"
 
@@ -18,8 +19,7 @@ class FeedController: UICollectionViewController
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
         style()
-        
-        
+
     }
     
     override  func viewDidLoad() {
@@ -78,7 +78,7 @@ extension FeedController
         }
     }
     
-    func alertMessage(Message: String, title: String, completion: @escaping(UIAlertAction) -> Void)
+    func alertMessage(Message: String, title: String, completion: @escaping(AlertFunction))
     {
         let alert = UIAlertController(title: title, message: Message, preferredStyle: .actionSheet)
         let action = UIAlertAction(title: "Logout", style: .destructive, handler: completion)

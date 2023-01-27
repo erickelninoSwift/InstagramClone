@@ -14,7 +14,7 @@ class SearchFeedController: UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray
+         view.backgroundColor = .white
         navigationItem.title = "Search"
     }
 }

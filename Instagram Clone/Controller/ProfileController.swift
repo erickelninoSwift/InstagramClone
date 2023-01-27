@@ -13,19 +13,24 @@ private let profileIDcell = "ProfileViewcontrollerID"
 private let headerprofileID = "ProfileviewHeader"
 class ProfileController: UICollectionViewController
 {
+    var user: UserModel?
+  
     
-
-    
-    override init(collectionViewLayout layout: UICollectionViewLayout) {
+    override init(collectionViewLayout layout: UICollectionViewLayout)
+    {
         super.init(collectionViewLayout: layout)
-       fetchCurrentuser()
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationItem.title = user?.username ?? ""
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-         style()
-         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: profileIDcell)
-         self.collectionView.register(ProfileCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerprofileID)
+        style()
+        self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: profileIDcell)
+        self.collectionView.register(ProfileCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerprofileID)
+        
     }
     
     required init?(coder: NSCoder) {
@@ -39,7 +44,6 @@ extension ProfileController
     private func style()
     {
         self.collectionView.backgroundColor = .white
-        
     }
 }
 extension ProfileController
@@ -52,11 +56,25 @@ extension ProfileController
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: profileIDcell, for: indexPath)
+       
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerprofileID, for: indexPath) as? ProfileCollectionViewHeader else {return UICollectionReusableView()}
+        
+        if let currentuserID = Auth.auth().currentUser?.uid
+        {
+            Database.database().reference().child("Users").child(currentuserID).observeSingleEvent(of: .value) { snapshots in
+                guard let datadictionary = snapshots.value as? [String:Any] else {return}
+                self.user = UserModel(dictionary: datadictionary)
+                header.currentUser = UserModel(dictionary: datadictionary)
+                let userone = UserModel(dictionary: datadictionary)
+                self.navigationItem.title = userone.username ?? ""
+            }
+        }
+        
         
         return header
     }
@@ -64,21 +82,6 @@ extension ProfileController
     
 }
 // API CALLS
-
-extension ProfileController
-{
-    private func fetchCurrentuser()
-    {
-        guard let currentUSerID = Auth.auth().currentUser?.uid else {return}
-
-        Database.database().reference().child("Users").child(currentUSerID).observeSingleEvent(of: .value) { snapshots in
-            guard let datadictionary = snapshots.value as? [String:Any] else {return}
-            guard let currentusername = datadictionary["Username"] as? String else {return}
-            self.navigationItem.title = "\(currentusername)"
-        }
-    }
-}
-
 extension ProfileController: UICollectionViewDelegateFlowLayout
 {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {

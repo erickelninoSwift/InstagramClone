@@ -14,7 +14,7 @@ class PostController: UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemPink
+        view.backgroundColor = .white
         navigationItem.title = "Post"
     }
 }

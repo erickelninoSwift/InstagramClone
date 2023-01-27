@@ -14,6 +14,7 @@ class MainViewController: UITabBarController
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchCurrentUserData()
         style()
         layout()
         checkUserifloggedIn()
@@ -35,7 +36,7 @@ extension MainViewController: UITabBarControllerDelegate
     }
     
     
-     func viewcontrollers()
+    func viewcontrollers()
     {
         let feedController = buildnavigationController(selectedImage: UIImage(named: "home_selected"), unselctedImage: UIImage(named: "home_unselected"), rootViewController: FeedController(collectionViewLayout: UICollectionViewFlowLayout()))
         
@@ -94,7 +95,7 @@ extension MainViewController
     
     func fetchCurrentUserData()
     {
-        
+      
     }
     
 }
