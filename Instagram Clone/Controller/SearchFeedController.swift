@@ -12,8 +12,6 @@ import SDWebImage
 
 class SearchFeedController: UITableViewController
 {
-    
-    
     private let searchbar = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
@@ -31,11 +29,10 @@ extension SearchFeedController
         self.tableView.register(SearchViewControllerCell.self, forCellReuseIdentifier: SearchViewControllerCell.searchcellid)
         self.tableView.rowHeight = 80
         self.tableView.tableFooterView = UIView()
+        self.tableView.separatorStyle = .none
         
         self.searchbar.delegate = self
         navigationItem.searchController = searchbar
-    
-        
     }
     
     
