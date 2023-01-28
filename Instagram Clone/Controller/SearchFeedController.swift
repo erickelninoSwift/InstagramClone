@@ -54,13 +54,17 @@ extension SearchFeedController
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchViewControllerCell.searchcellid, for: indexPath) as? SearchViewControllerCell else {return UITableViewCell()}
-        
+        cell.currentUser = userCollection[indexPath.row]
         return cell
     }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.deselectRow(at: indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard let username = userCollection[indexPath.row].username else {return}
+        print("DEBUG: USER IS :\(username)")
     }
+    
+   
 }
 extension SearchFeedController
 {

@@ -13,6 +13,14 @@ class SearchViewControllerCell: UITableViewCell
     static let searchcellid = "SearchViewControllerCell"
     
     
+     var currentUser: UserModel?
+    {
+        didSet
+        {
+            configure()
+        }
+    }
+    
     private let profilepic: UIImageView =
     {
         let propic = UIImageView()
@@ -73,7 +81,6 @@ class SearchViewControllerCell: UITableViewCell
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         configureationCell()
         layout()
-        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -124,6 +131,10 @@ extension SearchViewControllerCell
 {
     fileprivate func configure()
     {
+        guard let myuser = currentUser else {return}
+        self.usernameLabel.text = myuser.username
+        self.FullnameLabrl.text = myuser.fullname
+        self.profilepic.loadImage(with: myuser.profileImage)
         
     }
 }
