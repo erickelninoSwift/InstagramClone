@@ -26,6 +26,7 @@
 		94E8395829815B05002B365C /* ProfileCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E8395729815B05002B365C /* ProfileCollectionViewHeader.swift */; };
 		94E8395A2982AE11002B365C /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E839592982AE11002B365C /* UserModel.swift */; };
 		94E8395C29840182002B365C /* SearchViewControllerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E8395B29840182002B365C /* SearchViewControllerCell.swift */; };
+		94E8395F2984AF5B002B365C /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E8395E2984AF5B002B365C /* Services.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		94E8395729815B05002B365C /* ProfileCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewHeader.swift; sourceTree = "<group>"; };
 		94E839592982AE11002B365C /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		94E8395B29840182002B365C /* SearchViewControllerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewControllerCell.swift; sourceTree = "<group>"; };
+		94E8395E2984AF5B002B365C /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
 		9B738775C7C66D85EB099DAA /* Pods-Instagram Clone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instagram Clone.release.xcconfig"; path = "Target Support Files/Pods-Instagram Clone/Pods-Instagram Clone.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +98,7 @@
 		94C4B298297A9E7F00B44056 /* Instagram Clone */ = {
 			isa = PBXGroup;
 			children = (
+				94E8395D2984AF37002B365C /* Services */,
 				94C4B2BA297D4C9B00B44056 /* GoogleService-Info.plist */,
 				94C4B2B5297C405100B44056 /* Utils */,
 				94C4B2B2297B741D00B44056 /* Files */,
@@ -165,6 +168,14 @@
 				94C4B2B6297C413D00B44056 /* Extensions.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		94E8395D2984AF37002B365C /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				94E8395E2984AF5B002B365C /* Services.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		988652CB04F94A604203B5BB /* Frameworks */ = {
@@ -301,6 +312,7 @@
 				94C4B2B7297C413D00B44056 /* Extensions.swift in Sources */,
 				94E8395C29840182002B365C /* SearchViewControllerCell.swift in Sources */,
 				943E3DD7298067F0000CAA98 /* ProfileController.swift in Sources */,
+				94E8395F2984AF5B002B365C /* Services.swift in Sources */,
 				94C4B2B9297CF39B00B44056 /* SignUpViewController.swift in Sources */,
 				943E3DD3298067A3000CAA98 /* SearchFeedController.swift in Sources */,
 				943E3DCF29806742000CAA98 /* FeedController.swift in Sources */,

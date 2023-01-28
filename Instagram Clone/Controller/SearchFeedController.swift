@@ -14,13 +14,19 @@ class SearchFeedController: UITableViewController
 {
     private let searchbar = UISearchController(searchResultsController: nil)
     
+    
+    private var userCollection = [UserModel]()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-         view.backgroundColor = .white
+        view.backgroundColor = .white
         navigationItem.title = "Search"
         style()
         layout()
+        getAllusers()
     }
+    
 }
 extension SearchFeedController
 {
@@ -29,9 +35,7 @@ extension SearchFeedController
         self.tableView.register(SearchViewControllerCell.self, forCellReuseIdentifier: SearchViewControllerCell.searchcellid)
         self.tableView.rowHeight = 80
         self.tableView.tableFooterView = UIView()
-        self.tableView.separatorStyle = .none
-        
-        self.searchbar.delegate = self
+        self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 80, bottom: 0, right: 0)
         navigationItem.searchController = searchbar
     }
     
@@ -45,12 +49,12 @@ extension SearchFeedController
 extension SearchFeedController
 {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return userCollection.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchViewControllerCell.searchcellid, for: indexPath) as? SearchViewControllerCell else {return UITableViewCell()}
-       
+        
         return cell
     }
     
@@ -58,11 +62,18 @@ extension SearchFeedController
         self.tableView.deselectRow(at: indexPath, animated: true)
     }
 }
-
-extension SearchFeedController: UISearchControllerDelegate, UISearchResultsUpdating
+extension SearchFeedController
 {
-    func updateSearchResults(for searchController: UISearchController) {
-        searchController.searchBar.showsCancelButton = false
+    fileprivate func getAllusers()
+    {
+        DispatchQueue.main.async {
+            Database.database().reference().child("Users").observe(.childAdded) { snapshots in
+                Services.shared.fetchUser(user_Id: snapshots.key) { user in
+                   
+                    self.userCollection.append(user)
+                    self.tableView.reloadData()
+                }
+            }
+        }
     }
-    
 }

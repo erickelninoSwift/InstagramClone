@@ -101,8 +101,8 @@ extension SearchViewControllerCell
         stackview.distribution = .fillEqually
         
         self.addSubview(stackview)
-        self.addSubview(bottomlineView)
-        
+//        self.addSubview(bottomlineView)
+//
         
         NSLayoutConstraint.activate([profilepic.centerYAnchor.constraint(equalTo: self.centerYAnchor),
                                      profilepic.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 2)
@@ -112,10 +112,10 @@ extension SearchViewControllerCell
                                      stackview.leadingAnchor.constraint(equalToSystemSpacingAfter: profilepic.trailingAnchor, multiplier: 3)
         ])
         
-        NSLayoutConstraint.activate([bottomlineView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-                                     bottomlineView.leadingAnchor.constraint(equalTo: stackview.leadingAnchor),
-                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: bottomlineView.trailingAnchor, multiplier: 0)
-        ])
+//        NSLayoutConstraint.activate([bottomlineView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+//                                     bottomlineView.leadingAnchor.constraint(equalTo: stackview.leadingAnchor),
+//                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: bottomlineView.trailingAnchor, multiplier: 0)
+//        ])
         
     }
 }
