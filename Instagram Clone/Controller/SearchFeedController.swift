@@ -55,13 +55,16 @@ extension SearchFeedController
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchViewControllerCell.searchcellid, for: indexPath) as? SearchViewControllerCell else {return UITableViewCell()}
         cell.currentUser = userCollection[indexPath.row]
+        cell.delegate = self
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        controller.user = userCollection[indexPath.row]
+        controller.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(controller, animated: true)
         
-        guard let username = userCollection[indexPath.row].username else {return}
-        print("DEBUG: USER IS :\(username)")
     }
     
    
@@ -79,5 +82,12 @@ extension SearchFeedController
                 }
             }
         }
+    }
+}
+
+extension SearchFeedController: imagestapped
+{
+    func tappedImageSelected() {
+        print("DEBUG: IMAGE TAPPED FORM THE FEEDCONTROLLER")
     }
 }

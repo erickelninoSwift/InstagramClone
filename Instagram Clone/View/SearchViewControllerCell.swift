@@ -8,9 +8,18 @@
 
 import UIKit
 
+
+protocol imagestapped: AnyObject
+{
+    func tappedImageSelected()
+}
+
 class SearchViewControllerCell: UITableViewCell
 {
     static let searchcellid = "SearchViewControllerCell"
+    
+    
+    weak var delegate:imagestapped?
     
     
      var currentUser: UserModel?
@@ -21,14 +30,13 @@ class SearchViewControllerCell: UITableViewCell
         }
     }
     
-    private let profilepic: UIImageView =
+    private var profilepic: UIImageView =
     {
         let propic = UIImageView()
         propic.translatesAutoresizingMaskIntoConstraints = false
         propic.clipsToBounds = true
         propic.contentMode = .scaleAspectFill
-        
-        
+
         NSLayoutConstraint.activate([propic.heightAnchor.constraint(equalToConstant: 60),
                                      propic.widthAnchor.constraint(equalToConstant: 60)
         ])
@@ -124,6 +132,10 @@ extension SearchViewControllerCell
 //                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: bottomlineView.trailingAnchor, multiplier: 0)
 //        ])
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTappedImage))
+        profilepic.addGestureRecognizer(tap)
+        profilepic.isUserInteractionEnabled = true
+        
     }
 }
 
@@ -136,5 +148,9 @@ extension SearchViewControllerCell
         self.FullnameLabrl.text = myuser.fullname
         self.profilepic.loadImage(with: myuser.profileImage)
         
+    }
+    @objc func handleTappedImage()
+    {
+        delegate?.tappedImageSelected()
     }
 }

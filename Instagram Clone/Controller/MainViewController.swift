@@ -12,9 +12,24 @@ import Firebase
 class MainViewController: UITabBarController
 {
     
+    var currentUser: UserModel?
+    {
+        didSet
+        {
+            guard let current = currentUser else {return}
+            guard let cholocontroller  = UIApplication.shared.windows.first(where: {$0.isKeyWindow}) else {return}
+            guard let profile  = cholocontroller.rootViewController as? ProfileController else {return}
+            profile.user = current
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchCurrentUserData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchCurrentUserData()
         style()
         layout()
         checkUserifloggedIn()
@@ -38,6 +53,8 @@ extension MainViewController: UITabBarControllerDelegate
     
     func viewcontrollers()
     {
+        fetchCurrentUserData()
+
         let feedController = buildnavigationController(selectedImage: UIImage(named: "home_selected"), unselctedImage: UIImage(named: "home_unselected"), rootViewController: FeedController(collectionViewLayout: UICollectionViewFlowLayout()))
         
         let searchfeedController = buildnavigationController(selectedImage: UIImage(named:"search_selected"), unselctedImage: UIImage(named:"search_unselected"), rootViewController: SearchFeedController())
@@ -59,9 +76,6 @@ extension MainViewController: UITabBarControllerDelegate
         navigation.tabBarItem.image = unselctedImage
         navigation.tabBarItem.selectedImage = selectedImage
         navigation.navigationBar.barTintColor = .white
-        
-        
-        
         return navigation
     }
 }
@@ -95,7 +109,10 @@ extension MainViewController
     
     func fetchCurrentUserData()
     {
-      
+        guard let userid = Auth.auth().currentUser?.uid else {return}
+        Services.shared.fetchUser(user_Id: userid) { user in
+            self.currentUser = user
+        }
     }
     
 }
