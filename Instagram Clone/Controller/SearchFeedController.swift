@@ -17,6 +17,9 @@ class SearchFeedController: UITableViewController
     
     private var userCollection = [UserModel]()
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,8 +63,8 @@ extension SearchFeedController
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout())
-        controller.user = userCollection[indexPath.row]
+        let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout(), config: .followuser)
+        controller.userfromsearchVC = userCollection[indexPath.row]
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
         

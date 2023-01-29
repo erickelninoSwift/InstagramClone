@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+
 typealias AlertFunction = (UIAlertAction) -> Void
 
 private let collectionViewID = "CollectionViewID"
@@ -19,7 +20,7 @@ class FeedController: UICollectionViewController
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
         style()
-
+        
     }
     
     override  func viewDidLoad() {
@@ -54,6 +55,8 @@ extension FeedController
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handlelogOut))
         self.navigationController?.navigationBar.tintColor = .black
+        self.collectionView.backgroundColor = .white
+        self.navigationItem.leftBarButtonItem?.tintColor = .black
     }
     
     

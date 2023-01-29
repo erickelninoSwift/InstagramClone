@@ -12,17 +12,6 @@ import Firebase
 class MainViewController: UITabBarController
 {
     
-    var currentUser: UserModel?
-    {
-        didSet
-        {
-            guard let current = currentUser else {return}
-            guard let cholocontroller  = UIApplication.shared.windows.first(where: {$0.isKeyWindow}) else {return}
-            guard let profile  = cholocontroller.rootViewController as? ProfileController else {return}
-            profile.user = current
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchCurrentUserData()
@@ -63,7 +52,7 @@ extension MainViewController: UITabBarControllerDelegate
         
         let notificationController = buildnavigationController(selectedImage: UIImage(named: "like_selected"), unselctedImage: UIImage(named: "like_unselected"), rootViewController: NotificationController())
         
-        let profilecontroller = buildnavigationController(selectedImage: UIImage(named: "profile_selected"), unselctedImage: UIImage(named: "profile_unselected"), rootViewController: ProfileController(collectionViewLayout: UICollectionViewFlowLayout()))
+        let profilecontroller = buildnavigationController(selectedImage: UIImage(named: "profile_selected"), unselctedImage: UIImage(named: "profile_unselected"), rootViewController: ProfileController(collectionViewLayout: UICollectionViewFlowLayout(), config: .editprofile))
         
         self.viewControllers = [feedController,searchfeedController,postcontroller,notificationController,profilecontroller]
         self.tabBar.tintColor = .black
@@ -111,7 +100,7 @@ extension MainViewController
     {
         guard let userid = Auth.auth().currentUser?.uid else {return}
         Services.shared.fetchUser(user_Id: userid) { user in
-            self.currentUser = user
+           
         }
     }
     

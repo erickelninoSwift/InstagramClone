@@ -8,44 +8,59 @@
 
 import UIKit
 import Firebase
+enum configurationEditbutton: String
+{
+    case editprofile
+    case followuser
+    
+    var description: String
+    {
+        switch self {
+        case .editprofile:
+            return "Edit Profile"
+        case .followuser:
+            return "Follow"
+        }
+    }
+}
 
 private let profileIDcell = "ProfileViewcontrollerID"
 private let headerprofileID = "ProfileviewHeader"
 
 class ProfileController: UICollectionViewController
 {
+    
     var user: UserModel?
-    {
-        didSet
-        {
-            guard let currentuser = user else {return }
-            print("DEBUG: User was set from the mainTabBar \(currentuser)")
-            fetchuser()
-        }
-    }
     
     var userfromsearchVC: UserModel?
     
+    var profileconfig: configurationEditbutton = .editprofile
     
-    override init(collectionViewLayout layout: UICollectionViewLayout)
+    
+    
+    init(collectionViewLayout layout: UICollectionViewLayout, config: configurationEditbutton)
     {
+        self.profileconfig = config
         super.init(collectionViewLayout: layout)
-//        fetchuser()
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationItem.title = user?.username ?? ""
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         style()
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: profileIDcell)
         self.collectionView.register(ProfileCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerprofileID)
         
-        if let userfromSearch = self.userfromsearchVC
+        
+        if let currentUSerSelected = userfromsearchVC
         {
-            print("DEBUG: USER FROM SEARCH : \(userfromSearch.fullname ?? "")")
+            self.user = currentUSerSelected
+        }else
+        {
+            self.fetchuser()
         }
         
     }
@@ -61,6 +76,7 @@ extension ProfileController
     private func style()
     {
         self.collectionView.backgroundColor = .white
+        self.navigationController?.navigationBar.tintColor = .black
     }
 }
 extension ProfileController
@@ -73,16 +89,28 @@ extension ProfileController
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: profileIDcell, for: indexPath)
-        
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerprofileID, for: indexPath) as? ProfileCollectionViewHeader else {return UICollectionReusableView()}
-        guard let usertosend = user else {return UICollectionReusableView()}
-        header.currentUser = usertosend
-        self.navigationItem.title = usertosend.username ?? ""
+        if let myuser = user
+        {
+            switch self.profileconfig
+            {
+            case .editprofile:
+                header.currentUser = myuser
+                self.navigationItem.title = myuser.username ?? ""
+                header.configurationset = self.profileconfig
+                break
+            case .followuser:
+                header.currentUser = myuser
+                self.navigationItem.title = myuser.username ?? ""
+                header.configurationset = self.profileconfig
+                break
+            }
+        }
         return header
     }
     
@@ -101,7 +129,6 @@ extension ProfileController
     private func fetchuser()
     {
         guard let userID = Auth.auth().currentUser?.uid else {return}
-        
         Services.shared.fetchUser(user_Id: userID) { MyUSer in
             self.user = MyUSer
             self.collectionView.reloadData()

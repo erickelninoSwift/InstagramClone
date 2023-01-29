@@ -8,9 +8,18 @@
 
 import UIKit
 import SDWebImage
+import Firebase
 
 class ProfileCollectionViewHeader: UICollectionViewCell
 {
+    
+    var configurationset: configurationEditbutton?
+    {
+        didSet
+        {
+            configureeditbutton()
+        }
+    }
     
     var currentUser: UserModel?
     {
@@ -18,6 +27,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         {
             print("DEBUG: USER WSS SET")
             configurationUser()
+            
         }
     }
     
@@ -72,7 +82,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
     }()
     
     
-    private let FollowerLabel: UILabel =
+    var FollowerLabel: UILabel =
     {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -86,7 +96,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         return label
     }()
     
-    private let editbutton: UIButton =
+    var editbutton: UIButton =
     {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -98,7 +108,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         button.heightAnchor.constraint(equalToConstant: 35).isActive = true
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-      
+        
         
         
         button.addTarget(self, action: #selector(HandleIeditprofile), for: .primaryActionTriggered)
@@ -115,7 +125,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         button.tintColor = UIColor(white: 0, alpha: 0.2)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.addTarget(self, action: #selector(HandleGrid), for: .primaryActionTriggered)
-       
+        
         return button
     }()
     
@@ -127,7 +137,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         button.tintColor = UIColor(white: 0, alpha: 0.2)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.addTarget(self, action: #selector(HandleList), for: .primaryActionTriggered)
-       
+        
         return button
     }()
     
@@ -139,7 +149,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         button.tintColor = UIColor(white: 0, alpha: 0.2)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.addTarget(self, action: #selector(HandleBookMark), for: .primaryActionTriggered)
-       
+        
         return button
     }()
     
@@ -153,7 +163,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         layout()
         configured()
         createHeaderfooterwview()
-      
+        
     }
     
     required init?(coder: NSCoder) {
@@ -270,12 +280,12 @@ extension ProfileCollectionViewHeader
     
     @objc func HandleGrid()
     {
-         print("DEBUG: GRID")
+        print("DEBUG: GRID")
     }
     
     @objc func HandleList()
     {
-         print("DEBUG: LIST")
+        print("DEBUG: LIST")
     }
     
     @objc func HandleBookMark()
@@ -291,5 +301,27 @@ extension ProfileCollectionViewHeader
         profileImageView.loadImage(with: currentuser.profileImage)
     }
     
-   
+    
+    
+    func configureeditbutton()
+    {
+        guard let currentuserid = Auth.auth().currentUser?.uid else {return}
+        guard let userselected = currentUser else {return}
+        guard let buttonsetting = configurationset else {return}
+        
+        if currentuserid == userselected.userID && buttonsetting == .editprofile
+        {
+
+            self.editbutton.setTitle( buttonsetting.description, for: .normal)
+        
+        }else if currentuserid != userselected.userID && buttonsetting == .followuser
+        {
+            self.editbutton.setTitle( buttonsetting.description, for: .normal)
+            self.editbutton.setTitleColor(.white, for: .normal)
+            self.editbutton.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+        }
+        
+    }
+    
+    
 }
