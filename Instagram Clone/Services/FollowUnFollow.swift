@@ -14,12 +14,12 @@ class FollowUnFollow
 {
     static let shared = FollowUnFollow()
     
-    var userisFollowed = false
+    static var userisFollowed = false
     
     func followUser(usertoFollow: User)
     {
         guard let userid = Auth.auth().currentUser?.uid else {return}
-        self.userisFollowed = true
+        FollowUnFollow.userisFollowed = true
          let followingvalue = [usertoFollow.userID: 1]
         let followersvalue = [userid:1]
         
@@ -32,7 +32,7 @@ class FollowUnFollow
     func UnfollowUser(usertoUnfollow: User)
     {
         guard let userid = Auth.auth().currentUser?.uid else {return}
-        self.userisFollowed = false
+        FollowUnFollow.userisFollowed = false
         Database.database().reference().child("User-following").child(userid).child(usertoUnfollow.userID!).removeValue { (Error, Dataref) in
             if  Error != nil
             {

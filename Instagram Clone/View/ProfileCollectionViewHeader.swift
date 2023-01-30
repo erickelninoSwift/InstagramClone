@@ -10,8 +10,17 @@ import UIKit
 import SDWebImage
 import Firebase
 
+protocol ProfileCollectionViewHeaderDelegate: AnyObject
+{
+    func HandleeditFollow(profileheader: ProfileCollectionViewHeader)
+}
+
 class ProfileCollectionViewHeader: UICollectionViewCell
 {
+    
+    
+    weak var delegate: ProfileCollectionViewHeaderDelegate?
+    
     
     var configurationset: configurationEditbutton?
     {
@@ -96,7 +105,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         return label
     }()
     
-    var editbutton: UIButton =
+    var editFollowButton: UIButton =
     {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -192,7 +201,7 @@ extension ProfileCollectionViewHeader
         
         self.addSubview(stack)
         
-        self.addSubview(editbutton)
+        self.addSubview(editFollowButton)
         
         NSLayoutConstraint.activate([profileImageView.topAnchor.constraint(equalToSystemSpacingBelow: self.topAnchor, multiplier: 3),
                                      profileImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 2)
@@ -208,9 +217,9 @@ extension ProfileCollectionViewHeader
                                      self.trailingAnchor.constraint(equalToSystemSpacingAfter: stack.trailingAnchor, multiplier: 2)
         ])
         
-        NSLayoutConstraint.activate([editbutton.topAnchor.constraint(equalToSystemSpacingBelow: stack.bottomAnchor, multiplier: 2),
-                                     editbutton.widthAnchor.constraint(equalToConstant: 280),
-                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: editbutton.trailingAnchor, multiplier: 1)
+        NSLayoutConstraint.activate([editFollowButton.topAnchor.constraint(equalToSystemSpacingBelow: stack.bottomAnchor, multiplier: 2),
+                                     editFollowButton.widthAnchor.constraint(equalToConstant: 280),
+                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: editFollowButton.trailingAnchor, multiplier: 1)
         ])
     }
     
@@ -275,7 +284,7 @@ extension ProfileCollectionViewHeader
 {
     @objc func HandleIeditprofile()
     {
-        print("DEBUG: PROFILE EDIT!!!!")
+        delegate?.HandleeditFollow(profileheader: self)
     }
     
     @objc func HandleGrid()
@@ -312,13 +321,13 @@ extension ProfileCollectionViewHeader
         if currentuserid == userselected.userID && buttonsetting == .editprofile
         {
 
-            self.editbutton.setTitle( buttonsetting.description, for: .normal)
+            self.editFollowButton.setTitle( buttonsetting.description, for: .normal)
         
         }else if currentuserid != userselected.userID && buttonsetting == .followuser
         {
-            self.editbutton.setTitle( buttonsetting.description, for: .normal)
-            self.editbutton.setTitleColor(.white, for: .normal)
-            self.editbutton.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+            self.editFollowButton.setTitle( buttonsetting.description, for: .normal)
+            self.editFollowButton.setTitleColor(.white, for: .normal)
+            self.editFollowButton.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
         }
         
     }

@@ -135,3 +135,9 @@ extension ProfileController
         }
     }
 }
+extension ProfileController: ProfileCollectionViewHeaderDelegate
+{
+    func HandleeditFollow(profileheader: ProfileCollectionViewHeader) {
+        print("DEBUG: EDIT AND FOLLOW")
+    }
+}
