@@ -30,9 +30,9 @@ private let headerprofileID = "ProfileviewHeader"
 class ProfileController: UICollectionViewController
 {
     
-    var user: UserModel?
+    var user: User?
     
-    var userfromsearchVC: UserModel?
+    var userfromsearchVC: User?
     
     var profileconfig: configurationEditbutton = .editprofile
     

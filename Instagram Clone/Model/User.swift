@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct UserModel
+struct User
 {
     var username: String?
     var fullname: String?

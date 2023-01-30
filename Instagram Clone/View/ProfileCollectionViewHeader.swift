@@ -21,7 +21,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         }
     }
     
-    var currentUser: UserModel?
+    var currentUser: User?
     {
         didSet
         {

@@ -22,7 +22,7 @@ class SearchViewControllerCell: UITableViewCell
     weak var delegate:imagestapped?
     
     
-     var currentUser: UserModel?
+     var currentUser: User?
     {
         didSet
         {

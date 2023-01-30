@@ -15,7 +15,7 @@ class SearchFeedController: UITableViewController
     private let searchbar = UISearchController(searchResultsController: nil)
     
     
-    private var userCollection = [UserModel]()
+    private var userCollection = [User]()
     
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
