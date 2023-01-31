@@ -12,8 +12,12 @@ import Firebase
 
 protocol ProfileCollectionViewHeaderDelegate: AnyObject
 {
-    func HandleeditFollow(profileheader: ProfileCollectionViewHeader)
+    func HandleeditFollow(profileheader: ProfileCollectionViewHeader, buttonConfig: configurationEditbutton)
+    func handleGrid(CurrentButton: UIButton , profileheader: ProfileCollectionViewHeader)
+    func handleListController(CurrentButton: UIButton , profileheader: ProfileCollectionViewHeader)
+    func HandleBookmark(CurrentButton: UIButton , profileheader: ProfileCollectionViewHeader)
 }
+
 
 class ProfileCollectionViewHeader: UICollectionViewCell
 {
@@ -34,7 +38,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
     {
         didSet
         {
-            print("DEBUG: USER WSS SET")
+            checkifuserfollwing()
             configurationUser()
             
         }
@@ -108,6 +112,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
     var editFollowButton: UIButton =
     {
         let button = UIButton(type: .system)
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Edit Profile", for: .normal)
         button.backgroundColor = .white
@@ -117,11 +122,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         button.heightAnchor.constraint(equalToConstant: 35).isActive = true
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        
-        
-        
-        button.addTarget(self, action: #selector(HandleIeditprofile), for: .primaryActionTriggered)
-        
+
         return button
     }()
     
@@ -133,7 +134,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         button.setImage(UIImage(named: "grid"), for: .normal)
         button.tintColor = UIColor(white: 0, alpha: 0.2)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        button.addTarget(self, action: #selector(HandleGrid), for: .primaryActionTriggered)
+        button.addTarget(self, action: #selector(HandleGrid), for: .touchUpInside)
         
         return button
     }()
@@ -145,7 +146,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         button.setImage(UIImage(named: "list"), for: .normal)
         button.tintColor = UIColor(white: 0, alpha: 0.2)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        button.addTarget(self, action: #selector(HandleList), for: .primaryActionTriggered)
+        button.addTarget(self, action: #selector(HandleList), for: .touchUpInside)
         
         return button
     }()
@@ -157,20 +158,17 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         button.setImage(UIImage(named: "ribbon"), for: .normal)
         button.tintColor = UIColor(white: 0, alpha: 0.2)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        button.addTarget(self, action: #selector(HandleBookMark), for: .primaryActionTriggered)
+        button.addTarget(self, action: #selector(HandleBookMark), for: .touchUpInside)
         
         return button
     }()
     
     
-    
-    
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        configured()
         style()
         layout()
-        configured()
         createHeaderfooterwview()
         
     }
@@ -225,7 +223,7 @@ extension ProfileCollectionViewHeader
     
     private func configured()
     {
-        
+        self.editFollowButton.addTarget(self, action: #selector(HandleIeditprofile), for: .primaryActionTriggered)
     }
 }
 //=================== Bottom view header section
@@ -284,22 +282,24 @@ extension ProfileCollectionViewHeader
 {
     @objc func HandleIeditprofile()
     {
-        delegate?.HandleeditFollow(profileheader: self)
+    
+        delegate?.HandleeditFollow(profileheader: self, buttonConfig: self.configurationset!)
     }
     
     @objc func HandleGrid()
     {
-        print("DEBUG: GRID")
+        delegate?.handleGrid(CurrentButton: self.gridbutton, profileheader: self)
     }
     
     @objc func HandleList()
     {
-        print("DEBUG: LIST")
+        delegate?.handleListController(CurrentButton: self.ListButton, profileheader: self)
+        
     }
     
     @objc func HandleBookMark()
     {
-        print("DEBUG: BOOKMARK")
+        delegate?.handleListController(CurrentButton: self.BookMark, profileheader: self)
     }
     
     
@@ -318,11 +318,12 @@ extension ProfileCollectionViewHeader
         guard let userselected = currentUser else {return}
         guard let buttonsetting = configurationset else {return}
         
+        
         if currentuserid == userselected.userID && buttonsetting == .editprofile
         {
-
             self.editFollowButton.setTitle( buttonsetting.description, for: .normal)
-        
+            
+            
         }else if currentuserid != userselected.userID && buttonsetting == .followuser
         {
             self.editFollowButton.setTitle( buttonsetting.description, for: .normal)
@@ -330,6 +331,14 @@ extension ProfileCollectionViewHeader
             self.editFollowButton.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
         }
         
+    }
+    
+    func checkifuserfollwing()
+    {
+        guard let usertofollow = currentUser else {return}
+        FollowUnFollow.shared.checkuserFollow(myUser: usertofollow) { isFollowed in
+            print("DEBUG: USER IS FOLLOWING : \(isFollowed)")
+        }
     }
     
     

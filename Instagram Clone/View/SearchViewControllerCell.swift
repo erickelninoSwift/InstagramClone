@@ -153,4 +153,7 @@ extension SearchViewControllerCell
     {
         delegate?.tappedImageSelected()
     }
+    
+    
+    
 }

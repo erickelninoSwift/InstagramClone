@@ -43,4 +43,18 @@ class FollowUnFollow
             Database.database().reference().child("User-followers").child(usertoUnfollow.userID!).child(userid).removeValue()
         }
     }
+    
+    
+    func checkuserFollow(myUser: User , completion: @escaping(Bool) -> Void)
+    {
+        var isuserfollowed = false
+        guard let userid = Auth.auth().currentUser?.uid else {return}
+        guard let letuseryoufollow = myUser.userID else {return}
+        
+        
+        Database.database().reference().child("User-following").child(userid).child(letuseryoufollow).observeSingleEvent(of: .value) { datasnapshots in
+            isuserfollowed = datasnapshots.exists()
+            completion(isuserfollowed)
+        }
+    }
 }

@@ -17,10 +17,6 @@ class SearchFeedController: UITableViewController
     
     private var userCollection = [User]()
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.tableView.reloadData()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -28,6 +24,7 @@ class SearchFeedController: UITableViewController
         style()
         layout()
         getAllusers()
+        self.tableView.reloadData()
     }
     
 }
@@ -76,12 +73,16 @@ extension SearchFeedController
 {
     fileprivate func getAllusers()
     {
+        guard let currentuser = Auth.auth().currentUser?.uid else {return}
+        
         DispatchQueue.main.async {
             Database.database().reference().child("Users").observe(.childAdded) { snapshots in
                 Services.shared.fetchUser(user_Id: snapshots.key) { user in
-                   
-                    self.userCollection.append(user)
-                    self.tableView.reloadData()
+                    if currentuser != user.userID
+                    {
+                        self.userCollection.append(user)
+                        self.tableView.reloadData()
+                    }
                 }
             }
         }

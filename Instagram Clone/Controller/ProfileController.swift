@@ -34,7 +34,7 @@ class ProfileController: UICollectionViewController
     
     var userfromsearchVC: User?
     
-    var profileconfig: configurationEditbutton = .editprofile
+    var profileconfig: configurationEditbutton?
     
     
     
@@ -95,25 +95,30 @@ extension ProfileController
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerprofileID, for: indexPath) as? ProfileCollectionViewHeader else {return UICollectionReusableView()}
+        
         if let myuser = user
         {
-            switch self.profileconfig
+            
+            switch profileconfig!
             {
             case .editprofile:
+                header.delegate = self
                 header.currentUser = myuser
                 self.navigationItem.title = myuser.username ?? ""
-                header.configurationset = self.profileconfig
-                break
+                header.configurationset = profileconfig
+                
+                
+                
             case .followuser:
+                
+                header.delegate = self
                 header.currentUser = myuser
                 self.navigationItem.title = myuser.username ?? ""
-                header.configurationset = self.profileconfig
-                break
+                header.configurationset = profileconfig
             }
         }
         return header
     }
-    
     
 }
 // API CALLS
@@ -137,7 +142,49 @@ extension ProfileController
 }
 extension ProfileController: ProfileCollectionViewHeaderDelegate
 {
-    func HandleeditFollow(profileheader: ProfileCollectionViewHeader) {
-        print("DEBUG: EDIT AND FOLLOW")
+    func handleGrid(CurrentButton: UIButton, profileheader: ProfileCollectionViewHeader) {
+        print("DEBUG: \(CurrentButton.currentTitle!) Here We go")
+    }
+    
+    func handleListController(CurrentButton: UIButton, profileheader: ProfileCollectionViewHeader) {
+        print("DEBUG: \(CurrentButton.currentTitle!) you will never walk alone")
+    }
+    
+    func HandleBookmark(CurrentButton: UIButton, profileheader: ProfileCollectionViewHeader) {
+        print("DEBUG: \(CurrentButton.currentTitle!)Make more money then avoid bitches")
+    }
+    
+    func HandleeditFollow(profileheader: ProfileCollectionViewHeader, buttonConfig: configurationEditbutton) {
+        
+        if let profileuser = profileheader.currentUser
+        {
+            switch buttonConfig
+            {
+            case .editprofile:
+
+                profileheader.currentUser = profileuser
+                self.navigationItem.title = profileuser.username ?? ""
+                profileheader.configurationset = buttonConfig
+                
+            case .followuser:
+                
+                profileheader.currentUser = profileuser
+                self.navigationItem.title = profileuser.username ?? ""
+                profileheader.configurationset = buttonConfig
+                
+                if profileheader.editFollowButton.titleLabel?.text == "Follow"
+                {
+                    profileheader.editFollowButton.setTitle("Following", for: .normal)
+                    FollowUnFollow.userisFollowed = true
+                    FollowUnFollow.shared.followUser(usertoFollow: profileuser)
+                }else
+                {
+                    profileheader.editFollowButton.setTitle("Follow", for: .normal)
+                    FollowUnFollow.userisFollowed = false
+                    FollowUnFollow.shared.UnfollowUser(usertoUnfollow: profileuser)
+                    
+                }
+            }
+        }
     }
 }
