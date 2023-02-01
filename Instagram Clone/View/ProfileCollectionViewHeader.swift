@@ -42,7 +42,8 @@ class ProfileCollectionViewHeader: UICollectionViewCell
             checkifuserfollwing()
             configurationUser()
             guard let user = currentUser else {return}
-            print("DEBUG: FOLLOW: \(user.isFollowed)")
+            
+            getuserStats(user_id: user.userID ?? "")
             
         }
     }
@@ -89,11 +90,6 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.textAlignment = .center
-        
-        let attributed = NSAttributedString(string: "Following", attributes: [.font: UIFont.boldSystemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
-        let MutabelAtributted = NSMutableAttributedString(string: "7 \n", attributes: [.font: UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
-        MutabelAtributted.append(attributed)
-        label.attributedText = MutabelAtributted
         return label
     }()
     
@@ -104,11 +100,6 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.textAlignment = .center
-        
-        let attributed = NSAttributedString(string: "Followers", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
-        let MutabelAtributted = NSMutableAttributedString(string: "5 \n", attributes: [.font: UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
-        MutabelAtributted.append(attributed)
-        label.attributedText = MutabelAtributted
         return label
     }()
     
@@ -178,6 +169,45 @@ class ProfileCollectionViewHeader: UICollectionViewCell
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    func getuserStats(user_id: String)
+    {
+        var userNumberOfFollowers:Int!
+        var userNumberOfFollowing: Int!
+        
+        
+        Database.database().reference().child("User-followers").child(user_id).observeSingleEvent(of: .value) { snapshots in
+            if let numberOfStats = snapshots.value as? [String:Any]
+            {
+                userNumberOfFollowers = numberOfStats.count
+            }else
+            {
+                userNumberOfFollowers = 0
+            }
+            
+            let attributed = NSAttributedString(string: "Followers", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
+            let MutabelAtributted = NSMutableAttributedString(string: "\(userNumberOfFollowers ?? 0) \n", attributes: [.font: UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
+            MutabelAtributted.append(attributed)
+            self.FollowerLabel.attributedText = MutabelAtributted
+        }
+        
+        Database.database().reference().child("User-following").child(user_id).observeSingleEvent(of: .value) { snapshots in
+            if let numberOfStats = snapshots.value as? [String:Any]
+            {
+                userNumberOfFollowing = numberOfStats.count
+            }else
+            {
+                userNumberOfFollowing = 0
+            }
+            
+            let attributed = NSAttributedString(string: "Following", attributes: [.font: UIFont.boldSystemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
+            let MutabelAtributted = NSMutableAttributedString(string: "\(userNumberOfFollowing ?? 0) \n", attributes: [.font: UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
+            MutabelAtributted.append(attributed)
+            self.FollowingLabel.attributedText = MutabelAtributted
+        }
+        
     }
 }
 extension ProfileCollectionViewHeader

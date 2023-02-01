@@ -16,15 +16,7 @@ class SearchFeedController: UITableViewController
     
     
     private var userCollection = [User]()
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        view.backgroundColor = .white
-        navigationItem.title = "Search"
-        style()
-        layout()
-        self.tableView.reloadData()
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
