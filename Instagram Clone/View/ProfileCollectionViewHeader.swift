@@ -25,6 +25,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
     
     weak var delegate: ProfileCollectionViewHeaderDelegate?
     
+    var userfollowing: Bool = false
     
     var configurationset: configurationEditbutton?
     {
@@ -40,6 +41,8 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         {
             checkifuserfollwing()
             configurationUser()
+            guard let user = currentUser else {return}
+            print("DEBUG: FOLLOW: \(user.isFollowed)")
             
         }
     }
@@ -318,7 +321,6 @@ extension ProfileCollectionViewHeader
         guard let userselected = currentUser else {return}
         guard let buttonsetting = configurationset else {return}
         
-        
         if currentuserid == userselected.userID && buttonsetting == .editprofile
         {
             self.editFollowButton.setTitle( buttonsetting.description, for: .normal)
@@ -326,18 +328,31 @@ extension ProfileCollectionViewHeader
             
         }else if currentuserid != userselected.userID && buttonsetting == .followuser
         {
-            self.editFollowButton.setTitle( buttonsetting.description, for: .normal)
-            self.editFollowButton.setTitleColor(.white, for: .normal)
-            self.editFollowButton.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+            if userselected.isFollowed == true
+            {
+                self.editFollowButton.setTitle("Following", for: .normal)
+                self.editFollowButton.setTitleColor(.white, for: .normal)
+                self.editFollowButton.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+            }else
+            {
+                self.editFollowButton.setTitle("Follow", for: .normal)
+                self.editFollowButton.setTitleColor(.white, for: .normal)
+                self.editFollowButton.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+            }
         }
         
     }
     
     func checkifuserfollwing()
     {
-        guard let usertofollow = currentUser else {return}
-        FollowUnFollow.shared.checkuserFollow(myUser: usertofollow) { isFollowed in
-            print("DEBUG: USER IS FOLLOWING : \(isFollowed)")
+        guard let current = currentUser else {return}
+        guard let myUID = Auth.auth().currentUser?.uid else {return}
+        
+        if current.userID != myUID
+        {
+            current.checkuserFollow(myUser: current, myuserID: myUID, completion: { isFollowed in
+                current.isFollowed = isFollowed
+            })
         }
     }
     

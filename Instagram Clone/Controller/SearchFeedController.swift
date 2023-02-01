@@ -17,6 +17,15 @@ class SearchFeedController: UITableViewController
     
     private var userCollection = [User]()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        view.backgroundColor = .white
+        navigationItem.title = "Search"
+        style()
+        layout()
+        self.tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -60,14 +69,16 @@ extension SearchFeedController
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
         let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout(), config: .followuser)
         controller.userfromsearchVC = userCollection[indexPath.row]
+        
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
         
     }
     
-   
+    
 }
 extension SearchFeedController
 {

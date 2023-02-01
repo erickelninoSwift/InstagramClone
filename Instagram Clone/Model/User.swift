@@ -7,14 +7,17 @@
 //
 
 import Foundation
+import Firebase
 
-struct User
+class User
 {
+    
     var username: String?
     var fullname: String?
     var email: String?
     var profileImage: URL!
     var userID: String?
+    var isFollowed: Bool = false
     
     init(dictionary:[String:Any])
     {
@@ -25,4 +28,18 @@ struct User
         self.profileImage = imageURl
         self.userID = dictionary["UserId"] as? String ?? ""
     }
+    
+    
+    func checkuserFollow(myUser: User ,myuserID: String, completion: @escaping(Bool) -> Void)
+    {
+        guard let letuseryoufollow = myUser.userID else {return}
+
+        Database.database().reference().child("User-following").child(myuserID).child(letuseryoufollow).observeSingleEvent(of: .value) { datasnapshots in
+            self.isFollowed = datasnapshots.exists()
+            completion(self.isFollowed)
+        }
+    }
+    
+    
+    
 }

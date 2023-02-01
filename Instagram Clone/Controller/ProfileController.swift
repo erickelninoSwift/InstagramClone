@@ -30,9 +30,25 @@ private let headerprofileID = "ProfileviewHeader"
 class ProfileController: UICollectionViewController
 {
     
+    
+    
+    
     var user: User?
+    {
+        didSet
+        {
+            checkifuserfollwing()
+        }
+    }
     
     var userfromsearchVC: User?
+    {
+        didSet
+        {
+            checkifuserfollwing()
+        }
+        
+    }
     
     var profileconfig: configurationEditbutton?
     
@@ -187,4 +203,21 @@ extension ProfileController: ProfileCollectionViewHeaderDelegate
             }
         }
     }
+}
+
+extension ProfileController
+{
+    func checkifuserfollwing()
+       {
+           guard let current = user else {return}
+           guard let myUID = Auth.auth().currentUser?.uid else {return}
+           
+           if current.userID != myUID
+           {
+               current.checkuserFollow(myUser: current, myuserID: myUID, completion: { isFollowed in
+                   current.isFollowed = isFollowed
+                self.collectionView.reloadData()
+               })
+           }
+       }
 }
