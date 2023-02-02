@@ -285,7 +285,9 @@ extension ProfileController: profileheaderLabelActionDelegate
         print("DEBUG: USER FOLLOWING")
     }
     func HandleFollowersLabel(userProfileHeader: ProfileCollectionViewHeader) {
-        print("DEBUG: USEr followers")
+        let controller = FollowersVC()
+        controller.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(controller, animated: true)
     }
 }
 

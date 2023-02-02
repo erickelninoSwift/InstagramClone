@@ -8,6 +8,9 @@
 
 import UIKit
 
+
+private let followersCellID = "Erickelninojackpot"
+
 class FollowersVC: UITableViewController
 {
     
@@ -26,7 +29,8 @@ extension FollowersVC
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: followersCellID, for: indexPath) as? FollowersViewControllerCell else {return UITableViewCell()}
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -40,6 +44,7 @@ extension FollowersVC
     {
         tableView.rowHeight = 80
         tableView.tableFooterView = UIView()
+        self.tableView.register(FollowersViewControllerCell.self, forCellReuseIdentifier: followersCellID)
     }
     
     
