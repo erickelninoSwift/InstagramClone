@@ -7,16 +7,50 @@
 //
 
 import UIKit
-
-
+enum followVCconfig
+{
+    case following
+    case follower
+    case post
+    
+    var description: String
+    {
+        switch self
+        {
+        case .follower:
+            return "Followers"
+        case .following:
+            return "Following"
+        case .post:
+            return "Post"
+        }
+    }
+}
 private let followersCellID = "Erickelninojackpot"
 
 class FollowersVC: UITableViewController
 {
     
+    
+    private var viewcontrollerConfig: followVCconfig = .follower
+    
+    private var userFollowers: User?
+    
+    init(style: UITableView.Style, followconfig:followVCconfig , userSelected: User) {
+        self.viewcontrollerConfig = followconfig
+        self.userFollowers = userSelected
+        super.init(style: style)
+        self.navigationItem.title = self.viewcontrollerConfig.description
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        configureUser()
         style()
         layout()
     }
@@ -51,5 +85,11 @@ extension FollowersVC
     private func layout()
     {
         
+    }
+    
+    func configureUser()
+    {
+        guard let currentuser = userFollowers else {return}
+        print("DEBUG: The user received from the profile controller is : \(currentuser.fullname ?? "")")
     }
 }

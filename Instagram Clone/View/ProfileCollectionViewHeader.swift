@@ -82,6 +82,11 @@ class ProfileCollectionViewHeader: UICollectionViewCell
             label.numberOfLines = 0
             label.textAlignment = .center
             
+            let attributed = NSAttributedString(string: "Following", attributes: [.font: UIFont.boldSystemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
+            let MutabelAtributted = NSMutableAttributedString(string: "0 \n", attributes: [.font: UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
+            MutabelAtributted.append(attributed)
+            label.attributedText = MutabelAtributted
+            
             return label
     }()
     
@@ -92,6 +97,12 @@ class ProfileCollectionViewHeader: UICollectionViewCell
             label.translatesAutoresizingMaskIntoConstraints = false
             label.numberOfLines = 0
             label.textAlignment = .center
+            
+            let attributed = NSAttributedString(string: "Followers", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
+            let MutabelAtributted = NSMutableAttributedString(string: "0 \n", attributes: [.font: UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
+            MutabelAtributted.append(attributed)
+            label.attributedText = MutabelAtributted
+            
             return label
     }()
     
