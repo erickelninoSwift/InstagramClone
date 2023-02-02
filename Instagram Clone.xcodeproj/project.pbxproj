@@ -10,6 +10,7 @@
 		074B78E55D3C104226398A8F /* Pods_Instagram_Clone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E4B1CB5B35402CB4FE76BCB /* Pods_Instagram_Clone.framework */; };
 		940D33382987641F0049F483 /* FollowUnFollow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940D33372987641F0049F483 /* FollowUnFollow.swift */; };
 		940D333A298B03EF0049F483 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940D3339298B03EF0049F483 /* Protocols.swift */; };
+		940D333C298C35830049F483 /* FollowersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940D333B298C35830049F483 /* FollowersVC.swift */; };
 		943E3DCD298061C7000CAA98 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943E3DCC298061C7000CAA98 /* MainViewController.swift */; };
 		943E3DCF29806742000CAA98 /* FeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943E3DCE29806742000CAA98 /* FeedController.swift */; };
 		943E3DD129806785000CAA98 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943E3DD029806785000CAA98 /* NotificationController.swift */; };
@@ -36,6 +37,7 @@
 		8D3FFEE3B26BD2CF07C5B5E5 /* Pods-Instagram Clone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instagram Clone.debug.xcconfig"; path = "Target Support Files/Pods-Instagram Clone/Pods-Instagram Clone.debug.xcconfig"; sourceTree = "<group>"; };
 		940D33372987641F0049F483 /* FollowUnFollow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUnFollow.swift; sourceTree = "<group>"; };
 		940D3339298B03EF0049F483 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		940D333B298C35830049F483 /* FollowersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersVC.swift; sourceTree = "<group>"; };
 		943E3DCC298061C7000CAA98 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		943E3DCE29806742000CAA98 /* FeedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedController.swift; sourceTree = "<group>"; };
 		943E3DD029806785000CAA98 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				943E3DD2298067A3000CAA98 /* SearchFeedController.swift */,
 				943E3DD4298067CC000CAA98 /* PostController.swift */,
 				943E3DD6298067F0000CAA98 /* ProfileController.swift */,
+				940D333B298C35830049F483 /* FollowersVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				94E8395F2984AF5B002B365C /* Services.swift in Sources */,
 				94C4B2B9297CF39B00B44056 /* SignUpViewController.swift in Sources */,
 				943E3DD3298067A3000CAA98 /* SearchFeedController.swift in Sources */,
+				940D333C298C35830049F483 /* FollowersVC.swift in Sources */,
 				943E3DCF29806742000CAA98 /* FeedController.swift in Sources */,
 				940D333A298B03EF0049F483 /* Protocols.swift in Sources */,
 				94E8395829815B05002B365C /* ProfileCollectionViewHeader.swift in Sources */,
