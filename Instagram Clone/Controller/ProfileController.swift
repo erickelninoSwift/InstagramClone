@@ -114,20 +114,25 @@ extension ProfileController
         
         if let myuser = user
         {
-            
+           
             switch profileconfig!
             {
+                
             case .editprofile:
+                self.getuserStats(user_id: myuser.userID!, profile: header)
                 header.delegate = self
+                header.labelActionDelegate = self
                 header.currentUser = myuser
                 self.navigationItem.title = myuser.username ?? ""
                 header.configurationset = profileconfig
-                
+               
                 
                 
             case .followuser:
-                
+        
+                self.getuserStats(user_id: myuser.userID!, profile: header)
                 header.delegate = self
+                header.labelActionDelegate = self
                 header.currentUser = myuser
                 self.navigationItem.title = myuser.username ?? ""
                 header.configurationset = profileconfig
@@ -174,13 +179,16 @@ extension ProfileController: ProfileCollectionViewHeaderDelegate
         
         if let profileuser = profileheader.currentUser
         {
+            
+           
             switch buttonConfig
             {
             case .editprofile:
-
+                self.getuserStats(user_id: profileuser.userID!, profile: profileheader)
                 profileheader.currentUser = profileuser
                 self.navigationItem.title = profileuser.username ?? ""
                 profileheader.configurationset = buttonConfig
+               
                 
             case .followuser:
                 
@@ -193,12 +201,14 @@ extension ProfileController: ProfileCollectionViewHeaderDelegate
                     profileheader.editFollowButton.setTitle("Following", for: .normal)
                     FollowUnFollow.userisFollowed = true
                     FollowUnFollow.shared.followUser(usertoFollow: profileuser)
+                    self.getuserStats(user_id: profileuser.userID!, profile: profileheader)
+                    
                 }else
                 {
                     profileheader.editFollowButton.setTitle("Follow", for: .normal)
                     FollowUnFollow.userisFollowed = false
                     FollowUnFollow.shared.UnfollowUser(usertoUnfollow: profileuser)
-                    
+                    self.getuserStats(user_id: profileuser.userID!, profile: profileheader)
                 }
             }
         }
@@ -208,16 +218,74 @@ extension ProfileController: ProfileCollectionViewHeaderDelegate
 extension ProfileController
 {
     func checkifuserfollwing()
-       {
-           guard let current = user else {return}
-           guard let myUID = Auth.auth().currentUser?.uid else {return}
-           
-           if current.userID != myUID
-           {
-               current.checkuserFollow(myUser: current, myuserID: myUID, completion: { isFollowed in
-                   current.isFollowed = isFollowed
+    {
+        guard let current = user else {return}
+        guard let myUID = Auth.auth().currentUser?.uid else {return}
+        
+        if current.userID != myUID
+        {
+            current.checkuserFollow(myUser: current, myuserID: myUID, completion: { isFollowed in
+                current.isFollowed = isFollowed
                 self.collectionView.reloadData()
-               })
-           }
-       }
+            })
+        }
+    }
 }
+
+extension ProfileController
+{
+    
+    
+    func getuserStats(user_id: String, profile: ProfileCollectionViewHeader)
+    {
+        var userNumberOfFollowers:Int!
+        var userNumberOfFollowing: Int!
+        
+        
+        Database.database().reference().child("User-followers").child(user_id).observe(.value) { snapshots in
+            if let numberOfStats = snapshots.value as? [String:Any]
+            {
+                userNumberOfFollowers = numberOfStats.count
+            }else
+            {
+                userNumberOfFollowers = 0
+            }
+            
+            let attributed = NSAttributedString(string: "Followers", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
+            let MutabelAtributted = NSMutableAttributedString(string: "\(userNumberOfFollowers ?? 0) \n", attributes: [.font: UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
+            MutabelAtributted.append(attributed)
+            profile.FollowerLabel.attributedText = MutabelAtributted
+        }
+        
+        Database.database().reference().child("User-following").child(user_id).observe(.value) { snapshots in
+            if let numberOfStats = snapshots.value as? [String:Any]
+            {
+                userNumberOfFollowing = numberOfStats.count
+            }else
+            {
+                userNumberOfFollowing = 0
+            }
+            
+            let attributed = NSAttributedString(string: "Following", attributes: [.font: UIFont.boldSystemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
+            let MutabelAtributted = NSMutableAttributedString(string: "\(userNumberOfFollowing ?? 0) \n", attributes: [.font: UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
+            MutabelAtributted.append(attributed)
+            profile.FollowingLabel.attributedText = MutabelAtributted
+        }
+        
+    }
+    
+}
+
+extension ProfileController: profileheaderLabelActionDelegate
+{
+    func HandlePostLabel(userProfileHeader: ProfileCollectionViewHeader) {
+        print("DEBUG: USER POST")
+    }
+    func HandleFollowingLabel(userProfileHeader: ProfileCollectionViewHeader) {
+        print("DEBUG: USER FOLLOWING")
+    }
+    func HandleFollowersLabel(userProfileHeader: ProfileCollectionViewHeader) {
+        print("DEBUG: USEr followers")
+    }
+}
+

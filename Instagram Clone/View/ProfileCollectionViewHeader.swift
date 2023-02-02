@@ -10,20 +10,14 @@ import UIKit
 import SDWebImage
 import Firebase
 
-protocol ProfileCollectionViewHeaderDelegate: AnyObject
-{
-    func HandleeditFollow(profileheader: ProfileCollectionViewHeader, buttonConfig: configurationEditbutton)
-    func handleGrid(CurrentButton: UIButton , profileheader: ProfileCollectionViewHeader)
-    func handleListController(CurrentButton: UIButton , profileheader: ProfileCollectionViewHeader)
-    func HandleBookmark(CurrentButton: UIButton , profileheader: ProfileCollectionViewHeader)
-}
-
-
 class ProfileCollectionViewHeader: UICollectionViewCell
 {
     
     
     weak var delegate: ProfileCollectionViewHeaderDelegate?
+    
+    weak var labelActionDelegate: profileheaderLabelActionDelegate?
+    
     
     var userfollowing: Bool = false
     
@@ -41,87 +35,85 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         {
             checkifuserfollwing()
             configurationUser()
-            guard let user = currentUser else {return}
-            
-            getuserStats(user_id: user.userID ?? "")
-            
         }
     }
     
-    private let profileImageView : UIImageView =
-    {
-        let profileimage = UIImageView()
-        profileimage.translatesAutoresizingMaskIntoConstraints = false
-        profileimage.contentMode = .scaleAspectFill
-        profileimage.clipsToBounds = true
-        profileimage.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        profileimage.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        profileimage.layer.cornerRadius = 80 / 2
-        
-        return profileimage
+    lazy var profileImageView : UIImageView =
+        {
+            let profileimage = UIImageView()
+            profileimage.translatesAutoresizingMaskIntoConstraints = false
+            profileimage.contentMode = .scaleAspectFill
+            profileimage.clipsToBounds = true
+            profileimage.heightAnchor.constraint(equalToConstant: 80).isActive = true
+            profileimage.widthAnchor.constraint(equalToConstant: 80).isActive = true
+            profileimage.layer.cornerRadius = 80 / 2
+            
+            return profileimage
     }()
     
-    private let nameLabel : UILabel =
-    {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 14)
-        return label
+    lazy var nameLabel : UILabel =
+        {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = UIFont.boldSystemFont(ofSize: 14)
+            
+            return label
     }()
     
-    private let postLabel: UILabel =
-    {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        
-        let attributed = NSAttributedString(string: "Post", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
-        let MutabelAtributted = NSMutableAttributedString(string: "3 \n", attributes: [.font:  UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
-        MutabelAtributted.append(attributed)
-        label.attributedText = MutabelAtributted
-        
-        return label
+    lazy var postLabel: UILabel =
+        {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.numberOfLines = 0
+            label.textAlignment = .center
+            
+            let attributed = NSAttributedString(string: "Post", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
+            let MutabelAtributted = NSMutableAttributedString(string: "3 \n", attributes: [.font:  UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
+            MutabelAtributted.append(attributed)
+            label.attributedText = MutabelAtributted
+            
+            return label
     }()
     
-    private let FollowingLabel: UILabel =
-    {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        return label
-    }()
-    
-    
-    var FollowerLabel: UILabel =
-    {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        return label
-    }()
-    
-    var editFollowButton: UIButton =
-    {
-        let button = UIButton(type: .system)
-        
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Edit Profile", for: .normal)
-        button.backgroundColor = .white
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.layer.borderWidth = 0.5
-        button.layer.cornerRadius = 5
-        button.heightAnchor.constraint(equalToConstant: 35).isActive = true
-        button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-
-        return button
+    lazy var FollowingLabel: UILabel =
+        {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.numberOfLines = 0
+            label.textAlignment = .center
+            
+            return label
     }()
     
     
-    private let gridbutton: UIButton =
+    lazy var FollowerLabel: UILabel =
+        {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.numberOfLines = 0
+            label.textAlignment = .center
+            return label
+    }()
+    
+    lazy var editFollowButton: UIButton =
+        {
+            let button = UIButton(type: .system)
+            
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.setTitle("Edit Profile", for: .normal)
+            button.backgroundColor = .white
+            button.layer.borderColor = UIColor.lightGray.cgColor
+            button.layer.borderWidth = 0.5
+            button.layer.cornerRadius = 5
+            button.heightAnchor.constraint(equalToConstant: 35).isActive = true
+            button.setTitleColor(.black, for: .normal)
+            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+            
+            return button
+    }()
+    
+    
+    let gridbutton: UIButton =
     {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -160,6 +152,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        myUIGesture()
         configured()
         style()
         layout()
@@ -169,45 +162,6 @@ class ProfileCollectionViewHeader: UICollectionViewCell
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-    func getuserStats(user_id: String)
-    {
-        var userNumberOfFollowers:Int!
-        var userNumberOfFollowing: Int!
-        
-        
-        Database.database().reference().child("User-followers").child(user_id).observeSingleEvent(of: .value) { snapshots in
-            if let numberOfStats = snapshots.value as? [String:Any]
-            {
-                userNumberOfFollowers = numberOfStats.count
-            }else
-            {
-                userNumberOfFollowers = 0
-            }
-            
-            let attributed = NSAttributedString(string: "Followers", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
-            let MutabelAtributted = NSMutableAttributedString(string: "\(userNumberOfFollowers ?? 0) \n", attributes: [.font: UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
-            MutabelAtributted.append(attributed)
-            self.FollowerLabel.attributedText = MutabelAtributted
-        }
-        
-        Database.database().reference().child("User-following").child(user_id).observeSingleEvent(of: .value) { snapshots in
-            if let numberOfStats = snapshots.value as? [String:Any]
-            {
-                userNumberOfFollowing = numberOfStats.count
-            }else
-            {
-                userNumberOfFollowing = 0
-            }
-            
-            let attributed = NSAttributedString(string: "Following", attributes: [.font: UIFont.boldSystemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
-            let MutabelAtributted = NSMutableAttributedString(string: "\(userNumberOfFollowing ?? 0) \n", attributes: [.font: UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
-            MutabelAtributted.append(attributed)
-            self.FollowingLabel.attributedText = MutabelAtributted
-        }
-        
     }
 }
 extension ProfileCollectionViewHeader
@@ -257,6 +211,40 @@ extension ProfileCollectionViewHeader
     private func configured()
     {
         self.editFollowButton.addTarget(self, action: #selector(HandleIeditprofile), for: .primaryActionTriggered)
+        
+        
+    }
+    
+    private func myUIGesture()
+    {
+        let followTapgesture = UITapGestureRecognizer(target: self, action: #selector(FollowlabelAction))
+        self.FollowerLabel.addGestureRecognizer(followTapgesture)
+        self.FollowerLabel.isUserInteractionEnabled = true
+        
+        let followingTapgesture = UITapGestureRecognizer(target: self, action: #selector(HandleFollowingAction))
+        self.FollowingLabel.addGestureRecognizer(followingTapgesture)
+        self.FollowingLabel.isUserInteractionEnabled = true
+        
+        
+        let posttapGesture = UITapGestureRecognizer(target: self, action: #selector(HandlePostTappedAction))
+        self.postLabel.addGestureRecognizer(posttapGesture)
+        self.postLabel.isUserInteractionEnabled = true
+        
+    }
+    
+    @objc func FollowlabelAction()
+    {
+        labelActionDelegate?.HandleFollowersLabel(userProfileHeader: self)
+    }
+    
+    @objc func HandleFollowingAction()
+    {
+        labelActionDelegate?.HandleFollowingLabel(userProfileHeader: self)
+    }
+    
+    @objc func HandlePostTappedAction()
+    {
+        labelActionDelegate?.HandlePostLabel(userProfileHeader: self)
     }
 }
 //=================== Bottom view header section
@@ -315,7 +303,7 @@ extension ProfileCollectionViewHeader
 {
     @objc func HandleIeditprofile()
     {
-    
+        
         delegate?.HandleeditFollow(profileheader: self, buttonConfig: self.configurationset!)
     }
     
@@ -363,11 +351,14 @@ extension ProfileCollectionViewHeader
                 self.editFollowButton.setTitle("Following", for: .normal)
                 self.editFollowButton.setTitleColor(.white, for: .normal)
                 self.editFollowButton.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+                checkifuserfollwing()
             }else
             {
+                checkifuserfollwing()
                 self.editFollowButton.setTitle("Follow", for: .normal)
                 self.editFollowButton.setTitleColor(.white, for: .normal)
                 self.editFollowButton.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+                
             }
         }
         
