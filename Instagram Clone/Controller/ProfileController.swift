@@ -279,10 +279,7 @@ extension ProfileController
 extension ProfileController: profileheaderLabelActionDelegate
 {
     func HandlePostLabel(userProfileHeader: ProfileCollectionViewHeader) {
-         guard let currentuser = userProfileHeader.currentUser else {return}
-        let controller = FollowersVC(style: .plain, followconfig: .post, userSelected: currentuser)
-        controller.modalPresentationStyle = .fullScreen
-        self.navigationController?.pushViewController(controller, animated: true)
+         print("DEBUG: POST BUTTON PRESSED")
     }
     func HandleFollowingLabel(userProfileHeader: ProfileCollectionViewHeader) {
            guard let currentuser = userProfileHeader.currentUser else {return}

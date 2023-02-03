@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import Firebase
+
 enum followVCconfig
 {
     case following
     case follower
-    case post
     
     var description: String
     {
@@ -21,8 +22,6 @@ enum followVCconfig
             return "Followers"
         case .following:
             return "Following"
-        case .post:
-            return "Post"
         }
     }
 }
@@ -35,6 +34,7 @@ class FollowersVC: UITableViewController
     private var viewcontrollerConfig: followVCconfig = .follower
     
     private var userFollowers: User?
+   
     
     init(style: UITableView.Style, followconfig:followVCconfig , userSelected: User) {
         self.viewcontrollerConfig = followconfig
@@ -50,6 +50,7 @@ class FollowersVC: UITableViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        fetchUser()
         configureUser()
         style()
         layout()
@@ -97,5 +98,32 @@ extension FollowersVC
     {
         guard let currentuser = userFollowers else {return}
         print("DEBUG: The user received from the profile controller is : \(currentuser.fullname ?? "")")
+    }
+    
+    func fetchUser()
+    {
+        guard let userpassed = userFollowers else {return}
+        
+        var dataref: DatabaseReference!
+        
+        switch viewcontrollerConfig
+        {
+        case .follower:
+            dataref = Database.database().reference().child("User-followers")
+
+        case .following:
+            dataref = Database.database().reference().child("User-following")
+    
+        }
+        
+        dataref.child(userpassed.userID!).observe(.childAdded) { snapshots in
+            let currentUserID = snapshots.key as String
+            print("DEBUG: Currentid: \(currentUserID)")
+            Services.shared.fetchUser(user_Id: currentUserID) { userFetched in
+                print("DEBUG: USER INFO: \(userFetched.fullname)")
+            }
+        }
+        
+        
     }
 }

@@ -42,18 +42,18 @@ class FollowersViewControllerCell: UITableViewCell
     }()
     
     lazy var followButton: UIButton =
-    {
-        let button  = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Following", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
-        button.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        button.layer.cornerRadius = 5
-        
-        button.addTarget(self, action: #selector(HandleFollowButton), for: .primaryActionTriggered)
-        
-        return button
+        {
+            let button  = UIButton(type: .system)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.setTitle("Following", for: .normal)
+            button.setTitleColor(.white, for: .normal)
+            button.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+            button.widthAnchor.constraint(equalToConstant: 120).isActive = true
+            button.layer.cornerRadius = 5
+            
+            button.addTarget(self, action: #selector(HandleFollowButton), for: .primaryActionTriggered)
+            
+            return button
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -77,67 +77,60 @@ class FollowersViewControllerCell: UITableViewCell
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     
     @objc func HandleFollowButton()
     {
         guard let currentConfig = configureCell else {return}
-//        guard let currentUserSelected = currentUser else {return}
+        //        guard let currentUserSelected = currentUser else {return}
         
         switch currentConfig
         {
         case .follower:
-           
+            
             print("DEBUG: Follow bruv!!!")
         case .following:
-          
             print("DEBUG: Following bruv!!!")
-        case .post:
-
-            print("DEBUG: Post bruv!!!")
         }
     }
 }
-
-extension FollowersViewControllerCell
-{
-    private func config()
-    {
-        self.profileImage.backgroundColor = .systemBlue
-        contentView.addSubview(profileImage)
-        contentView.addSubview(followButton)
-    }
     
-    
-    private func layout()
+    extension FollowersViewControllerCell
     {
-        NSLayoutConstraint.activate([profileImage.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 2),
-                                     profileImage.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([self.trailingAnchor.constraint(equalToSystemSpacingAfter: followButton.trailingAnchor, multiplier: 1),
-                                     followButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-                                     followButton.heightAnchor.constraint(equalToConstant: 30)
-        ])
-        
-    }
-    
-    func tableviewCellConfig()
-    {
-        guard let currentConfig = configureCell else {return}
-        guard let currentUserSelected = currentUser else {return}
-        
-        switch currentConfig
+        private func config()
         {
-        case .follower:
-           
-            self.followButton.setTitle("Follow", for: .normal)
-        case .following:
-          
-            self.followButton.setTitle(currentConfig.description, for: .normal)
-        case .post:
-
-            self.followButton.setTitle("View", for: .normal)
+            self.profileImage.backgroundColor = .systemBlue
+            contentView.addSubview(profileImage)
+            contentView.addSubview(followButton)
+        }
+        
+        
+        private func layout()
+        {
+            NSLayoutConstraint.activate([profileImage.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 2),
+                                         profileImage.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+            ])
+            
+            NSLayoutConstraint.activate([self.trailingAnchor.constraint(equalToSystemSpacingAfter: followButton.trailingAnchor, multiplier: 1),
+                                         followButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+                                         followButton.heightAnchor.constraint(equalToConstant: 30)
+            ])
+            
+        }
+        
+        func tableviewCellConfig()
+        {
+            guard let currentConfig = configureCell else {return}
+            guard let currentUserSelected = currentUser else {return}
+            
+            switch currentConfig
+            {
+            case .follower:
+                
+                self.followButton.setTitle("Follow", for: .normal)
+            case .following:
+                
+                self.followButton.setTitle(currentConfig.description, for: .normal)
+            }
         }
     }
-}
