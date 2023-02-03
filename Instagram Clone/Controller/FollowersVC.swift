@@ -64,6 +64,11 @@ extension FollowersVC
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: followersCellID, for: indexPath) as? FollowersViewControllerCell else {return UITableViewCell()}
+       if let myUserSelected  = userFollowers
+       {
+          cell.configureCell = viewcontrollerConfig
+          cell.currentUser = myUserSelected
+       }
         return cell
     }
     
@@ -78,6 +83,7 @@ extension FollowersVC
     {
         tableView.rowHeight = 80
         tableView.tableFooterView = UIView()
+        tableView.separatorStyle = .none
         self.tableView.register(FollowersViewControllerCell.self, forCellReuseIdentifier: followersCellID)
     }
     
