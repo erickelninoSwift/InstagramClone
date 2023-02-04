@@ -22,3 +22,9 @@ protocol profileheaderLabelActionDelegate: AnyObject
     func HandleFollowingLabel(userProfileHeader: ProfileCollectionViewHeader)
     func HandleFollowersLabel(userProfileHeader: ProfileCollectionViewHeader)
 }
+
+protocol FollowCellDelegate: AnyObject
+{
+    func handleFollowButtonTapped(cellFollow: FollowersViewControllerCell)
+    func handleUnfollowButtonTapped(cellUnfollow: FollowersViewControllerCell)
+}

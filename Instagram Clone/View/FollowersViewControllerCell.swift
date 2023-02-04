@@ -7,9 +7,14 @@
 //
 
 import UIKit
+import SDWebImage
+import Firebase
+
 
 class FollowersViewControllerCell: UITableViewCell
 {
+    
+    weak var delegate:FollowCellDelegate?
     
     var configureCell: followVCconfig?
     {
@@ -23,6 +28,7 @@ class FollowersViewControllerCell: UITableViewCell
         didSet
         {
             tableviewCellConfig()
+            populateCellData()
         }
     }
     
@@ -60,18 +66,19 @@ class FollowersViewControllerCell: UITableViewCell
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         config()
         layout()
-        textLabel?.text = "Username"
-        detailTextLabel?.text = "Fullname"
+        
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        textLabel?.frame = CGRect(x: 85, y: textLabel!.frame.origin.y, width: (textLabel?.frame.width ?? 100) + 100, height: textLabel?.frame.height ?? 20)
+        textLabel?.frame = CGRect(x: 88, y: textLabel!.frame.origin.y, width: (textLabel?.frame.width ?? 100) + 100, height: textLabel?.frame.height ?? 20)
         textLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         
-        detailTextLabel?.frame = CGRect(x: 85, y: detailTextLabel!.frame.origin.y + 2, width: (detailTextLabel?.frame.width ?? 100) + 100, height: detailTextLabel?.frame.height ?? 20)
+        detailTextLabel?.frame = CGRect(x: 88, y: detailTextLabel!.frame.origin.y + 3, width: (detailTextLabel?.frame.width ?? 100) + 100, height: detailTextLabel?.frame.height ?? 20)
         detailTextLabel?.textColor = .lightGray
         detailTextLabel?.font = UIFont.systemFont(ofSize: 14)
+        textLabel?.text = currentUser?.username ?? ""
+        detailTextLabel?.text = currentUser?.fullname ?? ""
     }
     
     required init?(coder: NSCoder) {
@@ -88,9 +95,9 @@ class FollowersViewControllerCell: UITableViewCell
         {
         case .follower:
             
-            print("DEBUG: Follow bruv!!!")
+            delegate?.handleFollowButtonTapped(cellFollow: self)
         case .following:
-            print("DEBUG: Following bruv!!!")
+            delegate?.handleUnfollowButtonTapped(cellUnfollow: self)
         }
     }
 }
@@ -121,7 +128,10 @@ class FollowersViewControllerCell: UITableViewCell
         func tableviewCellConfig()
         {
             guard let currentConfig = configureCell else {return}
-            guard let currentUserSelected = currentUser else {return}
+            guard let myID = Auth.auth().currentUser?.uid else {return}
+            guard let current = currentUser?.userID else {return}
+            
+            self.followButton.isHidden = myID == current ? true : false
             
             switch currentConfig
             {
@@ -130,7 +140,16 @@ class FollowersViewControllerCell: UITableViewCell
                 self.followButton.setTitle("Follow", for: .normal)
             case .following:
                 
+                
                 self.followButton.setTitle(currentConfig.description, for: .normal)
+                
             }
+        }
+        
+        
+        private func populateCellData()
+        {
+            guard let currentUserSelected = currentUser else {return}
+            self.profileImage.sd_setImage(with: currentUserSelected.profileImage, completed: nil)
         }
     }
