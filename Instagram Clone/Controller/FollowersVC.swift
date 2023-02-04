@@ -34,8 +34,8 @@ class FollowersVC: UITableViewController
     private var viewcontrollerConfig: followVCconfig = .follower
     
     private var userFollowers: User?
-   
-     var userfetched = [User]()
+    
+    var userfetched = [User]()
     
     init(style: UITableView.Style, followconfig:followVCconfig , userSelected: User) {
         self.viewcontrollerConfig = followconfig
@@ -67,11 +67,11 @@ extension FollowersVC
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: followersCellID, for: indexPath) as? FollowersViewControllerCell else {return UITableViewCell()}
         cell.delegate = self
-       if let myUserSelected  = userFollowers
-       {
-          cell.configureCell = viewcontrollerConfig
-        cell.currentUser = userfetched[indexPath.row]
-       }
+        if let myUserSelected  = userFollowers
+        {
+            cell.configureCell = viewcontrollerConfig
+            cell.currentUser = userfetched[indexPath.row]
+        }
         return cell
     }
     
@@ -112,10 +112,10 @@ extension FollowersVC
         {
         case .follower:
             dataref = Database.database().reference().child("User-followers")
-
+            
         case .following:
             dataref = Database.database().reference().child("User-following")
-    
+            
         }
         
         dataref.child(userpassed.userID!).observe(.childAdded) { snapshots in
@@ -134,20 +134,30 @@ extension FollowersVC
 extension FollowersVC: FollowCellDelegate
 {
     func handleFollowButtonTapped(cellFollow: FollowersViewControllerCell) {
-       guard let currentuser = cellFollow.currentUser else {return}
-        cellFollow.followButton.setTitle("Following", for: .normal)
-        cellFollow.configureCell = .following
-        FollowUnFollow.shared.followUser(usertoFollow: currentuser)
-        cellFollow.tableviewCellConfig()
         
+        guard let user = cellFollow.currentUser else {return}
+        if !user.isFollowed
+        {
+            print("DEBUG: PLEASE FOLLOW")
+        }else
+        {
+            print("DEBUG: PLEASE UNFOLLOW")
+        }
     }
     
     func handleUnfollowButtonTapped(cellUnfollow: FollowersViewControllerCell) {
-        guard let currentuser = cellUnfollow.currentUser else {return}
-         cellUnfollow.followButton.setTitle("Follow", for: .normal)
-         cellUnfollow.configureCell = .follower
-        FollowUnFollow.shared.UnfollowUser(usertoUnfollow: currentuser)
-        cellUnfollow.tableviewCellConfig()
+        guard let user = cellUnfollow.currentUser else {return}
+        
+        
+        if user.isFollowed
+        {
+           
+            print("DEBUG: PLEASE UNFOLLOW")
+        }else
+        {
+             print("DEBUG: PLEASE FOLLOW")
+        }
+        
     }
     
     
