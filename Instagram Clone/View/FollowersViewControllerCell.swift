@@ -28,7 +28,6 @@ class FollowersViewControllerCell: UITableViewCell
         didSet
         {
             tableviewCellConfig()
-            populateCellData()
         }
     }
     
@@ -66,6 +65,7 @@ class FollowersViewControllerCell: UITableViewCell
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         config()
         layout()
+        tableviewCellConfig()
         
     }
     
@@ -88,17 +88,7 @@ class FollowersViewControllerCell: UITableViewCell
     
     @objc func HandleFollowButton()
     {
-        guard let currentConfig = configureCell else {return}
-        //        guard let currentUserSelected = currentUser else {return}
-        
-        switch currentConfig
-        {
-        case .follower:
-            
-            delegate?.handleFollowButtonTapped(cellFollow: self)
-        case .following:
-            delegate?.handleUnfollowButtonTapped(cellUnfollow: self)
-        }
+        delegate?.handleFollowandUnfollowButtonTapped(cellFollow: self, cellconfig: configureCell ?? followVCconfig.follower)
     }
 }
     
@@ -127,21 +117,33 @@ class FollowersViewControllerCell: UITableViewCell
         
         func tableviewCellConfig()
         {
+            populateCellData()
             guard let currentConfig = configureCell else {return}
             guard let myID = Auth.auth().currentUser?.uid else {return}
             guard let current = currentUser?.userID else {return}
+            guard let currentUserSelcted = currentUser else {return}
             
             self.followButton.isHidden = myID == current ? true : false
             
-            switch currentConfig
-            {
-            case .follower:
+            
+            FollowUnFollow.shared.checkuserFollow(myUser: currentUserSelcted) { isFollowed in
                 
-                self.followButton.setTitle("Follow", for: .normal)
-            case .following:
-                
-                
-                self.followButton.setTitle(currentConfig.description, for: .normal)
+                if isFollowed
+                {
+                    self.followButton.setTitle(currentConfig.description, for: .normal)
+                    self.followButton.backgroundColor = .white
+                    self.followButton.setTitleColor(.black, for: .normal)
+                    self.followButton.layer.borderColor = UIColor.darkGray.cgColor
+                    self.followButton.layer.borderWidth = 1
+                }else
+                {
+                    self.followButton.setTitle("Follow", for: .normal)
+                    self.followButton.backgroundColor =  UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+                    self.followButton.setTitleColor(.white, for: .normal)
+                    self.followButton.layer.borderColor = UIColor.white.cgColor
+                    self.followButton.layer.borderWidth = 1
+                    
+                }
                 
             }
         }

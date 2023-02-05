@@ -58,6 +58,7 @@ class ProfileController: UICollectionViewController
     {
         self.profileconfig = config
         super.init(collectionViewLayout: layout)
+        checkifuserfollwing()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,7 +66,7 @@ class ProfileController: UICollectionViewController
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        checkifuserfollwing()
         style()
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: profileIDcell)
         self.collectionView.register(ProfileCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerprofileID)
@@ -188,7 +189,7 @@ extension ProfileController: ProfileCollectionViewHeaderDelegate
                 profileheader.currentUser = profileuser
                 self.navigationItem.title = profileuser.username ?? ""
                 profileheader.configurationset = buttonConfig
-               
+                checkifuserfollwing()
                 
             case .followuser:
                 
@@ -199,16 +200,17 @@ extension ProfileController: ProfileCollectionViewHeaderDelegate
                 if profileheader.editFollowButton.titleLabel?.text == "Follow"
                 {
                     profileheader.editFollowButton.setTitle("Following", for: .normal)
-                    FollowUnFollow.userisFollowed = true
+                    FollowUnFollow.shared.userisFollowed = true
                     FollowUnFollow.shared.followUser(usertoFollow: profileuser)
                     self.getuserStats(user_id: profileuser.userID!, profile: profileheader)
-                    
+                    checkifuserfollwing()
                 }else
                 {
                     profileheader.editFollowButton.setTitle("Follow", for: .normal)
-                    FollowUnFollow.userisFollowed = false
+                    FollowUnFollow.shared.userisFollowed = false
                     FollowUnFollow.shared.UnfollowUser(usertoUnfollow: profileuser)
                     self.getuserStats(user_id: profileuser.userID!, profile: profileheader)
+                    checkifuserfollwing()
                 }
             }
         }
@@ -226,6 +228,7 @@ extension ProfileController
         {
             current.checkuserFollow(myUser: current, myuserID: myUID, completion: { isFollowed in
                 current.isFollowed = isFollowed
+                self.user?.isFollowed = isFollowed
                 self.collectionView.reloadData()
             })
         }

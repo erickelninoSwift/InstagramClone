@@ -14,12 +14,12 @@ class FollowUnFollow
 {
     static let shared = FollowUnFollow()
     
-    static var userisFollowed = false
+     var userisFollowed = false
     
     func followUser(usertoFollow: User)
     {
         guard let userid = Auth.auth().currentUser?.uid else {return}
-        FollowUnFollow.userisFollowed = true
+        self.userisFollowed = true
          let followingvalue = [usertoFollow.userID: 1]
         let followersvalue = [userid:1]
         
@@ -32,7 +32,7 @@ class FollowUnFollow
     func UnfollowUser(usertoUnfollow: User)
     {
         guard let userid = Auth.auth().currentUser?.uid else {return}
-        FollowUnFollow.userisFollowed = false
+        self.userisFollowed = false
         Database.database().reference().child("User-following").child(userid).child(usertoUnfollow.userID!).removeValue { (Error, Dataref) in
             if  Error != nil
             {
@@ -47,14 +47,18 @@ class FollowUnFollow
     
     func checkuserFollow(myUser: User , completion: @escaping(Bool) -> Void)
     {
-        var isuserfollowed = false
         guard let userid = Auth.auth().currentUser?.uid else {return}
         guard let letuseryoufollow = myUser.userID else {return}
         
         
         Database.database().reference().child("User-following").child(userid).child(letuseryoufollow).observeSingleEvent(of: .value) { datasnapshots in
-            isuserfollowed = datasnapshots.exists()
-            completion(isuserfollowed)
+           self.userisFollowed = datasnapshots.exists()
+            completion(datasnapshots.exists())
+        }
+        
+        Database.database().reference().child("User-followers").child(myUser.userID!).child(userid).observeSingleEvent(of: .value) { Datasnapshots in
+             self.userisFollowed = Datasnapshots.exists()
+            completion(Datasnapshots.exists())
         }
     }
 }

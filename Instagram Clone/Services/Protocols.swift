@@ -25,6 +25,6 @@ protocol profileheaderLabelActionDelegate: AnyObject
 
 protocol FollowCellDelegate: AnyObject
 {
-    func handleFollowButtonTapped(cellFollow: FollowersViewControllerCell)
-    func handleUnfollowButtonTapped(cellUnfollow: FollowersViewControllerCell)
+    func handleFollowandUnfollowButtonTapped(cellFollow: FollowersViewControllerCell, cellconfig: followVCconfig)
+
 }

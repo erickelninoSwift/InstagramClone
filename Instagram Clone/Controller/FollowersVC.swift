@@ -118,47 +118,55 @@ extension FollowersVC
             
         }
         
-        dataref.child(userpassed.userID!).observe(.childAdded) { snapshots in
-            let currentUserID = snapshots.key as String
+        dataref.child(userpassed.userID!).observeSingleEvent(of: .value) { snapshots in
             
-            Services.shared.fetchUser(user_Id: currentUserID) { userFetched in
-                self.userfetched.append(userFetched)
-                self.tableView.reloadData()
+            guard let Allobject = snapshots.children.allObjects as? [DataSnapshot]  else {return}
+            
+            Allobject.forEach { Mysnapshots in
+                Services.shared.fetchUser(user_Id: Mysnapshots.key) { user in
+                    self.userfetched.append(user)
+                    self.tableView.reloadData()
+                }
             }
         }
-        
-        
     }
 }
 
 extension FollowersVC: FollowCellDelegate
 {
-    func handleFollowButtonTapped(cellFollow: FollowersViewControllerCell) {
+    func handleFollowandUnfollowButtonTapped(cellFollow: FollowersViewControllerCell, cellconfig: followVCconfig) {
         
-        guard let user = cellFollow.currentUser else {return}
-        if !user.isFollowed
+//                if cellconfig == .follower
+//                {
+//
+//                    FollowUnFollow.shared.followUser(usertoFollow: cellFollow.currentUser!)
+//                    cellFollow.followButton.setTitle("Following", for: .normal)
+//                    cellFollow.followButton.backgroundColor = .white
+//                    cellFollow.followButton.setTitleColor(.black, for: .normal)
+//                    cellFollow.followButton.layer.borderColor = UIColor.lightGray.cgColor
+//                    cellFollow.followButton.layer.borderWidth = 0.5
+//
+//                }else
+//                {
+//
+//                    FollowUnFollow.shared.UnfollowUser(usertoUnfollow: cellFollow.currentUser!)
+//                    cellFollow.followButton.setTitle("Follow", for: .normal)
+//                    cellFollow.followButton.backgroundColor =  UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+//                    cellFollow.followButton.setTitleColor(.white, for: .normal)
+//                    cellFollow.followButton.layer.borderWidth = 0
+//                }
+        
+        guard let myuser = cellFollow.currentUser else {return}
+        
+        if myuser.isFollowed
         {
-            print("DEBUG: PLEASE FOLLOW")
+           print("DEBUG: Should unfollow")
+            print("DEBUG:\(myuser.isFollowed)")
         }else
         {
-            print("DEBUG: PLEASE UNFOLLOW")
+            print("DEBUG: Should be following by now")
+              print("DEBUG:\(myuser.isFollowed)")
         }
     }
-    
-    func handleUnfollowButtonTapped(cellUnfollow: FollowersViewControllerCell) {
-        guard let user = cellUnfollow.currentUser else {return}
-        
-        
-        if user.isFollowed
-        {
-           
-            print("DEBUG: PLEASE UNFOLLOW")
-        }else
-        {
-             print("DEBUG: PLEASE FOLLOW")
-        }
-        
-    }
-    
-    
+   
 }
