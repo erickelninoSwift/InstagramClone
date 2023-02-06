@@ -89,6 +89,7 @@ class SearchViewControllerCell: UITableViewCell
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         configureationCell()
         layout()
+         self.selectionStyle = .none
     }
     
     required init?(coder: NSCoder) {

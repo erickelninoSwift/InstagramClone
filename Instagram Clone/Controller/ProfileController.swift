@@ -58,7 +58,7 @@ class ProfileController: UICollectionViewController
     {
         self.profileconfig = config
         super.init(collectionViewLayout: layout)
-        checkifuserfollwing()
+      
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,7 +66,7 @@ class ProfileController: UICollectionViewController
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkifuserfollwing()
+       
         style()
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: profileIDcell)
         self.collectionView.register(ProfileCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerprofileID)

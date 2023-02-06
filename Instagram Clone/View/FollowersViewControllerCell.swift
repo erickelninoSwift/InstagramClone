@@ -66,6 +66,7 @@ class FollowersViewControllerCell: UITableViewCell
         config()
         layout()
         tableviewCellConfig()
+        self.selectionStyle = .none
         
     }
     

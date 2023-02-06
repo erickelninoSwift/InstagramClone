@@ -42,6 +42,7 @@ class FollowersVC: UITableViewController
         self.userFollowers = userSelected
         super.init(style: style)
         self.navigationItem.title = self.viewcontrollerConfig.description
+        
     }
     
     required init?(coder: NSCoder) {
@@ -55,6 +56,7 @@ class FollowersVC: UITableViewController
         configureUser()
         style()
         layout()
+        
     }
 }
 
@@ -66,17 +68,25 @@ extension FollowersVC
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: followersCellID, for: indexPath) as? FollowersViewControllerCell else {return UITableViewCell()}
+    
         cell.delegate = self
         if let myUserSelected  = userFollowers
         {
             cell.configureCell = viewcontrollerConfig
             cell.currentUser = userfetched[indexPath.row]
+            print("DEBUG: \(myUserSelected)")
         }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let myUser = userfetched[indexPath.row]
+        let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout(), config: .followuser)
+        controller.userfromsearchVC = myUser
+        controller.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(controller, animated: true)
+        
     }
 }
 
@@ -136,37 +146,35 @@ extension FollowersVC: FollowCellDelegate
 {
     func handleFollowandUnfollowButtonTapped(cellFollow: FollowersViewControllerCell, cellconfig: followVCconfig) {
         
-//                if cellconfig == .follower
-//                {
-//
-//                    FollowUnFollow.shared.followUser(usertoFollow: cellFollow.currentUser!)
-//                    cellFollow.followButton.setTitle("Following", for: .normal)
-//                    cellFollow.followButton.backgroundColor = .white
-//                    cellFollow.followButton.setTitleColor(.black, for: .normal)
-//                    cellFollow.followButton.layer.borderColor = UIColor.lightGray.cgColor
-//                    cellFollow.followButton.layer.borderWidth = 0.5
-//
-//                }else
-//                {
-//
-//                    FollowUnFollow.shared.UnfollowUser(usertoUnfollow: cellFollow.currentUser!)
-//                    cellFollow.followButton.setTitle("Follow", for: .normal)
-//                    cellFollow.followButton.backgroundColor =  UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
-//                    cellFollow.followButton.setTitleColor(.white, for: .normal)
-//                    cellFollow.followButton.layer.borderWidth = 0
-//                }
         
-        guard let myuser = cellFollow.currentUser else {return}
+        guard let currentuserselected = cellFollow.currentUser else {return}
         
-        if myuser.isFollowed
+        
+        if cellFollow.followButton.titleLabel?.text == "Following"
         {
-           print("DEBUG: Should unfollow")
-            print("DEBUG:\(myuser.isFollowed)")
-        }else
+            FollowUnFollow.shared.UnfollowUser(usertoUnfollow: currentuserselected)
+
+            
+            buttonSetting(followButton: cellFollow, title: "Follow", buttonbackground: UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+                , titlebutton: .white, borderwith: 1, buttonLayerColor: .white)
+            
+        }else if cellFollow.followButton.titleLabel?.text == "Follow"
         {
-            print("DEBUG: Should be following by now")
-              print("DEBUG:\(myuser.isFollowed)")
+            FollowUnFollow.shared.followUser(usertoFollow: currentuserselected)
+            
+            buttonSetting(followButton: cellFollow, title: "Following", buttonbackground: .white
+            , titlebutton: .black, borderwith: 1, buttonLayerColor: .darkGray)
+            
         }
+    }
+    
+    func buttonSetting(followButton: FollowersViewControllerCell,title: String , buttonbackground: UIColor , titlebutton: UIColor, borderwith: CGFloat, buttonLayerColor: UIColor)
+    {
+        followButton.followButton.setTitle(title, for: .normal)
+        followButton.followButton.backgroundColor = buttonbackground
+        followButton.followButton.setTitleColor(titlebutton, for: .normal)
+        followButton.followButton.layer.borderColor = buttonLayerColor.cgColor
+        followButton.followButton.layer.borderWidth = borderwith
     }
    
 }
