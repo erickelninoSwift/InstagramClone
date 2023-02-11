@@ -9,7 +9,7 @@
 import UIKit
 
 
-class PostController: UIViewController
+class PostController: UICollectionViewController
 {
     
     override func viewDidLoad() {
