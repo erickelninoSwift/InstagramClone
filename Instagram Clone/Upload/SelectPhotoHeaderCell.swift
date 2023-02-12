@@ -21,7 +21,7 @@ class SelectPhotoHeaderCell: UICollectionViewCell
     
     override var intrinsicContentSize: CGSize
     {
-        return CGSize(width: UIView.noIntrinsicMetric, height: 300)
+        return CGSize(width: UIView.noIntrinsicMetric, height: 350)
         
     }
     
@@ -36,7 +36,7 @@ extension SelectPhotoHeaderCell
 {
     private func style()
     {
-        self.backgroundColor = .systemRed
+        self.backgroundColor = .white
     }
     
     

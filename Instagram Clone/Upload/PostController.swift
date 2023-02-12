@@ -9,13 +9,29 @@
 import UIKit
 
 
-class PostController: UICollectionViewController
+class PostController: UIViewController
 {
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        navigationItem.title = "Post"
+        style()
+        configure()
     }
 }
+
+extension PostController
+{
+    private func style()
+    {
+        view.backgroundColor = .systemBlue
+    }
+    private func configure()
+    {
+        let controller = SelectImageViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        controller.modalPresentationStyle = .fullScreen
+        self.navigationController?.present(controller, animated: true, completion: nil)
+    }
+}
+
+
 

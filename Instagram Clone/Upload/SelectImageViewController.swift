@@ -26,6 +26,7 @@ extension SelectImageViewController: UICollectionViewDelegateFlowLayout
     
     private  func style()
     {
+//        collectionView.register(SelectPhotoHeaderCell.self, forSupplementaryViewOfKind: ,SelectPhotoHeaderCell.photoheaderID)
         collectionView.register(SelectPhotoCell.self, forCellWithReuseIdentifier: SelectPhotoCell.selectphotocellID)
        
     }
@@ -33,7 +34,7 @@ extension SelectImageViewController: UICollectionViewDelegateFlowLayout
     
     private func layout()
     {
-        
+        self.collectionView.backgroundColor = .systemPurple
         
     }
     
@@ -46,7 +47,19 @@ extension SelectImageViewController: UICollectionViewDelegateFlowLayout
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell()
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelectPhotoCell.selectphotocellID, for: indexPath) as? SelectPhotoCell else {return UICollectionViewCell()}
+        
+        return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header  =  collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SelectPhotoHeaderCell.photoheaderID, for: indexPath) as? SelectPhotoHeaderCell else {return UICollectionViewCell()}
+        
+        return header
+    }
+    
+     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.width, height: 350)
     }
     
 }
