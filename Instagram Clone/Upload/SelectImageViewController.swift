@@ -7,16 +7,23 @@
 //
 
 import UIKit
-
+import Photos
 
 class SelectImageViewController: UICollectionViewController
 {
     
+    private var allImages = [UIImage]()
+    private var Allasset = [PHAsset]()
+    
+    var pickedImage: UIImage?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNavButton()
         style()
         layout()
+        fetchPhotos()
     }
     
 }
@@ -34,27 +41,55 @@ extension SelectImageViewController: UICollectionViewDelegateFlowLayout
     private func layout()
     {
         self.collectionView.backgroundColor = .white
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(HansleCancel))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(HandleDone))
-        self.navigationController?.navigationBar.tintColor = .black
+        
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return allImages.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelectPhotoCell.selectphotocellID, for: indexPath) as? SelectPhotoCell else {return UICollectionViewCell()}
-        
+        cell.photocellimage.image = allImages[indexPath.row]
         return cell
+    }
+    
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard pickedImage != nil else {return}
+        self.pickedImage = allImages[indexPath.row]
+        self.collectionView.reloadData()
+        
+        UIView.animate(withDuration: 2) {
+            let myindexpath = IndexPath(item: 0, section: 0)
+            self.collectionView.scrollToItem(at: myindexpath, at: .bottom, animated: true)
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header  =  collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SelectPhotoHeaderCell.photoheaderID, for: indexPath) as? SelectPhotoHeaderCell else {return UICollectionViewCell()}
+        if let selectedImage = pickedImage
+        {
+            if let index = self.allImages.firstIndex(of: selectedImage)
+            {
+                let selectedAsset = Allasset[index]
+                let imgaeManager = PHImageManager.default()
+                 let targetsize  = CGSize(width: 600, height: 600)
+                
+                imgaeManager.requestImage(for: selectedAsset, targetSize: targetsize, contentMode: .default, options: nil) { (Image, Infos) in
+                    if let currentImage = Image
+                    {
+                        header.profileImageView.image = currentImage
+                    }
+                }
+                
+            }
+            
+        }
         
         return header
     }
@@ -82,6 +117,15 @@ extension SelectImageViewController: UICollectionViewDelegateFlowLayout
 
 extension SelectImageViewController
 {
+    
+    private func configureNavButton()
+    {
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(HansleCancel))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(HandleDone))
+        self.navigationController?.navigationBar.tintColor = .black
+    }
+    
+    
     @objc func HansleCancel()
     {
         self.dismiss(animated: true, completion: nil)
@@ -90,5 +134,64 @@ extension SelectImageViewController
     @objc func HandleDone()
     {
         print("DEBUG: Done!!!!")
+    }
+}
+
+extension SelectImageViewController
+{
+    func getAssetoptions() -> PHFetchOptions
+    {
+        let selectedoption  = PHFetchOptions()
+        
+        //fetch linit
+        selectedoption.fetchLimit = 30
+        
+        // sort photo by date
+        let sortselectedoption = NSSortDescriptor(key: "creationDate", ascending: false)
+        
+        //set sort description for options
+        selectedoption.sortDescriptors = [sortselectedoption]
+        
+        
+        return selectedoption
+    }
+    
+    func fetchPhotos()
+    {
+        let Allphotos = PHAsset.fetchAssets(with: .image, options: getAssetoptions())
+        
+        // fetch Imamge in the background
+        
+        DispatchQueue.global(qos: .background).async {
+            
+            Allphotos.enumerateObjects { (asset, count, stop) in
+                
+                let imageManager = PHImageManager.default()
+                let targetsize  = CGSize(width: 200, height: 200)
+                let currentoptions = PHImageRequestOptions()
+                currentoptions.isSynchronous = true
+                
+                imageManager.requestImage(for: asset, targetSize: targetsize, contentMode: .aspectFit, options: currentoptions) { (Image, infos) in
+                    
+                    if let currentImage = Image
+                    {
+                        self.allImages.append(currentImage)
+                        self.Allasset.append(asset)
+                        
+                        if self.pickedImage == nil
+                        {
+                            self.pickedImage = Image
+                        }
+                        
+                        if count == Allphotos.count - 1
+                        {
+                            DispatchQueue.main.async {
+                                self.collectionView.reloadData()
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

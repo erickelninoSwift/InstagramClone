@@ -12,15 +12,15 @@ class SelectPhotoHeaderCell: UICollectionReusableView
 {
     
     lazy var profileImageView: UIImageView =
-    {
-        let propic = UIImageView()
-        propic.translatesAutoresizingMaskIntoConstraints = false
-        propic.clipsToBounds = true
-        propic.layer.masksToBounds = true
-        propic.contentMode = .scaleAspectFill
-        propic.backgroundColor = .systemRed
-        
-        return propic
+        {
+            let propic = UIImageView()
+            propic.translatesAutoresizingMaskIntoConstraints = false
+            propic.clipsToBounds = true
+            propic.layer.masksToBounds = true
+            propic.contentMode = .scaleAspectFill
+            propic.backgroundColor = .systemRed
+            
+            return propic
     }()
     
     static let photoheaderID = "SelectPhotoHeaderCell"
@@ -55,6 +55,11 @@ extension SelectPhotoHeaderCell
     
     private func layout()
     {
-        profileImageView.frame = self.bounds
+        NSLayoutConstraint.activate([profileImageView.topAnchor.constraint(equalToSystemSpacingBelow: self.topAnchor, multiplier: 0),
+                                     profileImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 0),
+                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: profileImageView.trailingAnchor, multiplier: 0),
+                                     self.bottomAnchor.constraint(equalToSystemSpacingBelow: profileImageView.bottomAnchor, multiplier: 0)
+        ])
+        
     }
 }

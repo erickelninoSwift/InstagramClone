@@ -47,6 +47,12 @@ extension SelectPhotoCell
     
     private func layout()
     {
-        photocellimage.frame = self.bounds
+//        photocellimage.frame = self.bounds
+//        
+        NSLayoutConstraint.activate([photocellimage.topAnchor.constraint(equalToSystemSpacingBelow: self.topAnchor, multiplier: 0),
+                                     photocellimage.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 0),
+                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: photocellimage.trailingAnchor, multiplier: 0),
+                                     self.bottomAnchor.constraint(equalToSystemSpacingBelow: photocellimage.bottomAnchor, multiplier: 0)
+        ])
     }
 }
