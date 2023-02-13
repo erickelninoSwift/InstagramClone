@@ -58,7 +58,7 @@ extension SelectPhotoHeaderCell
         NSLayoutConstraint.activate([profileImageView.topAnchor.constraint(equalToSystemSpacingBelow: self.topAnchor, multiplier: 0),
                                      profileImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 0),
                                      self.trailingAnchor.constraint(equalToSystemSpacingAfter: profileImageView.trailingAnchor, multiplier: 0),
-                                     self.bottomAnchor.constraint(equalToSystemSpacingBelow: profileImageView.bottomAnchor, multiplier: 0)
+                                     self.bottomAnchor.constraint(equalToSystemSpacingBelow: profileImageView.bottomAnchor, multiplier: 0.25)
         ])
         
     }

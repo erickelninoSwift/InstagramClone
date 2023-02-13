@@ -24,6 +24,7 @@ class SelectImageViewController: UICollectionViewController
         style()
         layout()
         fetchPhotos()
+     
     }
     
 }
@@ -40,7 +41,8 @@ extension SelectImageViewController: UICollectionViewDelegateFlowLayout
     
     private func layout()
     {
-        self.collectionView.backgroundColor = .white
+        self.collectionView.backgroundColor = .black
+    
         
     }
     
@@ -78,7 +80,7 @@ extension SelectImageViewController: UICollectionViewDelegateFlowLayout
             {
                 let selectedAsset = Allasset[index]
                 let imgaeManager = PHImageManager.default()
-                 let targetsize  = CGSize(width: 600, height: 600)
+                let targetsize  = CGSize(width: view.frame.width, height: 600)
                 
                 imgaeManager.requestImage(for: selectedAsset, targetSize: targetsize, contentMode: .default, options: nil) { (Image, Infos) in
                     if let currentImage = Image
@@ -133,7 +135,7 @@ extension SelectImageViewController
     
     @objc func HandleDone()
     {
-        print("DEBUG: Done!!!!")
+        
     }
 }
 
@@ -167,7 +169,7 @@ extension SelectImageViewController
             Allphotos.enumerateObjects { (asset, count, stop) in
                 
                 let imageManager = PHImageManager.default()
-                let targetsize  = CGSize(width: 200, height: 200)
+                let targetsize  = CGSize(width: 180, height: 180)
                 let currentoptions = PHImageRequestOptions()
                 currentoptions.isSynchronous = true
                 

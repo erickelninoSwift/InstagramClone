@@ -112,17 +112,17 @@
 		94C4B298297A9E7F00B44056 /* Instagram Clone */ = {
 			isa = PBXGroup;
 			children = (
+				94C4B2B5297C405100B44056 /* Utils */,
 				94E4A71A2997436100074803 /* Upload */,
 				94E8395D2984AF37002B365C /* Services */,
-				94C4B2BA297D4C9B00B44056 /* GoogleService-Info.plist */,
-				94C4B2B5297C405100B44056 /* Utils */,
-				94C4B2B2297B741D00B44056 /* Files */,
 				94C4B2AF297B73D100B44056 /* Model */,
 				94C4B2AE297B73CE00B44056 /* View */,
 				94C4B2B1297B73F100B44056 /* ViewModel */,
 				94C4B2AD297B73CA00B44056 /* Controller */,
+				94C4B2B2297B741D00B44056 /* Files */,
 				94C4B2A2297A9EB700B44056 /* Assets.xcassets */,
 				94C4B2A7297A9EB700B44056 /* Info.plist */,
+				94C4B2BA297D4C9B00B44056 /* GoogleService-Info.plist */,
 			);
 			path = "Instagram Clone";
 			sourceTree = "<group>";
