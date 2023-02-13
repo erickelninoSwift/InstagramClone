@@ -23,7 +23,7 @@ extension PostController
 {
     private func style()
     {
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = .white
     }
     private func configure()
     {

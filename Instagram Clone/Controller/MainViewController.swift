@@ -43,18 +43,19 @@ extension MainViewController: UITabBarControllerDelegate
     func viewcontrollers()
     {
         fetchCurrentUserData()
-
+        
         let feedController = buildnavigationController(selectedImage: UIImage(named: "home_selected"), unselctedImage: UIImage(named: "home_unselected"), rootViewController: FeedController(collectionViewLayout: UICollectionViewFlowLayout()))
         
         let searchfeedController = buildnavigationController(selectedImage: UIImage(named:"search_selected"), unselctedImage: UIImage(named:"search_unselected"), rootViewController: SearchFeedController())
         
-        let postcontroller = buildnavigationController(selectedImage: UIImage(named: "plus_unselected"), unselctedImage: UIImage(named: "plus_unselected"), rootViewController: PostController())
+        
+        let selectImageVC = buildnavigationController(selectedImage:  UIImage(named: "plus_unselected"), unselctedImage: UIImage(named: "plus_unselected"), rootViewController: SelectImageViewController(collectionViewLayout: UICollectionViewFlowLayout()))
         
         let notificationController = buildnavigationController(selectedImage: UIImage(named: "like_selected"), unselctedImage: UIImage(named: "like_unselected"), rootViewController: NotificationController())
         
         let profilecontroller = buildnavigationController(selectedImage: UIImage(named: "profile_selected"), unselctedImage: UIImage(named: "profile_unselected"), rootViewController: ProfileController(collectionViewLayout: UICollectionViewFlowLayout(), config: .editprofile))
         
-        self.viewControllers = [feedController,searchfeedController,postcontroller,notificationController,profilecontroller]
+        self.viewControllers = [feedController,searchfeedController,selectImageVC,notificationController,profilecontroller]
         self.tabBar.tintColor = .black
     }
     
@@ -71,10 +72,32 @@ extension MainViewController: UITabBarControllerDelegate
 extension MainViewController
 {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        if let index = viewControllers?.firstIndex(of: viewController)
+        let index = viewControllers?.firstIndex(of: viewController)
+        
+        if index == 2
         {
-            print("DEBUG: Index : \(index)")
+//            let selectImage = SelectImageViewController(collectionViewLayout: UICollectionViewFlowLayout())
+//            let navigation = UINavigationController(rootViewController: selectImage)
+//            navigation.modalPresentationStyle = .fullScreen
+//            self.present(navigation, animated: true, completion: nil)
+//
         }
+        
+    }
+    
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        let index = viewControllers?.firstIndex(of: viewController)
+        if index == 2
+        {
+            let selectImage = SelectImageViewController(collectionViewLayout: UICollectionViewFlowLayout())
+            let navigation = UINavigationController(rootViewController: selectImage)
+            navigation.modalPresentationStyle = .fullScreen
+            self.present(navigation, animated: true, completion: nil)
+            return false
+        }
+
+        return true
     }
 }
 
@@ -100,7 +123,7 @@ extension MainViewController
     {
         guard let userid = Auth.auth().currentUser?.uid else {return}
         Services.shared.fetchUser(user_Id: userid) { user in
-           
+            
         }
     }
     

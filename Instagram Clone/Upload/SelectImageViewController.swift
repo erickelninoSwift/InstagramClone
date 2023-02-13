@@ -26,16 +26,17 @@ extension SelectImageViewController: UICollectionViewDelegateFlowLayout
     
     private  func style()
     {
-//        collectionView.register(SelectPhotoHeaderCell.self, forSupplementaryViewOfKind: ,SelectPhotoHeaderCell.photoheaderID)
+        collectionView.register(SelectPhotoHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SelectPhotoHeaderCell.photoheaderID)
         collectionView.register(SelectPhotoCell.self, forCellWithReuseIdentifier: SelectPhotoCell.selectphotocellID)
-       
     }
     
     
     private func layout()
     {
-        self.collectionView.backgroundColor = .systemPurple
-        
+        self.collectionView.backgroundColor = .white
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(HansleCancel))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(HandleDone))
+        self.navigationController?.navigationBar.tintColor = .black
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -58,8 +59,36 @@ extension SelectImageViewController: UICollectionViewDelegateFlowLayout
         return header
     }
     
-     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 350)
+    
+    // Functions needed to setup Collection views
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.width, height: view.frame.width)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: (view.frame.width - 3) / 4, height: (view.frame.width - 3) / 4)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+}
+
+extension SelectImageViewController
+{
+    @objc func HansleCancel()
+    {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func HandleDone()
+    {
+        print("DEBUG: Done!!!!")
+    }
 }

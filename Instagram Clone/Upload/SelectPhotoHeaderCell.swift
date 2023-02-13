@@ -8,8 +8,21 @@
 
 import UIKit
 
-class SelectPhotoHeaderCell: UICollectionViewCell
+class SelectPhotoHeaderCell: UICollectionReusableView
 {
+    
+    lazy var profileImageView: UIImageView =
+    {
+        let propic = UIImageView()
+        propic.translatesAutoresizingMaskIntoConstraints = false
+        propic.clipsToBounds = true
+        propic.layer.masksToBounds = true
+        propic.contentMode = .scaleAspectFill
+        propic.backgroundColor = .systemRed
+        
+        return propic
+    }()
+    
     static let photoheaderID = "SelectPhotoHeaderCell"
     
     override init(frame: CGRect) {
@@ -36,12 +49,12 @@ extension SelectPhotoHeaderCell
 {
     private func style()
     {
-        self.backgroundColor = .white
+        self.addSubview(profileImageView)
     }
     
     
     private func layout()
     {
-        
+        profileImageView.frame = self.bounds
     }
 }
