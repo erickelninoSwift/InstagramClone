@@ -194,15 +194,15 @@ extension PostController
                 guard let postImageUrl = url?.absoluteString else {return}
                 print("DEBUG: IMAGE URL : \(postImageUrl)")
                 Services.shared.fetchUser(user_Id: userID) { elninouser in
-                    let dictionary = ["User_id": elninouser.userID ?? "" , "Username": elninouser.username ?? "", "Fullname":elninouser.fullname ?? "","Post-image-url" : postImageUrl, "Date" : currentDate] as [String:Any]
-                    Database.database().reference().child("Posts").child(elninouser.userID!).updateChildValues(dictionary) { (Error, Dataref) in
+                    let dictionary = ["User_id": elninouser.userID ?? "" , "Username": elninouser.username ?? "", "Fullname":elninouser.fullname ?? "","Post-image-url" : postImageUrl, "Date" : currentDate,"Post": post] as [String:Any]
+                    Database.database().reference().child("Posts").child(elninouser.userID!).childByAutoId().updateChildValues(dictionary) { (Error, Dataref) in
                         if let error = Error
                         {
                             print("DEBUG: There was an error while trying to save your post : \(error.localizedDescription)/")
                             return
                         }
                         
-                        print("DEBUG: Post Saved Successfully !!!")
+                        self.navigationController?.dismiss(animated: true, completion: nil)
                     }
                     
                 }
