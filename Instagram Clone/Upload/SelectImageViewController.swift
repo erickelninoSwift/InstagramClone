@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import Firebase
 
 class SelectImageViewController: UICollectionViewController
 {
@@ -15,16 +16,24 @@ class SelectImageViewController: UICollectionViewController
     private var allImages = [UIImage]()
     private var Allasset = [PHAsset]()
     
+    
+    var user: User?
+    
     var pickedImage: UIImage?
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        DispatchQueue.main.async {
+            self.fetchPhotos()
+        }
+        fetchCurrentUserData()
         configureNavButton()
         style()
         layout()
-        fetchPhotos()
-     
+        
     }
     
 }
@@ -41,8 +50,7 @@ extension SelectImageViewController: UICollectionViewDelegateFlowLayout
     
     private func layout()
     {
-        self.collectionView.backgroundColor = .black
-    
+        self.collectionView.backgroundColor = .white
         
     }
     
@@ -135,7 +143,12 @@ extension SelectImageViewController
     
     @objc func HandleDone()
     {
+        guard let currentuser = user else {return}
+        guard let currentImage = pickedImage else {return}
         
+        let controller = PostController(user: currentuser, myImage: currentImage)
+        controller.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(controller, animated: true)
     }
 }
 
@@ -194,6 +207,19 @@ extension SelectImageViewController
                     }
                 }
             }
+        }
+    }
+}
+
+extension SelectImageViewController
+{
+    
+    
+    func fetchCurrentUserData()
+    {
+        guard let userid = Auth.auth().currentUser?.uid else {return}
+        Services.shared.fetchUser(user_Id: userid) { user in
+            self.user = user
         }
     }
 }

@@ -18,7 +18,7 @@ class SelectPhotoHeaderCell: UICollectionReusableView
             propic.clipsToBounds = true
             propic.layer.masksToBounds = true
             propic.contentMode = .scaleAspectFill
-            propic.backgroundColor = .systemRed
+
             
             return propic
     }()
