@@ -23,9 +23,9 @@ class ProfilePostCell: UICollectionViewCell
     }
     
     static let ProfilePostid = "ProfilePostCell"
-    lazy var postImageView: UIImageView =
+    lazy var postImageView: CustomImageView =
     {
-        let postimage =  UIImageView()
+        let postimage =  CustomImageView()
         postimage.translatesAutoresizingMaskIntoConstraints = false
         postimage.clipsToBounds = true
         postimage.layer.masksToBounds = true

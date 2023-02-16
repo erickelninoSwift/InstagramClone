@@ -38,9 +38,9 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         }
     }
     
-    lazy var profileImageView : UIImageView =
+    lazy var profileImageView : CustomImageView =
         {
-            let profileimage = UIImageView()
+            let profileimage = CustomImageView()
             profileimage.translatesAutoresizingMaskIntoConstraints = false
             profileimage.contentMode = .scaleAspectFill
             profileimage.clipsToBounds = true

@@ -328,24 +328,28 @@ extension ProfileController
         {
         case .editprofile:
             
-            Database.database().reference().child("User-posts").child(currentId).observe(.childAdded) { datasnaping in
-                Services.shared.fetchPost(userid: currentId, postid: datasnaping.key) { myPost in
-                    self.AllmyPost.append(myPost)
-                    self.AllmyPost.sort { (post1, post2) -> Bool in
-                        return post1.date > post2.date
+            DispatchQueue.main.async {
+                Database.database().reference().child("User-posts").child(currentId).observe(.childAdded) { datasnaping in
+                    Services.shared.fetchPost(userid: currentId, postid: datasnaping.key) { myPost in
+                        self.AllmyPost.append(myPost)
+                        self.AllmyPost.sort { (post1, post2) -> Bool in
+                            return post1.date > post2.date
+                        }
+                        self.collectionView.reloadData()
                     }
-                    self.collectionView.reloadData()
                 }
             }
             
         case .followuser:
-            Database.database().reference().child("User-posts").child(self.user?.userID ?? "").observe(.childAdded) { datasnaping in
-                Services.shared.fetchPost(userid: self.user?.userID ?? "", postid: datasnaping.key) { myPost in
-                    self.AllmyPost.append(myPost)
-                    self.AllmyPost.sort { (post1, post2) -> Bool in
-                        return post1.date > post2.date
+            DispatchQueue.main.async {
+                Database.database().reference().child("User-posts").child(self.user?.userID ?? "").observe(.childAdded) { datasnaping in
+                    Services.shared.fetchPost(userid: self.user?.userID ?? "", postid: datasnaping.key) { myPost in
+                        self.AllmyPost.append(myPost)
+                        self.AllmyPost.sort { (post1, post2) -> Bool in
+                            return post1.date > post2.date
+                        }
+                        self.collectionView.reloadData()
                     }
-                    self.collectionView.reloadData()
                 }
             }
         case .none:

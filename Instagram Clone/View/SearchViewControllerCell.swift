@@ -30,9 +30,9 @@ class SearchViewControllerCell: UITableViewCell
         }
     }
     
-    private var profilepic: UIImageView =
+    private var profilepic: CustomImageView =
     {
-        let propic = UIImageView()
+        let propic = CustomImageView()
         propic.translatesAutoresizingMaskIntoConstraints = false
         propic.clipsToBounds = true
         propic.contentMode = .scaleAspectFill
