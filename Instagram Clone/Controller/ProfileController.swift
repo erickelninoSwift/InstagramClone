@@ -57,7 +57,6 @@ class ProfileController: UICollectionViewController
     {
         self.profileconfig = config
         super.init(collectionViewLayout: layout)
-       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,20 +64,20 @@ class ProfileController: UICollectionViewController
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchAllpost()
+        
         style()
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: profileIDcell)
         self.collectionView.register(ProfileCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerprofileID)
         
-        
         if let currentUSerSelected = userfromsearchVC
         {
             self.user = currentUSerSelected
+            fetchAllpost()
         }else
         {
             self.fetchuser()
+           
         }
-        
     }
     
     required init?(coder: NSCoder) {
@@ -104,14 +103,13 @@ extension ProfileController
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("DEBUG: COUNT  : \(self.AllmyPost.count)")
         return AllmyPost.count
     }
     
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: ProfilePostCell.ProfilePostid, for: indexPath) as? ProfilePostCell else {return UICollectionViewCell()}
-        
+        cell.myPost = AllmyPost[indexPath.row]
         return cell
     }
     
@@ -121,7 +119,7 @@ extension ProfileController
         
         if let myuser = user
         {
-           
+            
             switch profileconfig!
             {
                 
@@ -132,11 +130,11 @@ extension ProfileController
                 header.currentUser = myuser
                 self.navigationItem.title = myuser.username ?? ""
                 header.configurationset = profileconfig
-               
+                
                 
                 
             case .followuser:
-        
+                
                 self.getuserStats(user_id: myuser.userID!, profile: header)
                 header.delegate = self
                 header.labelActionDelegate = self
@@ -157,16 +155,16 @@ extension ProfileController: UICollectionViewDelegateFlowLayout
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-           return CGSize(width: (view.frame.width - 2) / 3, height: (view.frame.width - 2) / 3)
-       }
-       
-       func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-           return 1
-       }
-       
-       func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-           return 1
-       }
+        return CGSize(width: (view.frame.width - 2) / 3, height: (view.frame.width - 2) / 3)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
     
 }
 
@@ -177,6 +175,7 @@ extension ProfileController
         guard let userID = Auth.auth().currentUser?.uid else {return}
         Services.shared.fetchUser(user_Id: userID) { MyUSer in
             self.user = MyUSer
+            self.fetchAllpost()
             self.collectionView.reloadData()
         }
     }
@@ -200,7 +199,7 @@ extension ProfileController: ProfileCollectionViewHeaderDelegate
         if let profileuser = profileheader.currentUser
         {
             
-           
+            
             switch buttonConfig
             {
             case .editprofile:
@@ -301,10 +300,10 @@ extension ProfileController
 extension ProfileController: profileheaderLabelActionDelegate
 {
     func HandlePostLabel(userProfileHeader: ProfileCollectionViewHeader) {
-         print("DEBUG: POST BUTTON PRESSED")
+        print("DEBUG: POST BUTTON PRESSED")
     }
     func HandleFollowingLabel(userProfileHeader: ProfileCollectionViewHeader) {
-           guard let currentuser = userProfileHeader.currentUser else {return}
+        guard let currentuser = userProfileHeader.currentUser else {return}
         let controller = FollowersVC(style: .plain, followconfig: .following, userSelected: currentuser)
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
@@ -312,7 +311,7 @@ extension ProfileController: profileheaderLabelActionDelegate
     func HandleFollowersLabel(userProfileHeader: ProfileCollectionViewHeader) {
         
         guard let currentuser = userProfileHeader.currentUser else {return}
-       
+        
         let controller = FollowersVC(style: .plain, followconfig: .follower, userSelected: currentuser)
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
@@ -324,13 +323,35 @@ extension ProfileController
     func fetchAllpost()
     {
         guard let currentId = Auth.auth().currentUser?.uid else {return}
-        Database.database().reference().child("User-posts").child(currentId).observe(.childAdded) { datasnaping in
-            Services.shared.fetchPost(userid: currentId, postid: datasnaping.key) { myPost in
-                self.AllmyPost.append(myPost)
-                self.collectionView.reloadData()
+        
+        switch profileconfig
+        {
+        case .editprofile:
+            
+            Database.database().reference().child("User-posts").child(currentId).observe(.childAdded) { datasnaping in
+                Services.shared.fetchPost(userid: currentId, postid: datasnaping.key) { myPost in
+                    self.AllmyPost.append(myPost)
+                    self.AllmyPost.sort { (post1, post2) -> Bool in
+                        return post1.date > post2.date
+                    }
+                    self.collectionView.reloadData()
+                }
             }
+            
+        case .followuser:
+            Database.database().reference().child("User-posts").child(self.user?.userID ?? "").observe(.childAdded) { datasnaping in
+                Services.shared.fetchPost(userid: self.user?.userID ?? "", postid: datasnaping.key) { myPost in
+                    self.AllmyPost.append(myPost)
+                    self.AllmyPost.sort { (post1, post2) -> Bool in
+                        return post1.date > post2.date
+                    }
+                    self.collectionView.reloadData()
+                }
+            }
+        case .none:
+            print("DEBUg: none")
         }
-    
+        
     }
     
     

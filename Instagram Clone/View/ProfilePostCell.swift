@@ -13,6 +13,15 @@ import UIKit
 class ProfilePostCell: UICollectionViewCell
 {
     
+    
+    var myPost: Post?
+    {
+        didSet
+        {
+            configureCell()
+        }
+    }
+    
     static let ProfilePostid = "ProfilePostCell"
     lazy var postImageView: UIImageView =
     {
@@ -63,6 +72,7 @@ extension ProfilePostCell
     
     private func configureCell()
     {
-        
+        guard let imageurl = myPost?.post_url else {return}
+        self.postImageView.loadImage(with: imageurl)
     }
 }
