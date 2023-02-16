@@ -22,4 +22,17 @@ class Services
             completion(user)
         }
     }
+    
+    
+    func fetchPost(userid: String,postid: String, completion: @escaping(Post) -> Void)
+    {
+
+        
+        Database.database().reference().child("Posts").child(userid).child(postid).observeSingleEvent(of: .value) { datasnaping in
+            guard let currentdata = datasnaping.value as? [String:Any] else {return}
+            let post = Post(mypostID: postid, dictionary: currentdata)
+            completion(post)
+        }
+      
+    }
 }

@@ -30,8 +30,7 @@ private let headerprofileID = "ProfileviewHeader"
 class ProfileController: UICollectionViewController
 {
     
-    
-    
+    var AllmyPost = [Post]()
     
     var user: User?
     {
@@ -58,7 +57,7 @@ class ProfileController: UICollectionViewController
     {
         self.profileconfig = config
         super.init(collectionViewLayout: layout)
-      
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,7 +65,7 @@ class ProfileController: UICollectionViewController
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        fetchAllpost()
         style()
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: profileIDcell)
         self.collectionView.register(ProfileCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerprofileID)
@@ -94,6 +93,7 @@ extension ProfileController
     {
         self.collectionView.backgroundColor = .white
         self.navigationController?.navigationBar.tintColor = .black
+        self.collectionView.register(ProfilePostCell.self, forCellWithReuseIdentifier: ProfilePostCell.ProfilePostid)
     }
 }
 extension ProfileController
@@ -103,9 +103,15 @@ extension ProfileController
         return  1
     }
     
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print("DEBUG: COUNT  : \(self.AllmyPost.count)")
+        return AllmyPost.count
+    }
+    
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: profileIDcell, for: indexPath)
+        guard let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: ProfilePostCell.ProfilePostid, for: indexPath) as? ProfilePostCell else {return UICollectionViewCell()}
+        
         return cell
     }
     
@@ -149,6 +155,19 @@ extension ProfileController: UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: 250)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+           return CGSize(width: (view.frame.width - 2) / 3, height: (view.frame.width - 2) / 3)
+       }
+       
+       func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+           return 1
+       }
+       
+       func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+           return 1
+       }
+    
 }
 
 extension ProfileController
@@ -298,5 +317,23 @@ extension ProfileController: profileheaderLabelActionDelegate
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
     }
+}
+
+extension ProfileController
+{
+    func fetchAllpost()
+    {
+        guard let currentId = Auth.auth().currentUser?.uid else {return}
+        Database.database().reference().child("User-posts").child(currentId).observe(.childAdded) { datasnaping in
+            Services.shared.fetchPost(userid: currentId, postid: datasnaping.key) { myPost in
+                self.AllmyPost.append(myPost)
+                self.collectionView.reloadData()
+            }
+        }
+    
+    }
+    
+    
+    
 }
 

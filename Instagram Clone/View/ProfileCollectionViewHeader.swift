@@ -129,9 +129,11 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "grid"), for: .normal)
-        button.tintColor = UIColor(white: 0, alpha: 0.2)
+        button.tintColor = UIColor(red: 0/255, green: 120/255, blue: 175/255, alpha: 1)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.addTarget(self, action: #selector(HandleGrid), for: .touchUpInside)
+        
+        
         
         return button
     }()
