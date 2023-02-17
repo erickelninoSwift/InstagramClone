@@ -166,7 +166,7 @@ extension PostController
     
     func savePost(post: String , PostImage: UIImage ,  userID: String)
     {
-        guard let imageData = PostImage.jpegData(compressionQuality: 0.5) else {return}
+        guard let imageData = PostImage.jpegData(compressionQuality: 0.3) else {return}
         
         
         let filename = NSUUID().uuidString

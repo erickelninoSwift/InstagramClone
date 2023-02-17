@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class FeedCell: UICollectionViewCell
 {
@@ -18,6 +19,7 @@ class FeedCell: UICollectionViewCell
         didSet
         {
             configureFeedCell()
+            
         }
     }
     
@@ -129,10 +131,6 @@ class FeedCell: UICollectionViewCell
     {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        
-        let attributed = NSMutableAttributedString(string: "Username ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
-        attributed.append(NSAttributedString(string: "Some test caption jackpot here !!!", attributes: [.font:UIFont.systemFont(ofSize: 16)]))
-        label.attributedText = attributed
         label.textAlignment = .left
         return label
     }()
@@ -161,7 +159,7 @@ class FeedCell: UICollectionViewCell
     
     @objc func Handleusername()
     {
-        print("DEBUG: USERNAME PRESSED")
+        print("DEBUG: USERNAME \(usernameButton.currentTitle ?? "")")
     }
     
     @objc func HandleOptionPressed()
@@ -256,9 +254,25 @@ extension FeedCell
     private func configureFeedCell()
     {
         guard let myPost = selectedPost else {return}
-         let prostViewModel = UserPostCellViewModel(currentPost: myPost)
-        Services.shared.fetchUser(user_Id: prostViewModel.userID ?? "") { user in
-            print("DEBUG: USER: \(user.fullname ?? "")")
+        guard let userid = myPost.user_id else {return}
+        guard let PostImageUrl = myPost.post_url else {return}
+        
+        
+        Services.shared.fetchUser(user_Id: userid) { user in
+            self.profilepicture.loadImage(with: user.profileImage)
+            self.usernameButton.setTitle(user.username ?? "", for: .normal)
+            self.configureCaptionLabel(user: user)
         }
+        postImage.loadImage(with: PostImageUrl)
+       
+        
+    }
+    
+    private func configureCaptionLabel(user: User)
+    {
+         guard let myPost = selectedPost else {return}
+        let attributted = NSMutableAttributedString(string: "\(user.username ?? "") ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
+        attributted.append(NSAttributedString(string: myPost.post, attributes: [.font:UIFont.systemFont(ofSize: 16)]))
+        self.captionMessage.attributedText = attributted
     }
 }
