@@ -19,10 +19,11 @@ class Post
     var post: String!
     var post_url: URL!
     var post_ID: String!
+    var user: User?
     
-    init(mypostID: String , dictionary: [String:Any])
+    init(mypostID: String, user: User , dictionary: [String:Any])
     {
-        
+        self.user = user
         guard let postid = dictionary["post_id"] as? String else {return}
         
         if postid == mypostID

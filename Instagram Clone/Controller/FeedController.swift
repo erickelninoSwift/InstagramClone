@@ -21,13 +21,13 @@ class FeedController: UICollectionViewController
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
         style()
+        fetchAllpost()
         
     }
     
     override  func viewDidLoad() {
         super.viewDidLoad()
         style()
-        fetchAllpost()
         Controllerlayout()
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewID)
         navigationItem.title = "Feed"
@@ -49,10 +49,9 @@ extension FeedController: UICollectionViewDelegateFlowLayout
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.FeedCellId, for: indexPath) as? FeedCell else {return UICollectionViewCell()}
-       self.Allpost.sort { (pst1,pst2) -> Bool in
-           return pst1.date > pst2.date
-       }
+        cell.delegate = self
         cell.selectedPost = Allpost[indexPath.row]
         return cell
     }
@@ -76,7 +75,7 @@ extension FeedController
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "send2")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(handleSendMessage))
         
         self.collectionView.register(FeedCell.self, forCellWithReuseIdentifier: FeedCell.FeedCellId)
-    
+        
     }
     
     @objc func handleSendMessage()
@@ -124,9 +123,75 @@ extension FeedController
     {
         Services.shared.fetchAllpost(userid: UserId.elninoID) { posts in
             self.Allpost.append(posts)
+            
+            self.Allpost.sort { (post1, post2) -> Bool in
+                return post1.date > post2.date
+            }
             self.collectionView.reloadData()
         }
-         
-      
+        
     }
+}
+
+extension FeedController: FeedCellDelegate
+{
+    func usernameButtonTapped(cell: FeedCell, buttonPressed: UIButton) {
+        if cell.usernameButton == buttonPressed
+        {
+            guard let posts = cell.selectedPost else {return}
+            if posts.user?.userID != UserId.elninoID
+            {
+                let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout(), config: .followuser)
+                
+                controller.userfromsearchVC = posts.user
+                
+                controller.modalPresentationStyle = .fullScreen
+                self.navigationController?.pushViewController(controller, animated: true)
+            }else
+            {
+                let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout(), config:  .editprofile)
+                
+                controller.user = posts.user
+                controller.modalPresentationStyle = .fullScreen
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
+    }
+    
+    func feedCellOptionButtonTapped(cell: FeedCell, buttonPressed: UIButton) {
+        if cell.FeedCellOption == buttonPressed
+        {
+            print("DEBUG: OPTION")
+        }
+    }
+    
+    func FeedLikeButtonTapped(cell: FeedCell, buttonPressed: UIButton) {
+        if cell.LikeButton == buttonPressed
+        {
+            print("DEBUG: LIKE")
+        }
+    }
+    
+    func FeedCommentbuttonTapped(cell: FeedCell, buttonPressed: UIButton) {
+        if cell.CommentButton == buttonPressed
+        {
+            print("DEBUG: COMMENT")
+        }
+    }
+    
+    func FeedMessageButtonTapped(cell: FeedCell, buttonPressed: UIButton) {
+        if cell.MessageButton == buttonPressed
+        {
+            print("DEBUG: MESSAGE")
+        }
+    }
+    
+    func BookmarkButtonTapped(cell: FeedCell, buttonPressed: UIButton) {
+        if cell.savePostButton == buttonPressed
+        {
+            print("DEBUG: BOOKMARK")
+        }
+    }
+    
+    
 }

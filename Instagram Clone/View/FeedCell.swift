@@ -14,6 +14,9 @@ class FeedCell: UICollectionViewCell
     
     static let FeedCellId = "FeedCellID"
     
+    var delegate:FeedCellDelegate?
+    
+    
     var selectedPost: Post?
     {
         didSet
@@ -121,7 +124,6 @@ class FeedCell: UICollectionViewCell
     {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "3 Likes"
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textAlignment = .left
         return label
@@ -159,23 +161,31 @@ class FeedCell: UICollectionViewCell
     
     @objc func Handleusername()
     {
-        print("DEBUG: USERNAME \(usernameButton.currentTitle ?? "")")
+        delegate?.usernameButtonTapped(cell: self, buttonPressed: self.usernameButton)
     }
     
     @objc func HandleOptionPressed()
     {
-        print("DEBUG: OPTIONS PRESSED")
+        delegate?.feedCellOptionButtonTapped(cell: self, buttonPressed: self.FeedCellOption)
     }
     
     
     @objc func Handlelike()
-    { print("DEBUG: USERNAME LIKED")}
+    {
+        delegate?.FeedLikeButtonTapped(cell: self, buttonPressed: self.LikeButton)
+    }
     @objc func HandleComment()
-    { print("DEBUG: USERNAME COMMENT")}
+    {
+        delegate?.FeedCommentbuttonTapped(cell: self, buttonPressed: self.CommentButton)
+    }
     @objc func HandleMessgae()
-    { print("DEBUG: USERNAME MESSAGE")}
+    {
+        delegate?.FeedMessageButtonTapped(cell: self, buttonPressed: self.MessageButton)
+    }
     @objc func HandleSavePost()
-    {print("DEBUG: SAVE POST")}
+    {
+        delegate?.BookmarkButtonTapped(cell: self, buttonPressed: self.savePostButton)
+    }
     
     
 }
@@ -256,6 +266,7 @@ extension FeedCell
         guard let myPost = selectedPost else {return}
         guard let userid = myPost.user_id else {return}
         guard let PostImageUrl = myPost.post_url else {return}
+        guard let likes = myPost.likes else {return}
         
         
         Services.shared.fetchUser(user_Id: userid) { user in
@@ -264,7 +275,7 @@ extension FeedCell
             self.configureCaptionLabel(user: user)
         }
         postImage.loadImage(with: PostImageUrl)
-       
+        self.likesLabel.text = "\(likes) Likes"
         
     }
     

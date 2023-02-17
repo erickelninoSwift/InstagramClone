@@ -30,8 +30,11 @@ class Services
         
         Database.database().reference().child("Posts").child(userid).child(postid).observeSingleEvent(of: .value) { datasnaping in
             guard let currentdata = datasnaping.value as? [String:Any] else {return}
-            let post = Post(mypostID: postid, dictionary: currentdata)
-            completion(post)
+            Services.shared.fetchUser(user_Id: userid) { myUser in
+                let post = Post(mypostID: postid, user: myUser, dictionary: currentdata)
+                completion(post)
+            }
+            
         }
       
     }
@@ -42,8 +45,11 @@ class Services
         
         Database.database().reference().child("Posts").child(userid).observe(.childAdded) { datasnapshots in
             guard let currentuserdata  = datasnapshots.value as? [String:Any] else {return}
-            let currentpost = Post(mypostID: datasnapshots.key, dictionary: currentuserdata)
-            completion(currentpost)
+            Services.shared.fetchUser(user_Id: userid) { MyUser in
+                let currentpost = Post(mypostID: datasnapshots.key, user: MyUser, dictionary: currentuserdata)
+                completion(currentpost)
+            }
+            
         }
     }
 }
