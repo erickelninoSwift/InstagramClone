@@ -36,15 +36,26 @@ class FeedController: UICollectionViewController
     }
     
 }
-extension FeedController
+extension FeedController: UICollectionViewDelegateFlowLayout
 {
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 0
+        return 1
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionViewID, for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.FeedCellId, for: indexPath) as? FeedCell else {return UICollectionViewCell()}
+        
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = view.frame.width
+        let height = width + 8 + 50 + 8
+        return CGSize(width: width, height: height)
     }
     
 }
@@ -57,8 +68,16 @@ extension FeedController
         self.navigationController?.navigationBar.tintColor = .black
         self.collectionView.backgroundColor = .white
         self.navigationItem.leftBarButtonItem?.tintColor = .black
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "send2")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(handleSendMessage))
+        
+        self.collectionView.register(FeedCell.self, forCellWithReuseIdentifier: FeedCell.FeedCellId)
+    
     }
     
+    @objc func handleSendMessage()
+    {
+        print("DEBUG: Send Message")
+    }
     
     private func Controllerlayout()
     {
