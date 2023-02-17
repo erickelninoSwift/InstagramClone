@@ -16,6 +16,7 @@ private let collectionViewID = "CollectionViewID"
 class FeedController: UICollectionViewController
 {
     
+    private var Allpost = [Post]()
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
@@ -26,6 +27,7 @@ class FeedController: UICollectionViewController
     override  func viewDidLoad() {
         super.viewDidLoad()
         style()
+        fetchAllpost()
         Controllerlayout()
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewID)
         navigationItem.title = "Feed"
@@ -43,18 +45,18 @@ extension FeedController: UICollectionViewDelegateFlowLayout
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return Allpost.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.FeedCellId, for: indexPath) as? FeedCell else {return UICollectionViewCell()}
-        
+        cell.selectedPost = Allpost[indexPath.row]
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = view.frame.width
-        let height = (width + 8 + 50 + 8) + 60
+        let height = width + 200
         return CGSize(width: width, height: height)
     }
     
@@ -110,5 +112,21 @@ extension FeedController
         alert.addAction(action)
         alert.addAction(cancel)
         self.present(alert, animated: true, completion: nil)
+    }
+}
+
+extension FeedController
+{
+    private func fetchAllpost()
+    {
+        Services.shared.fetchAllpost(userid: UserId.elninoID) { posts in
+            self.Allpost.append(posts)
+            
+            self.Allpost.sort { (post1, post2) -> Bool in
+                return post1.date > post2.date
+            }
+            self.collectionView.reloadData()
+        }
+      
     }
 }

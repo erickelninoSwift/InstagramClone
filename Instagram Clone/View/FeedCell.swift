@@ -13,6 +13,14 @@ class FeedCell: UICollectionViewCell
     
     static let FeedCellId = "FeedCellID"
     
+    var selectedPost: Post?
+    {
+        didSet
+        {
+            configureFeedCell()
+        }
+    }
+    
     lazy var profilepicture: CustomImageView =
         {
             let propic = CustomImageView()
@@ -97,6 +105,50 @@ class FeedCell: UICollectionViewCell
     }()
     
     
+    
+    lazy var savePostButton: UIButton =
+        { let button = UIButton(type: .system)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.setImage(UIImage(named: "ribbon")?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
+            button.addTarget(self, action: #selector(HandleSavePost), for: .primaryActionTriggered)
+            return button
+    }()
+    
+    
+    var likesLabel: UILabel =
+    {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "3 Likes"
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.textAlignment = .left
+        return label
+    }()
+    
+    var captionMessage: UILabel =
+    {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        let attributed = NSMutableAttributedString(string: "Username ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
+        attributed.append(NSAttributedString(string: "Some test caption jackpot here !!!", attributes: [.font:UIFont.systemFont(ofSize: 16)]))
+        label.attributedText = attributed
+        label.textAlignment = .left
+        return label
+    }()
+    
+    var timeLable: UILabel =
+    {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.textColor = .lightGray
+        label.text = "2 DAYS AGO"
+        return label
+    }()
+    
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         style()
@@ -124,6 +176,8 @@ class FeedCell: UICollectionViewCell
     { print("DEBUG: USERNAME COMMENT")}
     @objc func HandleMessgae()
     { print("DEBUG: USERNAME MESSAGE")}
+    @objc func HandleSavePost()
+    {print("DEBUG: SAVE POST")}
     
     
 }
@@ -135,8 +189,6 @@ extension FeedCell
         self.addSubview(usernameButton)
         self.addSubview(FeedCellOption)
         self.addSubview(postImage)
-        
-        
         
     }
     
@@ -158,7 +210,7 @@ extension FeedCell
         NSLayoutConstraint.activate([postImage.topAnchor.constraint(equalToSystemSpacingBelow: profilepicture.bottomAnchor, multiplier: 1),
                                      postImage.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 0),
                                      self.trailingAnchor.constraint(equalToSystemSpacingAfter: postImage.trailingAnchor, multiplier: 0),
-                                     self.bottomAnchor.constraint(equalToSystemSpacingBelow: postImage.bottomAnchor, multiplier: 5)
+                                     self.bottomAnchor.constraint(equalToSystemSpacingBelow: postImage.bottomAnchor, multiplier: 14)
         ])
         
         
@@ -166,14 +218,47 @@ extension FeedCell
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
         stack.distribution = .fillEqually
-        stack.spacing = 12
-        
+        stack.spacing = 14
+        stack.heightAnchor.constraint(equalToConstant: 25).isActive = true
         self.addSubview(stack)
         
         NSLayoutConstraint.activate([stack.topAnchor.constraint(equalToSystemSpacingBelow: postImage.bottomAnchor, multiplier: 2),
                                      stack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 1)
-                            
+            
         ])
         
+        self.addSubview(savePostButton)
+        NSLayoutConstraint.activate([self.trailingAnchor.constraint(equalToSystemSpacingAfter: savePostButton.trailingAnchor, multiplier: 2),
+                                     savePostButton.topAnchor.constraint(equalToSystemSpacingBelow: postImage.bottomAnchor, multiplier: 2)
+        ])
+        
+        self.addSubview(likesLabel)
+        NSLayoutConstraint.activate([likesLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 1),
+                                     likesLabel.topAnchor.constraint(equalToSystemSpacingBelow: stack.bottomAnchor, multiplier: 1),
+                                     self.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+        
+        self.addSubview(captionMessage)
+        NSLayoutConstraint.activate([captionMessage.topAnchor.constraint(equalToSystemSpacingBelow: likesLabel.bottomAnchor, multiplier: 1),
+                                     captionMessage.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 1)
+        ])
+        
+        
+        self.addSubview(timeLable)
+        NSLayoutConstraint.activate([timeLable.topAnchor.constraint(equalToSystemSpacingBelow: captionMessage.bottomAnchor, multiplier: 1),
+                                     timeLable.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 1)
+        ])
+    }
+}
+
+extension FeedCell
+{
+    private func configureFeedCell()
+    {
+        guard let myPost = selectedPost else {return}
+         let prostViewModel = UserPostCellViewModel(currentPost: myPost)
+        Services.shared.fetchUser(user_Id: prostViewModel.userID ?? "") { user in
+            print("DEBUG: USER: \(user.fullname ?? "")")
+        }
     }
 }

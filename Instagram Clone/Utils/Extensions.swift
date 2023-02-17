@@ -8,6 +8,14 @@
 
 import UIKit
 import SDWebImage
+import Firebase
+
+
+class UserId
+{
+    static let elninoID =  Auth.auth().currentUser?.uid ?? ""
+}
+
 
 extension UIView
 {

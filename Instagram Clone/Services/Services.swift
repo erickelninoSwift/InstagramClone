@@ -35,4 +35,15 @@ class Services
         }
       
     }
+    
+    
+    func fetchAllpost(userid: String , completion: @escaping(Post) -> Void)
+    {
+        
+        Database.database().reference().child("Posts").child(userid).observe(.childAdded) { datasnapshots in
+            guard let currentuserdata  = datasnapshots.value as? [String:Any] else {return}
+            let currentpost = Post(mypostID: datasnapshots.key, dictionary: currentuserdata)
+            completion(currentpost)
+        }
+    }
 }
