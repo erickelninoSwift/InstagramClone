@@ -46,8 +46,8 @@
             filePath = "Instagram Clone/View/FeedCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
             landmarkName = "layout()"
             landmarkType = "7">
          </BreakpointContent>

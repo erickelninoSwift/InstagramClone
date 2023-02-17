@@ -73,7 +73,7 @@ class FeedCell: UICollectionViewCell
             let button = UIButton(type: .system)
             button.translatesAutoresizingMaskIntoConstraints = false
             button.setImage(UIImage(named: "like_unselected")?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
-            button.addTarget(self, action: #selector(HandleOptionPressed), for: .primaryActionTriggered)
+            button.addTarget(self, action: #selector(Handlelike), for: .primaryActionTriggered)
             return button
     }()
     
@@ -83,7 +83,7 @@ class FeedCell: UICollectionViewCell
             let button = UIButton(type: .system)
             button.translatesAutoresizingMaskIntoConstraints = false
             button.setImage(UIImage(named: "comment")?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
-            button.addTarget(self, action: #selector(HandleOptionPressed), for: .primaryActionTriggered)
+            button.addTarget(self, action: #selector(HandleComment), for: .primaryActionTriggered)
             return button
     }()
     
@@ -92,7 +92,7 @@ class FeedCell: UICollectionViewCell
         { let button = UIButton(type: .system)
             button.translatesAutoresizingMaskIntoConstraints = false
             button.setImage(UIImage(named: "send2")?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
-            button.addTarget(self, action: #selector(HandleOptionPressed), for: .primaryActionTriggered)
+            button.addTarget(self, action: #selector(HandleMessgae), for: .primaryActionTriggered)
             return button
     }()
     
@@ -116,6 +116,15 @@ class FeedCell: UICollectionViewCell
     {
         print("DEBUG: OPTIONS PRESSED")
     }
+    
+    
+    @objc func Handlelike()
+    { print("DEBUG: USERNAME LIKED")}
+    @objc func HandleComment()
+    { print("DEBUG: USERNAME COMMENT")}
+    @objc func HandleMessgae()
+    { print("DEBUG: USERNAME MESSAGE")}
+    
     
 }
 extension FeedCell
@@ -157,11 +166,11 @@ extension FeedCell
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
         stack.distribution = .fillEqually
-        stack.spacing = 10
+        stack.spacing = 12
         
         self.addSubview(stack)
         
-        NSLayoutConstraint.activate([stack.topAnchor.constraint(equalToSystemSpacingBelow: postImage.bottomAnchor, multiplier: 1),
+        NSLayoutConstraint.activate([stack.topAnchor.constraint(equalToSystemSpacingBelow: postImage.bottomAnchor, multiplier: 2),
                                      stack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 1)
                             
         ])
