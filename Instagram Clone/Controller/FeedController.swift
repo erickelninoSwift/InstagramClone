@@ -50,6 +50,9 @@ extension FeedController: UICollectionViewDelegateFlowLayout
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.FeedCellId, for: indexPath) as? FeedCell else {return UICollectionViewCell()}
+       self.Allpost.sort { (pst1,pst2) -> Bool in
+           return pst1.date > pst2.date
+       }
         cell.selectedPost = Allpost[indexPath.row]
         return cell
     }
@@ -121,12 +124,9 @@ extension FeedController
     {
         Services.shared.fetchAllpost(userid: UserId.elninoID) { posts in
             self.Allpost.append(posts)
-            
-            self.Allpost.sort { (post1, post2) -> Bool in
-                return post1.date > post2.date
-            }
             self.collectionView.reloadData()
         }
+         
       
     }
 }

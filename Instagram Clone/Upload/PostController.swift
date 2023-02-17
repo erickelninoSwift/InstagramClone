@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import Photos
 
 class PostController: UIViewController
 {
@@ -73,7 +74,7 @@ class PostController: UIViewController
     var myImage: UIImage?
     
     
-    init(user: User, myImage: UIImage) {
+    init(user: User, myImage: UIImage , AssetSelected: PHAsset) {
         
         self.user = user
         self.myImage = myImage
@@ -166,7 +167,7 @@ extension PostController
     
     func savePost(post: String , PostImage: UIImage ,  userID: String)
     {
-        guard let imageData = PostImage.jpegData(compressionQuality: 0.3) else {return}
+        guard let imageData = PostImage.jpegData(compressionQuality: 0.9) else {return}
         
         
         let filename = NSUUID().uuidString
@@ -201,8 +202,6 @@ extension PostController
                             print("DEBUG: There was an error while trying to save your post : \(error.localizedDescription)/")
                             return
                         }
-                        
-                        
                         guard let postid = Dataref.key else {return}
                         
                         dictionary["post_id"] = postid

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class CustomImageView: UIImageView
 {
@@ -21,8 +22,8 @@ class CustomImageView: UIImageView
         
         self.lastImageUrlString = ImageURL
         
-        self.sd_setImage(with: ImageURL, completed: nil)
-        
+//        self.sd_setImage(with: ImageURL, completed: nil)
+//        
         DispatchQueue.main.async {
             URLSession.shared.dataTask(with: ImageURL) { (data, response , error) in
                 guard let ImageData = data else {return}
@@ -32,7 +33,7 @@ class CustomImageView: UIImageView
                     return
                 }
                 DispatchQueue.main.async {
-                    self.image = UIImage(data: ImageData)
+                    self.image = UIImage(data: ImageData)?.withRenderingMode(.alwaysOriginal)
                 }
             }.resume()
         }

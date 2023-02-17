@@ -21,6 +21,8 @@ class SelectImageViewController: UICollectionViewController
     
     var pickedImage: UIImage?
     
+    var pickedImageAsset: PHAsset?
+    
     
     
     override func viewDidLoad() {
@@ -87,6 +89,7 @@ extension SelectImageViewController: UICollectionViewDelegateFlowLayout
             if let index = self.allImages.firstIndex(of: selectedImage)
             {
                 let selectedAsset = Allasset[index]
+                self.pickedImageAsset = selectedAsset
                 let imgaeManager = PHImageManager.default()
                 let targetsize  = CGSize(width: view.frame.width, height: 600)
                 
@@ -94,6 +97,7 @@ extension SelectImageViewController: UICollectionViewDelegateFlowLayout
                     if let currentImage = Image
                     {
                         header.profileImageView.image = currentImage
+                        self.pickedImage = currentImage
                     }
                 }
                 
@@ -145,8 +149,9 @@ extension SelectImageViewController
     {
         guard let currentuser = user else {return}
         guard let currentImage = pickedImage else {return}
+        guard let currentAsset = pickedImageAsset else {return} 
         
-        let controller = PostController(user: currentuser, myImage: currentImage)
+        let controller = PostController(user: currentuser, myImage: currentImage, AssetSelected: currentAsset)
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
     }
