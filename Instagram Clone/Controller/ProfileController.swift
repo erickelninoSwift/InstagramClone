@@ -300,7 +300,7 @@ extension ProfileController
 extension ProfileController: profileheaderLabelActionDelegate
 {
     func HandlePostLabel(userProfileHeader: ProfileCollectionViewHeader) {
-        print("DEBUG: POST BUTTON PRESSED")
+        
     }
     func HandleFollowingLabel(userProfileHeader: ProfileCollectionViewHeader) {
         guard let currentuser = userProfileHeader.currentUser else {return}

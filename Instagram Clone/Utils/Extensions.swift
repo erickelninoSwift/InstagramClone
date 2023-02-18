@@ -13,7 +13,7 @@ import Firebase
 
 class UserId
 {
-    static let elninoID =  Auth.auth().currentUser?.uid ?? ""
+    static let elninoID =  Auth.auth().currentUser?.uid
 }
 
 

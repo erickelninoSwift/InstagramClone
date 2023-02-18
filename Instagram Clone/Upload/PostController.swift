@@ -146,9 +146,9 @@ extension PostController
     private func configureImage()
     {
         guard let currentimage = myImage else {return}
-        guard let currentUser = user else {return}
+//        guard let currentUser = user else {return}
         self.profilepicture.image = currentimage
-        print("DEBUG: USER : \(currentUser.fullname ?? "")")
+      
     }
     
 }

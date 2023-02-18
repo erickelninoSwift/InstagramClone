@@ -121,12 +121,13 @@ extension FeedController
 {
     private func fetchAllpost()
     {
-        Services.shared.fetchAllpost(userid: UserId.elninoID) { posts in
+          guard let currentID = Auth.auth().currentUser?.uid else {return}
+        Services.shared.fetchAllpost(userid: currentID) { posts in
             self.Allpost.append(posts)
             
-            self.Allpost.sort { (post1, post2) -> Bool in
-                return post1.date > post2.date
-            }
+//            self.Allpost.sort { (post1, post2) -> Bool in
+//                return post1.date > post2.date
+//            }
             self.collectionView.reloadData()
         }
         
@@ -136,22 +137,24 @@ extension FeedController
 extension FeedController: FeedCellDelegate
 {
     func usernameButtonTapped(cell: FeedCell, buttonPressed: UIButton) {
+        
+        guard let currentID = Auth.auth().currentUser?.uid else {return}
         if cell.usernameButton == buttonPressed
         {
             guard let posts = cell.selectedPost else {return}
-            if posts.user?.userID != UserId.elninoID
+            guard let postUser = posts.user else {return}
+            
+            if posts.user?.userID != currentID
             {
                 let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout(), config: .followuser)
-                
-                controller.userfromsearchVC = posts.user
-                
+                controller.userfromsearchVC = postUser
                 controller.modalPresentationStyle = .fullScreen
                 self.navigationController?.pushViewController(controller, animated: true)
             }else
             {
                 let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout(), config:  .editprofile)
-                
-                controller.user = posts.user
+        
+                controller.user = postUser
                 controller.modalPresentationStyle = .fullScreen
                 self.navigationController?.pushViewController(controller, animated: true)
             }

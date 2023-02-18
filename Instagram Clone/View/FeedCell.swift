@@ -48,7 +48,6 @@ class FeedCell: UICollectionViewCell
         {
             let button = UIButton(type: .system)
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.setTitle("Username", for: .normal)
             button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
             button.setTitleColor(.darkGray, for: [])
             
@@ -143,7 +142,7 @@ class FeedCell: UICollectionViewCell
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 12)
         label.textColor = .lightGray
-        label.text = "2 DAYS AGO"
+        label.text = "3 DAYS AGO"
         return label
     }()
     
