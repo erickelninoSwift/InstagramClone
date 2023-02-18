@@ -125,9 +125,9 @@ extension FeedController
         Services.shared.fetchAllpost(userid: currentID) { posts in
             self.Allpost.append(posts)
             
-//            self.Allpost.sort { (post1, post2) -> Bool in
-//                return post1.date > post2.date
-//            }
+            self.Allpost.sort { (post1, post2) -> Bool in
+                return post1.date > post2.date
+            }
             self.collectionView.reloadData()
         }
         
