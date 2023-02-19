@@ -21,13 +21,7 @@ class PostController: UIViewController
             propic.layer.masksToBounds = true
             propic.contentMode = .scaleAspectFill
             propic.backgroundColor = .darkGray
-            NSLayoutConstraint.activate([propic.heightAnchor.constraint(equalToConstant: 90),
-                                         propic.widthAnchor.constraint(equalToConstant: 90)
-            ])
-            
-            propic.layer.cornerRadius = 90 / 2
-            
-            
+
             return propic
     }()
     
@@ -44,9 +38,6 @@ class PostController: UIViewController
             textfield.isScrollEnabled = true
             
             textfield.heightAnchor.constraint(equalToConstant: 90).isActive = true
-            textfield.widthAnchor.constraint(equalToConstant: view.frame.width - 100).isActive = true
-            
-            
             
             return textfield
     }()
@@ -82,6 +73,7 @@ class PostController: UIViewController
         super.init(nibName: nil, bundle: nil)
         self.navigationItem.title = "\(user.username ?? "")"
         configureImage()
+        updateUserFeeds()
     }
     
     required init?(coder: NSCoder) {
@@ -94,6 +86,17 @@ class PostController: UIViewController
         style()
         configure()
         handletextfield()
+    }
+    
+    
+    func updateUserFeeds()
+    {
+        guard let currentuserid = Auth.auth().currentUser?.uid else {return}
+        
+        Database.database().reference().child("User-following").child(currentuserid).observe(.childAdded) { datasnapshots in
+            print("DEBUG: USER FOLLOWING : \(datasnapshots.key)")
+        }
+        
     }
 }
 
@@ -111,16 +114,19 @@ extension PostController
     private func configure()
     {
         NSLayoutConstraint.activate([profilepicture.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1),
-                                     profilepicture.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2)
+                                     profilepicture.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 3),
+                                     profilepicture.heightAnchor.constraint(equalToConstant: 80),
+                                     profilepicture.widthAnchor.constraint(equalToConstant: 80),
         ])
         
+        self.profilepicture.layer.cornerRadius = 80 / 2
+        
         NSLayoutConstraint.activate([myTextfield.leadingAnchor.constraint(equalToSystemSpacingAfter: profilepicture.trailingAnchor, multiplier: 1),
-                                     myTextfield.topAnchor.constraint(equalTo: profilepicture.topAnchor),
+                                     myTextfield.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 3),
                                      view.trailingAnchor.constraint(equalToSystemSpacingAfter: myTextfield.trailingAnchor, multiplier: 1)
         ])
         
         NSLayoutConstraint.activate([shareButton.topAnchor.constraint(equalToSystemSpacingBelow: myTextfield.bottomAnchor, multiplier: 1),
-                                     shareButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                      shareButton.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1),
                                      view.trailingAnchor.constraint(equalToSystemSpacingAfter: shareButton.trailingAnchor, multiplier: 1)
         ])

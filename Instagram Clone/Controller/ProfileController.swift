@@ -151,8 +151,11 @@ extension ProfileController
         let selectedPost  = AllmyPost[indexPath.row]
         
         let controller = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
+         controller.modalPresentationStyle = .fullScreen
+         controller.myPost = selectedPost
         controller.viewSinglePost = true
-        controller.myPost = selectedPost
+        controller.viewSinglePost ? controller.style(viewpostsignle: true) : controller.style(viewpostsignle: false)
+        
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -175,8 +178,6 @@ extension ProfileController: UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }
-    
-    
     
 }
 

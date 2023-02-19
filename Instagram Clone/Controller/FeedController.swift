@@ -25,17 +25,17 @@ class FeedController: UICollectionViewController
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
-        style()
+     
         fetchAllpost()
         
     }
     
     override  func viewDidLoad() {
         super.viewDidLoad()
-        style()
         Controllerlayout()
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewID)
         navigationItem.title = "Feed"
+        style(viewpostsignle: viewSinglePost)
     }
     
     required init?(coder: NSCoder) {
@@ -71,14 +71,19 @@ extension FeedController: UICollectionViewDelegateFlowLayout
 }
 extension FeedController
 {
-    private func style()
+    func style(viewpostsignle: Bool)
     {
-        
-        if  viewSinglePost
+        if viewpostsignle != true
         {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handlelogOut))
             self.navigationController?.navigationBar.tintColor = .black
         }
+//        else
+//        {
+//           print("DEBUG: SUPPOSED TO SHOW NAME ON THE LEFT")
+//        }
+        
+        
         self.collectionView.backgroundColor = .white
         self.navigationItem.leftBarButtonItem?.tintColor = .black
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "send2")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(handleSendMessage))
