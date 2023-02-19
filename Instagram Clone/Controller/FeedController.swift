@@ -18,6 +18,11 @@ class FeedController: UICollectionViewController
     
     private var Allpost = [Post]()
     
+    var viewSinglePost: Bool = false
+    
+    var myPost: Post?
+    
+    
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
         style()
@@ -45,14 +50,15 @@ extension FeedController: UICollectionViewDelegateFlowLayout
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Allpost.count
+        return viewSinglePost ? 1 : Allpost.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.FeedCellId, for: indexPath) as? FeedCell else {return UICollectionViewCell()}
         cell.delegate = self
-        cell.selectedPost = Allpost[indexPath.row]
+        cell.selectedPost = viewSinglePost ? myPost! : Allpost[indexPath.row]
         return cell
     }
     
@@ -68,8 +74,11 @@ extension FeedController
     private func style()
     {
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handlelogOut))
-        self.navigationController?.navigationBar.tintColor = .black
+        if  viewSinglePost
+        {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handlelogOut))
+            self.navigationController?.navigationBar.tintColor = .black
+        }
         self.collectionView.backgroundColor = .white
         self.navigationItem.leftBarButtonItem?.tintColor = .black
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "send2")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(handleSendMessage))

@@ -146,6 +146,16 @@ extension ProfileController
         return header
     }
     
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedPost  = AllmyPost[indexPath.row]
+        
+        let controller = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
+        controller.viewSinglePost = true
+        controller.myPost = selectedPost
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
 }
 // API CALLS
 extension ProfileController: UICollectionViewDelegateFlowLayout
@@ -165,6 +175,8 @@ extension ProfileController: UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }
+    
+    
     
 }
 
