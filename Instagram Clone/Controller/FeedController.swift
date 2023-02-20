@@ -25,11 +25,13 @@ class FeedController: UICollectionViewController
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
+        UpdateUserFeed()
         fetchAllpost()
     }
     
     override  func viewDidLoad() {
         super.viewDidLoad()
+        UpdateUserFeed()
         Controllerlayout()
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewID)
         navigationItem.title = "Feed"
@@ -113,15 +115,34 @@ extension FeedController
         }
     }
     
-  
+    
 }
 
 extension FeedController
 {
+    private func UpdateUserFeed()
+    {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {return}
+        
+        Database.database().reference().child("User-following").child(currentUserID).observe(.childAdded) { datasnapshots in
+            let userfollowingID = datasnapshots.key
+            Database.database().reference().child("User-posts").child(userfollowingID).observe(.childAdded) { userfollowingPost in
+                let postID = userfollowingPost.key
+                print("DEBUG:USER FOLLOWING ID: \(userfollowingID) POSTID:  \(postID)")
+                Database.database().reference().child("User-Feeds").child(currentUserID).updateChildValues([postID:1])
+            }
+        }
+        
+        Database.database().reference().child("User-posts").child(currentUserID).observe(.childAdded) { currentuserpost in
+            let postID = currentuserpost.key
+            print("DEBUG: CURRENT USER ID : \(currentUserID) POSTID: \(postID)")
+            Database.database().reference().child("User-Feeds").child(currentUserID).updateChildValues([postID:1])
+        }
+    }
+    
     private func fetchAllpost()
     {
-          guard let currentID = Auth.auth().currentUser?.uid else {return}
-          Services.shared.fetchAllpost(userid: currentID) { posts in
+        Services.shared.fetchAllpost { posts in
             self.Allpost.append(posts)
             self.collectionView.reloadData()
         }
@@ -147,7 +168,7 @@ extension FeedController: FeedCellDelegate
             }else
             {
                 let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout(), config:  .editprofile)
-        
+                
                 controller.user = postUser
                 controller.modalPresentationStyle = .fullScreen
                 self.navigationController?.pushViewController(controller, animated: true)

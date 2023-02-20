@@ -27,31 +27,32 @@ class Services
     func fetchPost(userid: String,postid: String, completion: @escaping(Post) -> Void)
     {
 
-        
-        Database.database().reference().child("Posts").child(userid).child(postid).observeSingleEvent(of: .value) { datasnaping in
-            guard let currentdata = datasnaping.value as? [String:Any] else {return}
-            Services.shared.fetchUser(user_Id: userid) { myUser in
-                let post = Post(mypostID: postid, user: myUser, dictionary: currentdata)
-                completion(post)
+        Database.database().reference().child("Posts").observe(.childAdded) { datafound in
+            guard datafound.key == postid else {return}
+            guard let data = datafound.value as? [String:Any] else {return}
+            self.fetchUser(user_Id: userid) { elninoUser in
+                let myPost  = Post(mypostID: datafound.key, user: elninoUser, dictionary: data)
+                completion(myPost)
             }
-            
         }
       
     }
     
     
-    func fetchAllpost(userid: String , completion: @escaping(Post) -> Void)
+    func fetchAllpost(completion: @escaping(Post) -> Void)
     {
-        
         guard let currentuserid = Auth.auth().currentUser?.uid else {return}
 
         Database.database().reference().child("User-Feeds").child(currentuserid).observe(.childAdded) { datasnapshots in
+            let myPostID = datasnapshots.key
             
-             let postid = datasnapshots.key
-            Database.database().reference().child("Posts").observe(.childAdded) { datasnaping in
-                print("DEBUG: \(datasnaping.children)")
+            Database.database().reference().child("Posts").child(myPostID).observeSingleEvent(of: .value) { DataPostsnap in
+                guard let data = DataPostsnap.value as? [String:Any] else {return}
+                Services.shared.fetchUser(user_Id: currentuserid) { myUser in
+                    let posts = Post(mypostID: myPostID, user: myUser, dictionary: data)
+                    completion(posts)
+                }
             }
-            
         }
     }
 }

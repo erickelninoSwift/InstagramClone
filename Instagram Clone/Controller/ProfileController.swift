@@ -336,7 +336,7 @@ extension ProfileController
     func fetchAllpost()
     {
         guard let currentId = Auth.auth().currentUser?.uid else {return}
-        
+        guard let myUser = user?.userID else {return}
         switch profileconfig
         {
         case .editprofile:
@@ -354,9 +354,10 @@ extension ProfileController
             }
             
         case .followuser:
+           
             DispatchQueue.main.async {
-                Database.database().reference().child("User-posts").child(self.user?.userID ?? "").observe(.childAdded) { datasnaping in
-                    Services.shared.fetchPost(userid: self.user?.userID ?? "", postid: datasnaping.key) { myPost in
+                Database.database().reference().child("User-posts").child(myUser).observe(.childAdded) { datasnaping in
+                    Services.shared.fetchPost(userid: myUser, postid: datasnaping.key) { myPost in
                         self.AllmyPost.append(myPost)
                         self.AllmyPost.sort { (post1, post2) -> Bool in
                             return post1.date > post2.date
@@ -370,8 +371,6 @@ extension ProfileController
         }
         
     }
-    
-    
-    
+
 }
 
