@@ -204,7 +204,7 @@ extension PostController
                 
                 Services.shared.fetchUser(user_Id: userID) { elninouser in
                     var dictionary = ["User_id": elninouser.userID ?? "" , "Username": elninouser.username ?? "", "Fullname":elninouser.fullname ?? "","Post-image-url" : postImageUrl, "Date" : currentDate,"Post": post,"Likes": 0] as [String:Any]
-                    Database.database().reference().child("Posts").child(elninouser.userID!).childByAutoId().updateChildValues(dictionary) { (Error, Dataref) in
+                    Database.database().reference().child("Posts").childByAutoId().updateChildValues(dictionary) { (Error, Dataref) in
                         if let error = Error
                         {
                             print("DEBUG: There was an error while trying to save your post : \(error.localizedDescription)/")

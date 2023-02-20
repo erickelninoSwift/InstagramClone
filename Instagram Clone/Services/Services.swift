@@ -44,23 +44,13 @@ class Services
     {
         
         guard let currentuserid = Auth.auth().currentUser?.uid else {return}
-        print("DEBUG: MY IUID : \(currentuserid)")
-        print("DEBUG: USERPOST ID  :\(userid)")
-        Database.database().reference().child("User-Feeds").child(userid).observe(.childAdded) { datasnapshots in
+
+        Database.database().reference().child("User-Feeds").child(currentuserid).observe(.childAdded) { datasnapshots in
             
              let postid = datasnapshots.key
-            
-            Services.shared.fetchUser(user_Id: userid) { MyUser in
-
-                Database.database().reference().child("Posts").child(MyUser.userID!).child(postid).observeSingleEvent(of: .value) { datavaluesnap in
-                    
-                    guard let currentData = datavaluesnap.value as? [String:Any] else {return}
-                    let elninomyPost = Post(mypostID: postid, user: MyUser, dictionary: currentData)
-                    completion(elninomyPost)
-                }
-                
+            Database.database().reference().child("Posts").observe(.childAdded) { datasnaping in
+                print("DEBUG: \(datasnaping.children)")
             }
-           
             
         }
     }
