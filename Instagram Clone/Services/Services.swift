@@ -43,12 +43,24 @@ class Services
     func fetchAllpost(userid: String , completion: @escaping(Post) -> Void)
     {
         
-        Database.database().reference().child("Posts").child(userid).observe(.childAdded) { datasnapshots in
-            guard let currentuserdata  = datasnapshots.value as? [String:Any] else {return}
+        guard let currentuserid = Auth.auth().currentUser?.uid else {return}
+        print("DEBUG: MY IUID : \(currentuserid)")
+        print("DEBUG: USERPOST ID  :\(userid)")
+        Database.database().reference().child("User-Feeds").child(userid).observe(.childAdded) { datasnapshots in
+            
+             let postid = datasnapshots.key
+            
             Services.shared.fetchUser(user_Id: userid) { MyUser in
-                let currentpost = Post(mypostID: datasnapshots.key, user: MyUser, dictionary: currentuserdata)
-                completion(currentpost)
+
+                Database.database().reference().child("Posts").child(MyUser.userID!).child(postid).observeSingleEvent(of: .value) { datavaluesnap in
+                    
+                    guard let currentData = datavaluesnap.value as? [String:Any] else {return}
+                    let elninomyPost = Post(mypostID: postid, user: MyUser, dictionary: currentData)
+                    completion(elninomyPost)
+                }
+                
             }
+           
             
         }
     }

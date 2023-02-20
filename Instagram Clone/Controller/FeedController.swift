@@ -121,7 +121,7 @@ extension FeedController
     private func fetchAllpost()
     {
           guard let currentID = Auth.auth().currentUser?.uid else {return}
-        Services.shared.fetchAllpost(userid: currentID) { posts in
+          Services.shared.fetchAllpost(userid: currentID) { posts in
             self.Allpost.append(posts)
             self.collectionView.reloadData()
         }

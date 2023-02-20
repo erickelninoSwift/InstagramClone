@@ -73,7 +73,7 @@ class PostController: UIViewController
         super.init(nibName: nil, bundle: nil)
         self.navigationItem.title = "\(user.username ?? "")"
         configureImage()
-        updateUserFeeds()
+       
     }
     
     required init?(coder: NSCoder) {
@@ -86,19 +86,19 @@ class PostController: UIViewController
         style()
         configure()
         handletextfield()
-        updateUserFeeds()
+        
     }
     
     
-    func updateUserFeeds()
+    func updateUserFeeds(with postid: String)
     {
         guard let currentuserid = Auth.auth().currentUser?.uid else {return}
-        print("DEBUG: current user id : \(currentuserid)")
-       
-        Database.database().reference().child("User-following").child(currentuserid).observe(.childAdded) { datasnapshots in
-            print("DEBUG: USER FOLLOW : \(datasnapshots.key)")
+         let value = [postid:1] as [String:Any]
+        Database.database().reference().child("User-followers").child(currentuserid).observe(.childAdded) { datasnapshots in
+            let myFollower = datasnapshots.key as String
+            Database.database().reference().child("User-Feeds").child(myFollower).updateChildValues(value)
         }
-        
+        Database.database().reference().child("User-Feeds").child(currentuserid).updateChildValues(value)
     }
 }
 
@@ -216,6 +216,8 @@ extension PostController
                         Dataref.updateChildValues(dictionary)
     
                         let value = [postid: 1] as [String:Any]
+                        
+                        self.updateUserFeeds(with: postid)
                         
                         Database.database().reference().child("User-posts").child(userID).updateChildValues(value) { (Error, datareference) in
                             if let error  = Error
