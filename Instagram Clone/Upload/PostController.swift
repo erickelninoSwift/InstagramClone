@@ -86,15 +86,17 @@ class PostController: UIViewController
         style()
         configure()
         handletextfield()
+        updateUserFeeds()
     }
     
     
     func updateUserFeeds()
     {
         guard let currentuserid = Auth.auth().currentUser?.uid else {return}
-        
+        print("DEBUG: current user id : \(currentuserid)")
+       
         Database.database().reference().child("User-following").child(currentuserid).observe(.childAdded) { datasnapshots in
-            print("DEBUG: USER FOLLOWING : \(datasnapshots.key)")
+            print("DEBUG: USER FOLLOW : \(datasnapshots.key)")
         }
         
     }

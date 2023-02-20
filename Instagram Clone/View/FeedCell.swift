@@ -75,6 +75,7 @@ class FeedCell: UICollectionViewCell
             propic.layer.masksToBounds = true
             propic.contentMode = .scaleAspectFill
             propic.backgroundColor = .lightGray
+            propic.heightAnchor.constraint(equalToConstant: 420).isActive = true
             return propic
     }()
     
@@ -216,8 +217,7 @@ extension FeedCell
         
         NSLayoutConstraint.activate([postImage.topAnchor.constraint(equalToSystemSpacingBelow: profilepicture.bottomAnchor, multiplier: 1),
                                      postImage.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 0),
-                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: postImage.trailingAnchor, multiplier: 0),
-                                     self.bottomAnchor.constraint(equalToSystemSpacingBelow: postImage.bottomAnchor, multiplier: 14)
+                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: postImage.trailingAnchor, multiplier: 0)
         ])
         
         
@@ -226,7 +226,7 @@ extension FeedCell
         stack.axis = .horizontal
         stack.distribution = .fillEqually
         stack.spacing = 14
-        stack.heightAnchor.constraint(equalToConstant: 25).isActive = true
+       
         self.addSubview(stack)
         
         NSLayoutConstraint.activate([stack.topAnchor.constraint(equalToSystemSpacingBelow: postImage.bottomAnchor, multiplier: 2),
@@ -252,8 +252,8 @@ extension FeedCell
         
         
         self.addSubview(timeLable)
-        NSLayoutConstraint.activate([timeLable.topAnchor.constraint(equalToSystemSpacingBelow: captionMessage.bottomAnchor, multiplier: 1),
-                                     timeLable.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 1)
+        NSLayoutConstraint.activate([timeLable.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 1),
+                                     self.bottomAnchor.constraint(equalToSystemSpacingBelow: timeLable.bottomAnchor, multiplier: 1)
         ])
     }
 }

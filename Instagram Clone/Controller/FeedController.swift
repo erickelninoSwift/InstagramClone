@@ -25,9 +25,7 @@ class FeedController: UICollectionViewController
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
-     
         fetchAllpost()
-        
     }
     
     override  func viewDidLoad() {
@@ -36,6 +34,7 @@ class FeedController: UICollectionViewController
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewID)
         navigationItem.title = "Feed"
         style(viewpostsignle: viewSinglePost)
+        
     }
     
     required init?(coder: NSCoder) {
@@ -78,10 +77,6 @@ extension FeedController
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handlelogOut))
             self.navigationController?.navigationBar.tintColor = .black
         }
-//        else
-//        {
-//           print("DEBUG: SUPPOSED TO SHOW NAME ON THE LEFT")
-//        }
         
         
         self.collectionView.backgroundColor = .white
@@ -118,17 +113,7 @@ extension FeedController
         }
     }
     
-    func alertMessage(Message: String, title: String, completion: @escaping(AlertFunction))
-    {
-        let alert = UIAlertController(title: title, message: Message, preferredStyle: .actionSheet)
-        let action = UIAlertAction(title: "Logout", style: .destructive, handler: completion)
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alertAction) in
-            alert.dismiss(animated: true, completion: nil)
-        }
-        alert.addAction(action)
-        alert.addAction(cancel)
-        self.present(alert, animated: true, completion: nil)
-    }
+  
 }
 
 extension FeedController
@@ -138,13 +123,8 @@ extension FeedController
           guard let currentID = Auth.auth().currentUser?.uid else {return}
         Services.shared.fetchAllpost(userid: currentID) { posts in
             self.Allpost.append(posts)
-            
-            self.Allpost.sort { (post1, post2) -> Bool in
-                return post1.date > post2.date
-            }
             self.collectionView.reloadData()
         }
-        
     }
 }
 
