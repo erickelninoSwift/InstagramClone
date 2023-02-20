@@ -25,6 +25,10 @@ class FollowUnFollow
         
         Database.database().reference().child("User-following").child(userid).updateChildValues(followingvalue)
         Database.database().reference().child("User-followers").child(usertoFollow.userID ?? "").updateChildValues(followersvalue)
+        Database.database().reference().child("User-posts").child(usertoFollow.userID ?? "").observe(.childAdded) { datasnpashots in
+            let postid = datasnpashots.key
+            Database.database().reference().child("User-Feeds").child(userid).updateChildValues([postid:1])
+        }
         
     }
     
@@ -41,6 +45,11 @@ class FollowUnFollow
             }
             
             Database.database().reference().child("User-followers").child(usertoUnfollow.userID!).child(userid).removeValue()
+        }
+        
+        Database.database().reference().child("User-posts").child(usertoUnfollow.userID ?? "").observe(.childAdded) { postDatasnapshot in
+            let postid = postDatasnapshot.key
+            Database.database().reference().child("User-Feeds").child(userid).child(postid).removeValue()
         }
     }
     

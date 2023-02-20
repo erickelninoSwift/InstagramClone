@@ -36,7 +36,6 @@ class FeedController: UICollectionViewController
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewID)
         navigationItem.title = "Feed"
         style(viewpostsignle: viewSinglePost)
-        
     }
     
     required init?(coder: NSCoder) {
