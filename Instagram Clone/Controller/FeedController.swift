@@ -23,6 +23,7 @@ class FeedController: UICollectionViewController
     var myPost: Post?
     
     
+    
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
         UpdateUserFeed()
@@ -30,7 +31,9 @@ class FeedController: UICollectionViewController
     }
     
     override  func viewDidLoad() {
+       
         super.viewDidLoad()
+        controllerRefresh()
         UpdateUserFeed()
         Controllerlayout()
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewID)
@@ -88,6 +91,22 @@ extension FeedController
         
     }
     
+    
+    func controllerRefresh()
+    {
+        let refechcontroller = UIRefreshControl()
+        refechcontroller.addTarget(self, action: #selector(HandleRefresher), for: .primaryActionTriggered)
+        
+        self.collectionView.refreshControl = refechcontroller
+        
+    }
+    
+    @objc func HandleRefresher()
+    {
+        self.Allpost.removeAll(keepingCapacity: false)
+        self.fetchAllpost()
+    }
+    
     @objc func handleSendMessage()
     {
         print("DEBUG: Send Message")
@@ -141,10 +160,14 @@ extension FeedController
     
     private func fetchAllpost()
     {
+        self.collectionView.refreshControl?.beginRefreshing()
         Services.shared.fetchAllpost { posts in
             self.Allpost.append(posts)
+            self.collectionView.refreshControl?.endRefreshing()
             self.collectionView.reloadData()
+
         }
+        
     }
 }
 
