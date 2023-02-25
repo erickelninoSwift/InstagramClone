@@ -20,6 +20,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
     
     
     var userfollowing: Bool = false
+    var AllpostID = [Int]()
     
     var configurationset: configurationEditbutton?
     {
@@ -35,6 +36,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         {
             checkifuserfollwing()
             configurationUser()
+            getAlluserpost()
         }
     }
     
@@ -387,6 +389,16 @@ extension ProfileCollectionViewHeader
             current.checkuserFollow(myUser: current, myuserID: myUID, completion: { isFollowed in
                 current.isFollowed = isFollowed
             })
+        }
+    }
+    
+    
+    private func getAlluserpost()
+    {
+       
+        guard let userSelected = currentUser else {return}
+        Services.shared.fetchUserPost(with: userSelected) { AllpostInt in
+            self.AllpostID = AllpostInt
         }
     }
     

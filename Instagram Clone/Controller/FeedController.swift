@@ -125,6 +125,7 @@ extension FeedController
                 try Auth.auth().signOut()
                 let loginVC = LoginViewController()
                 loginVC.modalPresentationStyle = .fullScreen
+                loginVC.modalTransitionStyle = .crossDissolve
                 self.present(loginVC, animated: true, completion: nil)
             }catch
             {
@@ -146,14 +147,14 @@ extension FeedController
             let userfollowingID = datasnapshots.key
             Database.database().reference().child("User-posts").child(userfollowingID).observe(.childAdded) { userfollowingPost in
                 let postID = userfollowingPost.key
-                print("DEBUG:USER FOLLOWING ID: \(userfollowingID) POSTID:  \(postID)")
+    
                 Database.database().reference().child("User-Feeds").child(currentUserID).updateChildValues([postID:1])
             }
         }
         
         Database.database().reference().child("User-posts").child(currentUserID).observe(.childAdded) { currentuserpost in
             let postID = currentuserpost.key
-            print("DEBUG: CURRENT USER ID : \(currentUserID) POSTID: \(postID)")
+           
             Database.database().reference().child("User-Feeds").child(currentUserID).updateChildValues([postID:1])
         }
     }

@@ -14,8 +14,8 @@
             filePath = "Instagram Clone/View/ProfileCollectionViewHeader.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
             landmarkName = "configurationset"
             landmarkType = "24">
          </BreakpointContent>
@@ -30,10 +30,10 @@
             filePath = "Instagram Clone/View/ProfileCollectionViewHeader.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "profileImageView"
-            landmarkType = "24">
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "ProfileCollectionViewHeader"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -78,8 +78,8 @@
             filePath = "Instagram Clone/Controller/FeedController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
             landmarkName = "usernameButtonTapped(cell:buttonPressed:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "Instagram Clone/Controller/FeedController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "192"
-            endingLineNumber = "192"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
             landmarkName = "usernameButtonTapped(cell:buttonPressed:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "Instagram Clone/Controller/FeedController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "189"
-            endingLineNumber = "189"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
             landmarkName = "usernameButtonTapped(cell:buttonPressed:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -74,7 +74,7 @@ extension FollowersVC
         {
             cell.configureCell = viewcontrollerConfig
             cell.currentUser = userfetched[indexPath.row]
-            print("DEBUG: \(myUserSelected)")
+           
         }
         return cell
     }
@@ -109,7 +109,7 @@ extension FollowersVC
     func configureUser()
     {
         guard let currentuser = userFollowers else {return}
-        print("DEBUG: The user received from the profile controller is : \(currentuser.fullname ?? "")")
+       
     }
     
     func fetchUser()

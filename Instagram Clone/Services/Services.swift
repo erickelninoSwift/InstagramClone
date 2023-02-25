@@ -55,4 +55,16 @@ class Services
             }
         }
     }
+    
+    func fetchUserPost(with userTo: User , completion: @escaping([Int]) ->Void)
+    {
+       
+       var allvalue = [Int]()
+        Database.database().reference().child("User-posts").child(userTo.userID!).observe(.childAdded) { datasnapshots in
+            guard let currentsata = datasnapshots.value as? Int else {return}
+            allvalue.append(currentsata)
+            completion(allvalue)
+        }
+    
+    }
 }

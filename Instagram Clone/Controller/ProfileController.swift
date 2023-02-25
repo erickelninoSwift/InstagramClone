@@ -57,6 +57,7 @@ class ProfileController: UICollectionViewController
     {
         self.profileconfig = config
         super.init(collectionViewLayout: layout)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,6 +73,7 @@ class ProfileController: UICollectionViewController
         if let currentUSerSelected = userfromsearchVC
         {
             self.user = currentUSerSelected
+    
             fetchAllpost()
         }else
         {
@@ -116,32 +118,27 @@ extension ProfileController
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerprofileID, for: indexPath) as? ProfileCollectionViewHeader else {return UICollectionReusableView()}
-        
+        header.delegate = self
+        header.labelActionDelegate = self
         if let myuser = user
         {
+            self.getuserStats(user_id: myuser.userID!, profile: header)
+            header.currentUser = myuser
+            self.navigationItem.title = myuser.username ?? ""
+            
+            
             
             switch profileconfig!
             {
-                
             case .editprofile:
-                self.getuserStats(user_id: myuser.userID!, profile: header)
-                header.delegate = self
-                header.labelActionDelegate = self
-                header.currentUser = myuser
-                self.navigationItem.title = myuser.username ?? ""
                 header.configurationset = profileconfig
-                
-                
                 
             case .followuser:
-                
-                self.getuserStats(user_id: myuser.userID!, profile: header)
-                header.delegate = self
-                header.labelActionDelegate = self
-                header.currentUser = myuser
-                self.navigationItem.title = myuser.username ?? ""
                 header.configurationset = profileconfig
             }
+            
+            
+            
         }
         return header
     }
@@ -189,6 +186,7 @@ extension ProfileController
         Services.shared.fetchUser(user_Id: userID) { MyUSer in
             self.user = MyUSer
             self.fetchAllpost()
+    
             self.collectionView.reloadData()
         }
     }
@@ -326,6 +324,7 @@ extension ProfileController: profileheaderLabelActionDelegate
         guard let currentuser = userProfileHeader.currentUser else {return}
         
         let controller = FollowersVC(style: .plain, followconfig: .follower, userSelected: currentuser)
+        controller.modalTransitionStyle = .crossDissolve
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
     }
