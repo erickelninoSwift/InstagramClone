@@ -213,11 +213,11 @@ extension FeedController: FeedCellDelegate
             if post.didlike
             {
                 post.adjustlike(addlike: false)
-               
+                cell.LikeButton.setImage(UIImage(named: "like_unselected")?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
             }else
             {
                 post.adjustlike(addlike: true)
-            
+                cell.LikeButton.setImage(UIImage(named: "like_selected")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal), for: .normal)
             }
         }
     }

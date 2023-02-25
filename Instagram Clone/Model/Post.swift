@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import Firebase
 
 class Post
 {
@@ -70,6 +70,6 @@ class Post
             self.likes = self.likes - 1
             didlike = false
         }
-        print("DEBUG: Post has : \(self.likes ?? 0) Likes")
+        Database.database().reference().child(post_ID).child("Likes").setValue(self.likes)
     }
 }
