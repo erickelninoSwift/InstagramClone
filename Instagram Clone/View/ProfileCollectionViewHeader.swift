@@ -27,6 +27,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
         didSet
         {
             configureeditbutton()
+            getAlluserpost()
         }
     }
     
@@ -68,13 +69,12 @@ class ProfileCollectionViewHeader: UICollectionViewCell
             label.translatesAutoresizingMaskIntoConstraints = false
             label.numberOfLines = 0
             label.textAlignment = .center
-
             
             let attributed = NSAttributedString(string: "Post", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
-            let MutabelAtributted = NSMutableAttributedString(string: "3 \n", attributes: [.font:  UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
+            let MutabelAtributted = NSMutableAttributedString(string: "\(0) \n", attributes: [.font:  UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
             MutabelAtributted.append(attributed)
             label.attributedText = MutabelAtributted
-            
+
             return label
     }()
     
@@ -400,6 +400,10 @@ extension ProfileCollectionViewHeader
         
         Services.shared.fetchuserSpecificPosts(with: userSelected) { posts in
             self.numberofPost = posts.count
+            let attributed = NSAttributedString(string: "Post", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
+            let MutabelAtributted = NSMutableAttributedString(string: "\(posts.count) \n", attributes: [.font:  UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
+            MutabelAtributted.append(attributed)
+            self.postLabel.attributedText = MutabelAtributted
         }
     }
     

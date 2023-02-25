@@ -209,7 +209,16 @@ extension FeedController: FeedCellDelegate
     func FeedLikeButtonTapped(cell: FeedCell, buttonPressed: UIButton) {
         if cell.LikeButton == buttonPressed
         {
-            print("DEBUG: LIKE")
+            guard let post = cell.selectedPost else {return}
+            if post.didlike
+            {
+                post.adjustlike(addlike: false)
+               
+            }else
+            {
+                post.adjustlike(addlike: true)
+            
+            }
         }
     }
     
