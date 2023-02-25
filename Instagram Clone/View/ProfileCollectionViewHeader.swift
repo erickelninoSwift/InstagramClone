@@ -20,7 +20,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
     
     
     var userfollowing: Bool = false
-    var AllpostID = [Int]()
+    var numberofPost: Int?
     
     var configurationset: configurationEditbutton?
     {
@@ -68,6 +68,7 @@ class ProfileCollectionViewHeader: UICollectionViewCell
             label.translatesAutoresizingMaskIntoConstraints = false
             label.numberOfLines = 0
             label.textAlignment = .center
+
             
             let attributed = NSAttributedString(string: "Post", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
             let MutabelAtributted = NSMutableAttributedString(string: "3 \n", attributes: [.font:  UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
@@ -395,10 +396,10 @@ extension ProfileCollectionViewHeader
     
     private func getAlluserpost()
     {
-       
         guard let userSelected = currentUser else {return}
-        Services.shared.fetchUserPost(with: userSelected) { AllpostInt in
-            self.AllpostID = AllpostInt
+        
+        Services.shared.fetchuserSpecificPosts(with: userSelected) { posts in
+            self.numberofPost = posts.count
         }
     }
     

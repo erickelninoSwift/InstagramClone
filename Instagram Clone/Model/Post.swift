@@ -21,6 +21,8 @@ class Post
     var post_ID: String!
     var user: User?
     
+    var didlike = false
+    
     init(mypostID: String, user: User , dictionary: [String:Any])
     {
         self.user = user
@@ -56,4 +58,18 @@ class Post
         
     }
     
+    func adjustlike(addlike: Bool)
+    {
+        if addlike
+        {
+            self.likes = self.likes + 1
+            didlike = true
+        }else
+        {
+            guard self.likes > 0 else {return}
+            self.likes = self.likes - 1
+            didlike = false
+        }
+        print("DEBUG: Post has : \(self.likes ?? 0) Likes")
+    }
 }

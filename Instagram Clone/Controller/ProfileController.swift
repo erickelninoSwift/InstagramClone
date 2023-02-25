@@ -272,7 +272,19 @@ extension ProfileController
     {
         var userNumberOfFollowers:Int!
         var userNumberOfFollowing: Int!
+        var numberofposts:Int?
         
+        
+        Services.shared.fetchUser(user_Id: user_id) { myUser in
+            Services.shared.fetchuserSpecificPosts(with: myUser) { Allpost in
+                
+            numberofposts = Allpost.count
+               let attributed = NSAttributedString(string: "Posts", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
+                let MutabelAtributted = NSMutableAttributedString(string: "\(numberofposts ?? 0) \n", attributes: [.font: UIFont.boldSystemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
+                 MutabelAtributted.append(attributed)
+                profile.postLabel.attributedText = MutabelAtributted
+            }
+        }
         
         Database.database().reference().child("User-followers").child(user_id).observe(.value) { snapshots in
             if let numberOfStats = snapshots.value as? [String:Any]

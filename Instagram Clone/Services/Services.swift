@@ -56,14 +56,19 @@ class Services
         }
     }
     
-    func fetchUserPost(with userTo: User , completion: @escaping([Int]) ->Void)
+    func fetchuserSpecificPosts(with userTo: User , completion: @escaping([Post]) ->Void)
     {
-       
-       var allvalue = [Int]()
+       var Allpost = [Post]()
+        
         Database.database().reference().child("User-posts").child(userTo.userID!).observe(.childAdded) { datasnapshots in
-            guard let currentsata = datasnapshots.value as? Int else {return}
-            allvalue.append(currentsata)
-            completion(allvalue)
+             let postid = datasnapshots.key
+            Database.database().reference().child("Posts").child(postid).observe(.value) { datasnapingData in
+                guard let postData = datasnapingData.value as? [String:Any] else {return}
+               let mypost = Post(mypostID: postid, user: userTo, dictionary: postData)
+                Allpost.append(mypost)
+                completion(Allpost)
+            }
+            
         }
     
     }
