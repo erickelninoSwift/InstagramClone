@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import Firebase
 
 class FeedCell: UICollectionViewCell
 {
@@ -21,8 +22,8 @@ class FeedCell: UICollectionViewCell
     {
         didSet
         {
-            configureFeedCell()
-            
+              configureFeedCell()
+             configureLikebutton()
         }
     }
     
@@ -85,7 +86,7 @@ class FeedCell: UICollectionViewCell
         {
             let button = UIButton(type: .system)
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.setImage(UIImage(named: "like_unselected")?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
+           
             button.addTarget(self, action: #selector(Handlelike), for: .primaryActionTriggered)
             return button
     }()
@@ -260,7 +261,7 @@ extension FeedCell
 
 extension FeedCell
 {
-    private func configureFeedCell()
+     func configureFeedCell()
     {
         guard let myPost = selectedPost else {return}
         guard let userid = myPost.user_id else {return}
@@ -275,6 +276,7 @@ extension FeedCell
         }
         postImage.loadImage(with: PostImageUrl)
         self.likesLabel.text = "\(likes) Likes"
+
         
     }
     
@@ -284,5 +286,13 @@ extension FeedCell
         let attributted = NSMutableAttributedString(string: "\(user.username ?? "") ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
         attributted.append(NSAttributedString(string: myPost.post, attributes: [.font:UIFont.systemFont(ofSize: 16)]))
         self.captionMessage.attributedText = attributted
+    }
+}
+
+extension FeedCell
+{
+   func configureLikebutton()
+   {
+    self.LikeButton.setImage(UIImage(named: self.selectedPost!.didlike ? "like_selected":"like_unselected")?.withTintColor(self.selectedPost!.didlike ? .systemRed: .black, renderingMode: .alwaysOriginal), for: .normal)
     }
 }

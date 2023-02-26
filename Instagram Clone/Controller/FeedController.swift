@@ -28,10 +28,11 @@ class FeedController: UICollectionViewController
         super.init(collectionViewLayout: layout)
         UpdateUserFeed()
         fetchAllpost()
+       
     }
     
     override  func viewDidLoad() {
-       
+        
         super.viewDidLoad()
         controllerRefresh()
         UpdateUserFeed()
@@ -147,14 +148,14 @@ extension FeedController
             let userfollowingID = datasnapshots.key
             Database.database().reference().child("User-posts").child(userfollowingID).observe(.childAdded) { userfollowingPost in
                 let postID = userfollowingPost.key
-    
+                
                 Database.database().reference().child("User-Feeds").child(currentUserID).updateChildValues([postID:1])
             }
         }
         
         Database.database().reference().child("User-posts").child(currentUserID).observe(.childAdded) { currentuserpost in
             let postID = currentuserpost.key
-           
+            
             Database.database().reference().child("User-Feeds").child(currentUserID).updateChildValues([postID:1])
         }
     }
@@ -166,7 +167,7 @@ extension FeedController
             self.Allpost.append(posts)
             self.collectionView.refreshControl?.endRefreshing()
             self.collectionView.reloadData()
-
+            
         }
         
     }
@@ -210,14 +211,26 @@ extension FeedController: FeedCellDelegate
         if cell.LikeButton == buttonPressed
         {
             guard let post = cell.selectedPost else {return}
+            guard let postId = post.post_ID else {return}
+            guard let currentuser = Auth.auth().currentUser?.uid else {return}
+            
             if post.didlike
             {
                 post.adjustlike(addlike: false)
                 cell.LikeButton.setImage(UIImage(named: "like_unselected")?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
+                Database.database().reference().child("Post-likes").child(postId).child(currentuser).removeValue()
+                Database.database().reference().child("User-Likes").child(currentuser).child(postId).removeValue()
+                cell.likesLabel.text = "\(post.likes ?? 0) Likes"
+                
+                
             }else
             {
                 post.adjustlike(addlike: true)
                 cell.LikeButton.setImage(UIImage(named: "like_selected")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal), for: .normal)
+                let datavalue = [postId:1] as [String:Any]
+                Database.database().reference().child("User-Likes").child(currentuser).updateChildValues(datavalue)
+                Database.database().reference().child("Post-likes").child(postId).updateChildValues([currentuser:1])
+                cell.likesLabel.text = "\(post.likes ?? 0) Likes"
             }
         }
     }
@@ -242,6 +255,5 @@ extension FeedController: FeedCellDelegate
             print("DEBUG: BOOKMARK")
         }
     }
-    
     
 }

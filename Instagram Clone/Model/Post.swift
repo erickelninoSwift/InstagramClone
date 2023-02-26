@@ -70,6 +70,6 @@ class Post
             self.likes = self.likes - 1
             didlike = false
         }
-        Database.database().reference().child(post_ID).child("Likes").setValue(self.likes)
+        Database.database().reference().child("Posts").child(post_ID).child("Likes").setValue(self.likes)
     }
 }
