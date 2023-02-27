@@ -22,8 +22,9 @@ class FeedCell: UICollectionViewCell
     {
         didSet
         {
-              configureFeedCell()
-             configureLikebutton()
+            
+            configureFeedCell()
+            
         }
     }
     
@@ -40,6 +41,7 @@ class FeedCell: UICollectionViewCell
             ])
             
             propic.layer.cornerRadius = 50 / 2
+            
             
             
             return propic
@@ -77,6 +79,14 @@ class FeedCell: UICollectionViewCell
             propic.contentMode = .scaleAspectFill
             propic.backgroundColor = .lightGray
             propic.heightAnchor.constraint(equalToConstant: 420).isActive = true
+            
+            let tap = UITapGestureRecognizer(target: self, action: #selector(HandleLikepicPost))
+            
+            tap.numberOfTapsRequired = 2
+            propic.addGestureRecognizer(tap)
+            propic.isUserInteractionEnabled = true
+            
+            
             return propic
     }()
     
@@ -86,7 +96,7 @@ class FeedCell: UICollectionViewCell
         {
             let button = UIButton(type: .system)
             button.translatesAutoresizingMaskIntoConstraints = false
-           
+            button.setImage(UIImage(named: "like_unselected")?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
             button.addTarget(self, action: #selector(Handlelike), for: .primaryActionTriggered)
             return button
     }()
@@ -121,12 +131,18 @@ class FeedCell: UICollectionViewCell
     }()
     
     
-    var likesLabel: UILabel =
+    lazy var likesLabel: UILabel =
     {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textAlignment = .left
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(HandleLikeTapped))
+        tap.numberOfTapsRequired = 1
+        label.addGestureRecognizer(tap)
+        label.isUserInteractionEnabled = true
+        
         return label
     }()
     
@@ -154,6 +170,7 @@ class FeedCell: UICollectionViewCell
         super.init(frame: frame)
         style()
         layout()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -189,6 +206,19 @@ class FeedCell: UICollectionViewCell
     }
     
     
+    @objc private func HandleLikeTapped()
+    {
+        guard let cellpost = selectedPost?.post_ID else {return}
+        
+        delegate?.likeLabelTapped(cell: self, likedPost: cellpost)
+    }
+    
+    
+    @objc private func HandleLikepicPost()
+    {
+        guard let postImageLiked = selectedPost else {return}
+        delegate?.postImageTapped(with: self, post: postImageLiked)
+    }
 }
 extension FeedCell
 {
@@ -227,7 +257,7 @@ extension FeedCell
         stack.axis = .horizontal
         stack.distribution = .fillEqually
         stack.spacing = 14
-       
+        
         self.addSubview(stack)
         
         NSLayoutConstraint.activate([stack.topAnchor.constraint(equalToSystemSpacingBelow: postImage.bottomAnchor, multiplier: 2),
@@ -261,7 +291,7 @@ extension FeedCell
 
 extension FeedCell
 {
-     func configureFeedCell()
+    func configureFeedCell()
     {
         guard let myPost = selectedPost else {return}
         guard let userid = myPost.user_id else {return}
@@ -276,23 +306,17 @@ extension FeedCell
         }
         postImage.loadImage(with: PostImageUrl)
         self.likesLabel.text = "\(likes) Likes"
-
+        delegate?.configureLikebutton(with: self, likebutton: self.LikeButton)
         
     }
     
     private func configureCaptionLabel(user: User)
     {
-         guard let myPost = selectedPost else {return}
+        guard let myPost = selectedPost else {return}
         let attributted = NSMutableAttributedString(string: "\(user.username ?? "") ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
         attributted.append(NSAttributedString(string: myPost.post, attributes: [.font:UIFont.systemFont(ofSize: 16)]))
         self.captionMessage.attributedText = attributted
     }
 }
 
-extension FeedCell
-{
-   func configureLikebutton()
-   {
-    self.LikeButton.setImage(UIImage(named: self.selectedPost!.didlike ? "like_selected":"like_unselected")?.withTintColor(self.selectedPost!.didlike ? .systemRed: .black, renderingMode: .alwaysOriginal), for: .normal)
-    }
-}
+

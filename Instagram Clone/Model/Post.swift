@@ -57,19 +57,35 @@ class Post
         }
         
     }
-    
-    func adjustlike(addlike: Bool)
+    func adjustlike(addlike: Bool, completion: @escaping(Int) ->Void)
     {
+        guard let currentuserID = Auth.auth().currentUser?.uid else {return}
+        let datavalue = [post_ID:1] as [String:Any]
         if addlike
         {
-            self.likes = self.likes + 1
-            didlike = true
+            Database.database().reference().child("User-Likes").child(currentuserID).updateChildValues(datavalue) { (error, dataref) in
+                Database.database().reference().child("Post-likes").child(self.post_ID).updateChildValues([currentuserID:1]) { (Error, Datareference) in
+                    self.likes = self.likes + 1
+                     completion(self.likes)
+                    self.didlike = true
+                    Database.database().reference().child("Posts").child(self.post_ID).child("Likes").setValue(self.likes)
+                }
+            }
+            Database.database().reference().child("Posts").child(self.post_ID).child("Likes").setValue(self.likes)
         }else
         {
             guard self.likes > 0 else {return}
-            self.likes = self.likes - 1
-            didlike = false
+            
+            Database.database().reference().child("Post-likes").child(post_ID).child(currentuserID).removeValue { (Error, Dataref) in
+                
+                Database.database().reference().child("User-Likes").child(currentuserID).child(self.post_ID).removeValue { (error, dataref) in
+                    self.likes = self.likes - 1
+                     completion(self.likes)
+                    self.didlike = false
+                    Database.database().reference().child("Posts").child(self.post_ID).child("Likes").setValue(self.likes)
+                }
+            }
         }
-        Database.database().reference().child("Posts").child(post_ID).child("Likes").setValue(self.likes)
+       
     }
 }
