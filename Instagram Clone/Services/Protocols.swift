@@ -39,7 +39,12 @@ protocol FeedCellDelegate: AnyObject
     func FeedCommentbuttonTapped(cell: FeedCell, buttonPressed: UIButton)
     func FeedMessageButtonTapped(cell: FeedCell, buttonPressed: UIButton)
     func BookmarkButtonTapped(cell: FeedCell, buttonPressed: UIButton)
-    func likeLabelTapped(cell: FeedCell,likedPost: String)
+   
     func configureLikebutton(with cell: FeedCell, likebutton: UIButton)
     func postImageTapped(with cell: FeedCell, post: Post)
+}
+
+protocol FeedCellLikeButtonPressed: AnyObject
+{
+    func likelabelButtonPressed(cell: FeedCell)
 }

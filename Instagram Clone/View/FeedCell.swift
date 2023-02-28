@@ -16,6 +16,7 @@ class FeedCell: UICollectionViewCell
     static let FeedCellId = "FeedCellID"
     
     var delegate:FeedCellDelegate?
+    var likelabelDelegate:FeedCellLikeButtonPressed?
     
     
     var selectedPost: Post?
@@ -41,8 +42,7 @@ class FeedCell: UICollectionViewCell
             ])
             
             propic.layer.cornerRadius = 50 / 2
-            
-            
+        
             
             return propic
     }()
@@ -138,11 +138,6 @@ class FeedCell: UICollectionViewCell
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textAlignment = .left
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(HandleLikeTapped))
-        tap.numberOfTapsRequired = 1
-        label.addGestureRecognizer(tap)
-        label.isUserInteractionEnabled = true
-        
         return label
     }()
     
@@ -168,6 +163,7 @@ class FeedCell: UICollectionViewCell
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        likelabelpressed()
         style()
         layout()
         
@@ -206,11 +202,17 @@ class FeedCell: UICollectionViewCell
     }
     
     
+    private func likelabelpressed()
+    {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(HandleLikeTapped))
+        self.likesLabel.addGestureRecognizer(tap)
+        self.likesLabel.isUserInteractionEnabled = true
+    }
+    
+    
     @objc private func HandleLikeTapped()
     {
-        guard let cellpost = selectedPost?.post_ID else {return}
-        
-        delegate?.likeLabelTapped(cell: self, likedPost: cellpost)
+        likelabelDelegate?.likelabelButtonPressed(cell: self)
     }
     
     

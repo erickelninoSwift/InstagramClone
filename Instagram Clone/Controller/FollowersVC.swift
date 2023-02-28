@@ -13,6 +13,7 @@ enum followVCconfig
 {
     case following
     case follower
+    case Likes
     
     var description: String
     {
@@ -22,28 +23,11 @@ enum followVCconfig
             return "Followers"
         case .following:
             return "Following"
+        case .Likes:
+            return "Likes"
         }
     }
 }
-
-enum FollowLike
-{
-    case FollowVC
-    case LikeControllerView
-    
-    
-    var description: String
-    {
-        switch self
-        {
-        case .FollowVC:
-            return "FollowController"
-        case .LikeControllerView:
-            return "LikeController"
-        }
-    }
-}
-
 
 private let followersCellID = "Erickelninojackpot"
 
@@ -52,15 +36,15 @@ class FollowersVC: UITableViewController
     
     
     private var viewcontrollerConfig: followVCconfig = .follower
-    private var likeViewController: FollowLike = .FollowVC
+  
     
     private var userFollowers: User?
     
     var userfetched = [User]()
     
-    init(style: UITableView.Style, followconfig:followVCconfig ,myFollowLikeController : FollowLike, userSelected: User) {
+    init(style: UITableView.Style, followconfig:followVCconfig, userSelected: User) {
         self.viewcontrollerConfig = followconfig
-        self.likeViewController = myFollowLikeController
+       
         self.userFollowers = userSelected
         super.init(style: style)
         self.navigationItem.title = self.viewcontrollerConfig.description
@@ -139,25 +123,26 @@ extension FollowersVC
         
         var dataref: DatabaseReference!
         
-        switch likeViewController
+        switch viewcontrollerConfig
         {
-        case .FollowVC:
+        case .follower:
+            dataref = Database.database().reference().child("User-followers")
+            configureUser(fetchuserid: userpassed.userID ?? "", Databaaee: dataref)
             
-            switch viewcontrollerConfig
-            {
-            case .follower:
-                dataref = Database.database().reference().child("User-followers")
-                
-            case .following:
-                dataref = Database.database().reference().child("User-following")
-                
-            }
-            
-        case .LikeControllerView:
-            print("DEBUG: LIKE VIEW CONTORLLER")
+        case .following:
+            dataref = Database.database().reference().child("User-following")
+             configureUser(fetchuserid: userpassed.userID ?? "", Databaaee: dataref)
+        case .Likes:
+            self.navigationItem.title = "Likes"
         }
         
-        dataref.child(userpassed.userID!).observeSingleEvent(of: .value) { snapshots in
+        
+    }
+    
+    
+    func configureUser(fetchuserid : String, Databaaee: DatabaseReference)
+    {
+        Databaaee.child(fetchuserid).observeSingleEvent(of: .value) { snapshots in
             
             guard let Allobject = snapshots.children.allObjects as? [DataSnapshot]  else {return}
             

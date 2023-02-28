@@ -62,6 +62,7 @@ extension FeedController: UICollectionViewDelegateFlowLayout
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.FeedCellId, for: indexPath) as? FeedCell else {return UICollectionViewCell()}
         cell.delegate = self
+        cell.likelabelDelegate = self
         cell.selectedPost = viewSinglePost ? myPost! : Allpost[indexPath.row]
         return cell
     }
@@ -198,7 +199,7 @@ extension FeedController: FeedCellDelegate
         guard let currentuser = Auth.auth().currentUser?.uid else {return}
         Services.shared.fetchUser(user_Id: currentuser) { erickUser in
             
-            let controller = FollowersVC(style: .plain, followconfig: .follower, myFollowLikeController: .LikeControllerView, userSelected: erickUser)
+            let controller = FollowersVC(style: .plain, followconfig: .Likes, userSelected: erickUser)
             controller.modalPresentationStyle = .fullScreen
             self.navigationController?.pushViewController(controller, animated: true)
         }
@@ -310,3 +311,14 @@ extension FeedController: FeedCellDelegate
     
 }
 
+extension FeedController:FeedCellLikeButtonPressed
+{
+    func likelabelButtonPressed(cell: FeedCell) {
+        guard let currentuserID = Auth.auth().currentUser?.uid else {return}
+        Services.shared.fetchUser(user_Id: currentuserID) { myUser in
+            let controller = FollowersVC(style: .plain, followconfig: .Likes, userSelected: myUser)
+            controller.modalPresentationStyle = .fullScreen
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+    }
+}

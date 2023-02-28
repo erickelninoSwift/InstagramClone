@@ -209,8 +209,7 @@ extension ProfileController: ProfileCollectionViewHeaderDelegate
         
         if let profileuser = profileheader.currentUser
         {
-            
-            
+
             switch buttonConfig
             {
             case .editprofile:
@@ -314,7 +313,7 @@ extension ProfileController: profileheaderLabelActionDelegate
     }
     func HandleFollowingLabel(userProfileHeader: ProfileCollectionViewHeader) {
         guard let currentuser = userProfileHeader.currentUser else {return}
-        let controller = FollowersVC(style: .plain, followconfig: .following, myFollowLikeController:.FollowVC, userSelected: currentuser)
+        let controller = FollowersVC(style: .plain, followconfig: .following, userSelected: currentuser)
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
     }
@@ -322,7 +321,7 @@ extension ProfileController: profileheaderLabelActionDelegate
         
         guard let currentuser = userProfileHeader.currentUser else {return}
         
-        let controller = FollowersVC(style: .plain, followconfig: .follower, myFollowLikeController: .FollowVC, userSelected: currentuser)
+        let controller = FollowersVC(style: .plain, followconfig: .follower, userSelected: currentuser)
         controller.modalTransitionStyle = .crossDissolve
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
