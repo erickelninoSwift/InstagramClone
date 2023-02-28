@@ -40,11 +40,13 @@ class FollowersVC: UITableViewController
     
     private var userFollowers: User?
     
+    private var selectedPost: Post?
+    
     var userfetched = [User]()
     
-    init(style: UITableView.Style, followconfig:followVCconfig, userSelected: User) {
+    init(style: UITableView.Style, followconfig:followVCconfig, userSelected: User , post: Post?) {
         self.viewcontrollerConfig = followconfig
-       
+        self.selectedPost = post
         self.userFollowers = userSelected
         super.init(style: style)
         self.navigationItem.title = self.viewcontrollerConfig.description
@@ -133,12 +135,27 @@ extension FollowersVC
             dataref = Database.database().reference().child("User-following")
              configureUser(fetchuserid: userpassed.userID ?? "", Databaaee: dataref)
         case .Likes:
+           
+            guard let currentPost = selectedPost else {return}
             self.navigationItem.title = "Likes"
+            self.navigationController?.navigationBar.tintColor = .black
+            Database.database().reference().child("Post-likes").child(currentPost.post_ID).observe(.childAdded) { snapshotkey in
+                let UserLikePost = snapshotkey.key
+                Database.database().reference().child("Users").child(UserLikePost).observeSingleEvent(of: .value) { UserSnapshots in
+                    guard let signleUser = UserSnapshots.value as? [String:Any] else {return}
+                    print("DEBUG: USER :\(signleUser)")
+                }
+            }
         }
         
         
     }
     
+    
+    func fetchLikes()
+    {
+        
+    }
     
     func configureUser(fetchuserid : String, Databaaee: DatabaseReference)
     {

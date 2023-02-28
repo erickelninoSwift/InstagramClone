@@ -313,7 +313,7 @@ extension ProfileController: profileheaderLabelActionDelegate
     }
     func HandleFollowingLabel(userProfileHeader: ProfileCollectionViewHeader) {
         guard let currentuser = userProfileHeader.currentUser else {return}
-        let controller = FollowersVC(style: .plain, followconfig: .following, userSelected: currentuser)
+        let controller = FollowersVC(style: .plain, followconfig: .following, userSelected: currentuser, post: nil)
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
     }
@@ -321,7 +321,7 @@ extension ProfileController: profileheaderLabelActionDelegate
         
         guard let currentuser = userProfileHeader.currentUser else {return}
         
-        let controller = FollowersVC(style: .plain, followconfig: .follower, userSelected: currentuser)
+        let controller = FollowersVC(style: .plain, followconfig: .follower, userSelected: currentuser, post: nil)
         controller.modalTransitionStyle = .crossDissolve
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)

@@ -197,9 +197,10 @@ extension FeedController: FeedCellDelegate
     
     func likeLabelTapped(cell: FeedCell, likedPost: String) {
         guard let currentuser = Auth.auth().currentUser?.uid else {return}
+        guard let postSelected = cell.selectedPost else {return}
         Services.shared.fetchUser(user_Id: currentuser) { erickUser in
             
-            let controller = FollowersVC(style: .plain, followconfig: .Likes, userSelected: erickUser)
+            let controller = FollowersVC(style: .plain, followconfig: .Likes, userSelected: erickUser, post: postSelected)
             controller.modalPresentationStyle = .fullScreen
             self.navigationController?.pushViewController(controller, animated: true)
         }
@@ -315,8 +316,10 @@ extension FeedController:FeedCellLikeButtonPressed
 {
     func likelabelButtonPressed(cell: FeedCell) {
         guard let currentuserID = Auth.auth().currentUser?.uid else {return}
+        guard let postSelected = cell.selectedPost else {return}
+        
         Services.shared.fetchUser(user_Id: currentuserID) { myUser in
-            let controller = FollowersVC(style: .plain, followconfig: .Likes, userSelected: myUser)
+            let controller = FollowersVC(style: .plain, followconfig: .Likes, userSelected: myUser, post: postSelected)
             controller.modalPresentationStyle = .fullScreen
             self.navigationController?.pushViewController(controller, animated: true)
         }
