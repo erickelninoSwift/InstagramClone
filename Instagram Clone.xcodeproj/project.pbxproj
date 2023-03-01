@@ -24,6 +24,7 @@
 		94512412299EFF760033E719 /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94512411299EFF760033E719 /* FeedCell.swift */; };
 		94512414299FDA8C0033E719 /* UserPostCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94512413299FDA8C0033E719 /* UserPostCellViewModel.swift */; };
 		94B0FD3529AEFEE2007B2921 /* CommentViewContorller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B0FD3429AEFEE2007B2921 /* CommentViewContorller.swift */; };
+		94B0FD3A29AF919E007B2921 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B0FD3929AF919E007B2921 /* CommentCell.swift */; };
 		94C4B29A297A9E7F00B44056 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C4B299297A9E7F00B44056 /* AppDelegate.swift */; };
 		94C4B29C297A9E7F00B44056 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C4B29B297A9E7F00B44056 /* SceneDelegate.swift */; };
 		94C4B2A1297A9E8000B44056 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94C4B29F297A9E8000B44056 /* Main.storyboard */; };
@@ -61,6 +62,7 @@
 		94512411299EFF760033E719 /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		94512413299FDA8C0033E719 /* UserPostCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostCellViewModel.swift; sourceTree = "<group>"; };
 		94B0FD3429AEFEE2007B2921 /* CommentViewContorller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewContorller.swift; sourceTree = "<group>"; };
+		94B0FD3929AF919E007B2921 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		94C4B296297A9E7F00B44056 /* Instagram Clone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instagram Clone.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		94C4B299297A9E7F00B44056 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94C4B29B297A9E7F00B44056 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 		94B0FD3329AEFEB2007B2921 /* Feed ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				94B0FD3929AF919E007B2921 /* CommentCell.swift */,
 				943E3DCE29806742000CAA98 /* FeedController.swift */,
 				94B0FD3429AEFEE2007B2921 /* CommentViewContorller.swift */,
 			);
@@ -404,6 +407,7 @@
 				940D333E298C38FC0049F483 /* FollowersViewControllerCell.swift in Sources */,
 				940D333C298C35830049F483 /* FollowersVC.swift in Sources */,
 				94E4A71F2997452400074803 /* SelectPhotoCell.swift in Sources */,
+				94B0FD3A29AF919E007B2921 /* CommentCell.swift in Sources */,
 				94E4A71D299743B400074803 /* SelectImageViewController.swift in Sources */,
 				943E3DCF29806742000CAA98 /* FeedController.swift in Sources */,
 				940D333A298B03EF0049F483 /* Protocols.swift in Sources */,

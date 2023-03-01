@@ -203,7 +203,7 @@ class FeedCell: UICollectionViewCell
     
     @objc func HandleComment()
     {
-        delegate?.FeedCommentbuttonTapped(cell: self, buttonPressed: self.CommentButton)
+        delegate?.FeedCommentbuttonTapped(cell: self)
     }
     @objc func HandleMessgae()
     {

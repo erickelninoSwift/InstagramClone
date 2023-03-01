@@ -174,8 +174,13 @@ extension FeedController
 
 extension FeedController: FeedCellDelegate
 {
-    
-    
+    func FeedCommentbuttonTapped(cell: FeedCell) {
+        
+        let controller = CommentViewContorller(collectionViewLayout: UICollectionViewFlowLayout())
+        controller.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(controller, animated: true)
+        
+    }
     
     func postImageTapped(with cell: FeedCell, post: Post) {
         guard let myPost = cell.selectedPost else {return}
@@ -291,13 +296,6 @@ extension FeedController: FeedCellDelegate
                 }
                 
             }
-        }
-    }
-    
-    func FeedCommentbuttonTapped(cell: FeedCell, buttonPressed: UIButton) {
-        if cell.CommentButton == buttonPressed
-        {
-            print("DEBUG: COMMENT")
         }
     }
     
