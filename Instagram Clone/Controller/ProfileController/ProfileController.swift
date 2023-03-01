@@ -217,7 +217,7 @@ extension ProfileController: ProfileCollectionViewHeaderDelegate
                 profileheader.currentUser = profileuser
                 self.navigationItem.title = profileuser.username ?? ""
                 profileheader.configurationset = buttonConfig
-                checkifuserfollwing()
+//                checkifuserfollwing()
                 
             case .followuser:
                 

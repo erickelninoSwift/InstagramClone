@@ -42,12 +42,14 @@ extension CommentViewContorller: UICollectionViewDelegateFlowLayout
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionviewcellID, for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CommentCell.commentCellID, for: indexPath) as? CommentCell else
+        {return UICollectionViewCell()}
+        
         return cell
     }
     
      func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 60)
+        return CGSize(width: collectionView.frame.width, height: 70)
     }
     
 }
@@ -57,7 +59,7 @@ extension CommentViewContorller
     private func style()
     {
         self.collectionView.backgroundColor = .white
-        self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionviewcellID)
+        self.collectionView.register(CommentCell.self, forCellWithReuseIdentifier: CommentCell.commentCellID)
         self.navigationController?.navigationBar.tintColor = .black
         self.navigationItem.title = "Comments"
     }
