@@ -22,19 +22,21 @@ class CommentViewContorller: UICollectionViewController
 
 extension CommentViewContorller: UICollectionViewDelegateFlowLayout
 {
-    
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return 5
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return UICollectionViewCell()
     }
     
-    
-    
 }
+
+
 extension CommentViewContorller
 {
     private func style()
