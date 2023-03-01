@@ -153,11 +153,7 @@ extension FollowersVC
         
     }
     
-    
-    func fetchLikes()
-    {
-        
-    }
+  
     
     func configureUser(fetchuserid : String, Databaaee: DatabaseReference)
     {

@@ -80,8 +80,8 @@ class FeedCell: UICollectionViewCell
             propic.backgroundColor = .lightGray
             propic.heightAnchor.constraint(equalToConstant: 420).isActive = true
             
-            let tap = UITapGestureRecognizer(target: self, action: #selector(HandleLikepicPost))
-            
+            let tap = UITapGestureRecognizer(target: self, action: #selector(HandlelikeDoubleTapped))
+
             tap.numberOfTapsRequired = 2
             propic.addGestureRecognizer(tap)
             propic.isUserInteractionEnabled = true
@@ -184,10 +184,23 @@ class FeedCell: UICollectionViewCell
     }
     
     
+//    ========================
+    
     @objc func Handlelike()
     {
-        delegate?.FeedLikeButtonTapped(cell: self, buttonPressed: self.LikeButton)
+        delegate?.FeedLikeButtonTapped(cell: self, doubleTapped: false)
     }
+    
+    @objc func HandlelikeDoubleTapped()
+    {
+        delegate?.FeedLikeButtonTapped(cell: self, doubleTapped: true)
+    }
+    
+//    ======================
+    
+    
+    
+    
     @objc func HandleComment()
     {
         delegate?.FeedCommentbuttonTapped(cell: self, buttonPressed: self.CommentButton)
@@ -204,7 +217,7 @@ class FeedCell: UICollectionViewCell
     
     private func likelabelpressed()
     {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(HandleLikeTapped))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(Handlelike))
         self.likesLabel.addGestureRecognizer(tap)
         self.likesLabel.isUserInteractionEnabled = true
     }

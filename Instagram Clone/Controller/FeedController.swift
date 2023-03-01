@@ -28,7 +28,7 @@ class FeedController: UICollectionViewController
         super.init(collectionViewLayout: layout)
         UpdateUserFeed()
         fetchAllpost()
-       
+        
     }
     
     override  func viewDidLoad() {
@@ -174,9 +174,12 @@ extension FeedController
 
 extension FeedController: FeedCellDelegate
 {
+    
+    
+    
     func postImageTapped(with cell: FeedCell, post: Post) {
         guard let myPost = cell.selectedPost else {return}
-       
+        
         if myPost.didlike
         {
             myPost.adjustlike(addlike: false) { likes in
@@ -193,7 +196,7 @@ extension FeedController: FeedCellDelegate
         
     }
     
-//    =====================
+    //    =====================
     
     func likeLabelTapped(cell: FeedCell, likedPost: String) {
         guard let currentuser = Auth.auth().currentUser?.uid else {return}
@@ -202,11 +205,12 @@ extension FeedController: FeedCellDelegate
             
             let controller = FollowersVC(style: .plain, followconfig: .Likes, userSelected: erickUser, post: postSelected)
             controller.modalPresentationStyle = .fullScreen
+            controller.modalTransitionStyle = .flipHorizontal
             self.navigationController?.pushViewController(controller, animated: true)
         }
         
     }
-//    ======================
+    //    ======================
     
     
     func configureLikebutton(with cell: FeedCell, likebutton: UIButton) {
@@ -256,35 +260,36 @@ extension FeedController: FeedCellDelegate
         }
     }
     
-    func FeedLikeButtonTapped(cell: FeedCell, buttonPressed: UIButton) {
-        if cell.LikeButton == buttonPressed
+    func FeedLikeButtonTapped(cell: FeedCell, doubleTapped: Bool) {
+        
+        guard let post = cell.selectedPost else {return}
+        
+        if doubleTapped
         {
-            guard let post = cell.selectedPost else {return}
-//            guard let postId = post.post_ID else {return}
-//            guard let currentuser = Auth.auth().currentUser?.uid else {return}
+            // double only to like post
+            guard post.didlike != true else {return}
+            post.adjustlike(addlike: true) { likes in
+                cell.likesLabel.text = "\(likes) Likes"
+                cell.LikeButton.setImage(UIImage(named: "like_selected")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal), for: .normal)
+            }
             
+        }else
+        {
             if post.didlike
             {
+                // unlike post
                 post.adjustlike(addlike: false) { likes in
                     cell.likesLabel.text = "\(likes) Likes"
                     cell.LikeButton.setImage(UIImage(named: "like_unselected")?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
                 }
-//                Database.database().reference().child("Post-likes").child(postId).child(currentuser).removeValue()
-//                Database.database().reference().child("User-Likes").child(currentuser).child(postId).removeValue()
-              
-               
             }else
             {
+                // like post
                 post.adjustlike(addlike: true) { likes in
-                      cell.likesLabel.text = "\(likes) Likes"
-                     cell.LikeButton.setImage(UIImage(named: "like_selected")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal), for: .normal)
+                    cell.likesLabel.text = "\(likes) Likes"
+                    cell.LikeButton.setImage(UIImage(named: "like_selected")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal), for: .normal)
                 }
                 
-//                let datavalue = [postId:1] as [String:Any]
-//                Database.database().reference().child("User-Likes").child(currentuser).updateChildValues(datavalue)
-//                Database.database().reference().child("Post-likes").child(postId).updateChildValues([currentuser:1])
-              
-              
             }
         }
     }

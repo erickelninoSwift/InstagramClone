@@ -97,7 +97,6 @@ class FollowersViewControllerCell: UITableViewCell
     {
         private func config()
         {
-            self.profileImage.backgroundColor = .systemBlue
             contentView.addSubview(profileImage)
             contentView.addSubview(followButton)
         }
@@ -125,7 +124,9 @@ class FollowersViewControllerCell: UITableViewCell
             guard let currentUserSelcted = currentUser else {return}
             
             self.followButton.isHidden = myID == current ? true : false
-            self.followButton.isHidden = followVCconfig.Likes.description == "Likes" ? true : false
+//            self.followButton.isHidden = followVCconfig.Likes.description == "Likes" ? true : false
+            
+            
             
             FollowUnFollow.shared.checkuserFollow(myUser: currentUserSelcted) { isFollowed in
                 
@@ -138,7 +139,7 @@ class FollowersViewControllerCell: UITableViewCell
                     self.followButton.layer.borderWidth = 1
                 }else
                 {
-                    self.followButton.setTitle("Follow", for: .normal)
+                    self.followButton.setTitle(currentConfig.description, for: .normal)
                     self.followButton.backgroundColor =  UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
                     self.followButton.setTitleColor(.white, for: .normal)
                     self.followButton.layer.borderColor = UIColor.white.cgColor

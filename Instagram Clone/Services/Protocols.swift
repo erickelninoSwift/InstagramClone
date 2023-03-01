@@ -35,7 +35,7 @@ protocol FeedCellDelegate: AnyObject
     
     func usernameButtonTapped(cell: FeedCell, buttonPressed: UIButton)
     func feedCellOptionButtonTapped(cell: FeedCell, buttonPressed: UIButton)
-    func FeedLikeButtonTapped(cell: FeedCell, buttonPressed: UIButton)
+    func FeedLikeButtonTapped(cell: FeedCell,doubleTapped: Bool)
     func FeedCommentbuttonTapped(cell: FeedCell, buttonPressed: UIButton)
     func FeedMessageButtonTapped(cell: FeedCell, buttonPressed: UIButton)
     func BookmarkButtonTapped(cell: FeedCell, buttonPressed: UIButton)
