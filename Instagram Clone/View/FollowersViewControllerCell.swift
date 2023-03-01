@@ -125,7 +125,7 @@ class FollowersViewControllerCell: UITableViewCell
             guard let currentUserSelcted = currentUser else {return}
             
             self.followButton.isHidden = myID == current ? true : false
-            
+            self.followButton.isHidden = followVCconfig.Likes.description == "Likes" ? true : false
             
             FollowUnFollow.shared.checkuserFollow(myUser: currentUserSelcted) { isFollowed in
                 

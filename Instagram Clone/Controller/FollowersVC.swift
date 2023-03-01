@@ -36,7 +36,7 @@ class FollowersVC: UITableViewController
     
     
     private var viewcontrollerConfig: followVCconfig = .follower
-  
+    
     
     private var userFollowers: User?
     
@@ -76,7 +76,7 @@ extension FollowersVC
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: followersCellID, for: indexPath) as? FollowersViewControllerCell else {return UITableViewCell()}
-    
+        
         cell.delegate = self
         if let myUserSelected  = userFollowers
         {
@@ -115,8 +115,8 @@ extension FollowersVC
     
     func configureUser()
     {
-//        guard let currentuser = userFollowers else {return}
-       
+        //        guard let currentuser = userFollowers else {return}
+        
     }
     
     func fetchUser()
@@ -133,9 +133,9 @@ extension FollowersVC
             
         case .following:
             dataref = Database.database().reference().child("User-following")
-             configureUser(fetchuserid: userpassed.userID ?? "", Databaaee: dataref)
+            configureUser(fetchuserid: userpassed.userID ?? "", Databaaee: dataref)
         case .Likes:
-           
+            
             guard let currentPost = selectedPost else {return}
             self.navigationItem.title = "Likes"
             self.navigationController?.navigationBar.tintColor = .black
@@ -143,7 +143,9 @@ extension FollowersVC
                 let UserLikePost = snapshotkey.key
                 Database.database().reference().child("Users").child(UserLikePost).observeSingleEvent(of: .value) { UserSnapshots in
                     guard let signleUser = UserSnapshots.value as? [String:Any] else {return}
-                    print("DEBUG: USER :\(signleUser)")
+                    let myUser = User(dictionary: signleUser)
+                    self.userfetched.append(myUser)
+                    self.tableView.reloadData()
                 }
             }
         }
@@ -184,7 +186,7 @@ extension FollowersVC: FollowCellDelegate
         if cellFollow.followButton.titleLabel?.text == "Following"
         {
             FollowUnFollow.shared.UnfollowUser(usertoUnfollow: currentuserselected)
-
+            
             
             buttonSetting(followButton: cellFollow, title: "Follow", buttonbackground: UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
                 , titlebutton: .white, borderwith: 1, buttonLayerColor: .white)
@@ -194,7 +196,7 @@ extension FollowersVC: FollowCellDelegate
             FollowUnFollow.shared.followUser(usertoFollow: currentuserselected)
             
             buttonSetting(followButton: cellFollow, title: "Following", buttonbackground: .white
-            , titlebutton: .black, borderwith: 1, buttonLayerColor: .darkGray)
+                , titlebutton: .black, borderwith: 1, buttonLayerColor: .darkGray)
             
         }
     }
@@ -207,5 +209,5 @@ extension FollowersVC: FollowCellDelegate
         followButton.followButton.layer.borderColor = buttonLayerColor.cgColor
         followButton.followButton.layer.borderWidth = borderwith
     }
-   
+    
 }
