@@ -162,7 +162,6 @@
 			isa = PBXGroup;
 			children = (
 				94C4B2B5297C405100B44056 /* Utils */,
-				94E4A71A2997436100074803 /* Upload */,
 				94E8395D2984AF37002B365C /* Services */,
 				94C4B2AF297B73D100B44056 /* Model */,
 				94C4B2AE297B73CE00B44056 /* View */,
@@ -179,6 +178,7 @@
 		94C4B2AD297B73CA00B44056 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				94E4A71A2997436100074803 /* Upload */,
 				94B0FD3829AEFFB1007B2921 /* TabControlller */,
 				94B0FD3729AEFF99007B2921 /* ProfileController */,
 				94B0FD3629AEFF83007B2921 /* Authentication */,
