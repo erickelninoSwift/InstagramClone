@@ -28,18 +28,34 @@ class CommentCell: UICollectionViewCell
     
     
     lazy var commentLabel: UILabel =
-        {
+    {
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             
             let attributed = NSAttributedString(string: "Some test Comments", attributes: [.font: UIFont.systemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
-             let attributed1 = NSAttributedString(string: "  2d", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
-            let MutabelAtributted = NSMutableAttributedString(string: "Eriik Elnino  ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14),.foregroundColor:UIColor.black])
+             let attributed1 = NSAttributedString(string: " 2d", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
+            let MutabelAtributted = NSMutableAttributedString(string: "Eriik Elnino ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14),.foregroundColor:UIColor.black])
             MutabelAtributted.append(attributed)
             MutabelAtributted.append(attributed1)
             
             label.attributedText = MutabelAtributted
             return label
+    }()
+
+    
+    lazy var postButton: UIButton =
+        {
+            let button = UIButton(type: .system)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            
+            button.setTitle("Post", for: .normal)
+            button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+            button.widthAnchor.constraint(equalToConstant: 70).isActive = true
+            
+            button.backgroundColor = .systemBlue
+            button.setTitleColor(.white, for: .normal)
+            
+            return button
     }()
     
     
@@ -70,6 +86,7 @@ extension CommentCell
         NSLayoutConstraint.activate([commentLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: profileImageView.trailingAnchor, multiplier: 2),
                                      commentLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor)
         ])
+
     }
     
     

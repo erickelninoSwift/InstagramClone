@@ -13,46 +13,78 @@ private let collectionviewcellID = "CollectionViewID"
 
 class CommentViewContorller: UICollectionViewController
 {
+    
+    
     lazy var commentTetxfield: UITextField =
-        {
+    {
             let textfield = UITextField()
             textfield.translatesAutoresizingMaskIntoConstraints = false
             textfield.borderStyle = .roundedRect
             textfield.placeholder = "Type in you comment here"
-            textfield.textColor = .lightGray
+           textfield.textColor = .darkGray
             textfield.backgroundColor = .white
             
             return textfield
     }()
+ 
+    lazy var postButton: UIButton =
+        {
+            let button = UIButton(type: .system)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            
+            button.setTitle("Post", for: .normal)
+            button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            button.widthAnchor.constraint(equalToConstant: 80).isActive = true
+            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+            
+            button.backgroundColor = .darkGray
+            button.setTitleColor(.white, for: .normal)
+            button.addTarget(self, action: #selector(HandlepostButton), for: .primaryActionTriggered)
+            
+            return button
+    }()
+    
     
     lazy var containerView: UIView =
         {
             let container  = UIView()
             
             container.addSubview(commentTetxfield)
+            container.addSubview(postButton)
+            
+            
             container.translatesAutoresizingMaskIntoConstraints = false
             container.backgroundColor = .init(white: 0.7, alpha: 1)
             container.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
             
             
-            
             NSLayoutConstraint.activate([commentTetxfield.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-                                         commentTetxfield.centerXAnchor.constraint(equalTo: container.centerXAnchor),
                                          commentTetxfield.leadingAnchor.constraint(equalToSystemSpacingAfter: container.leadingAnchor, multiplier: 1),
-                                         container.trailingAnchor.constraint(equalToSystemSpacingAfter: commentTetxfield.trailingAnchor, multiplier: 1)
+//
             ])
             
+            NSLayoutConstraint.activate([postButton.leadingAnchor.constraint(equalToSystemSpacingAfter:commentTetxfield.trailingAnchor , multiplier: 1),
+                                         postButton.centerYAnchor.constraint(equalTo: commentTetxfield.centerYAnchor),
+                                         container.trailingAnchor.constraint(equalToSystemSpacingAfter: postButton.trailingAnchor, multiplier: 1)
+                                         
+            ])
+            
+            
+            let separatorView = UIView()
+            separatorView.translatesAutoresizingMaskIntoConstraints = false
+            
+            separatorView.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+            separatorView.heightAnchor.constraint(equalToConstant: 2).isActive = true
+            container.addSubview(separatorView)
+            
+            NSLayoutConstraint.activate([separatorView.leadingAnchor.constraint(equalToSystemSpacingAfter: container.leadingAnchor, multiplier: 0),
+                                         container.trailingAnchor.constraint(equalToSystemSpacingAfter: separatorView.trailingAnchor, multiplier: 0),
+                                         separatorView.topAnchor.constraint(equalTo: container.topAnchor)
+            ])
+        
             return container
     }()
     
-    
-    lazy var postButton: UIButton =
-    {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        return button
-    }()
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -96,7 +128,7 @@ extension CommentViewContorller: UICollectionViewDelegateFlowLayout
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return 3
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -125,6 +157,12 @@ extension CommentViewContorller
     private func layout()
     {
         
+    }
+    
+    
+    @objc private func HandlepostButton()
+    {
+        print("DEBUG: POST BUTTON PRESSED")
     }
 }
 
