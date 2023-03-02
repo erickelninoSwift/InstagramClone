@@ -12,6 +12,38 @@ class CommentCell: UICollectionViewCell
 {
     static let commentCellID = "CommentCellIdentifier"
     
+    lazy var profileImageView : CustomImageView =
+        {
+            let profileimage = CustomImageView()
+            profileimage.translatesAutoresizingMaskIntoConstraints = false
+            profileimage.contentMode = .scaleAspectFill
+            profileimage.clipsToBounds = true
+            profileimage.heightAnchor.constraint(equalToConstant: 60).isActive = true
+            profileimage.widthAnchor.constraint(equalToConstant: 60).isActive = true
+            profileimage.layer.cornerRadius = 60 / 2
+            profileimage.backgroundColor = .lightGray
+            
+            return profileimage
+    }()
+    
+    
+    lazy var commentLabel: UILabel =
+        {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            
+            let attributed = NSAttributedString(string: "Some test Comments", attributes: [.font: UIFont.systemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
+             let attributed1 = NSAttributedString(string: "  2d", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
+            let MutabelAtributted = NSMutableAttributedString(string: "Eriik Elnino  ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14),.foregroundColor:UIColor.black])
+            MutabelAtributted.append(attributed)
+            MutabelAtributted.append(attributed1)
+            
+            label.attributedText = MutabelAtributted
+            return label
+    }()
+    
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         style()
@@ -27,7 +59,17 @@ extension CommentCell
 {
     private func style()
     {
-        self.backgroundColor = .cyan
+       
+        self.addSubview(profileImageView)
+        self.addSubview(commentLabel)
+        
+        NSLayoutConstraint.activate([profileImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 1),
+                                     profileImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([commentLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: profileImageView.trailingAnchor, multiplier: 2),
+                                     commentLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor)
+        ])
     }
     
     
