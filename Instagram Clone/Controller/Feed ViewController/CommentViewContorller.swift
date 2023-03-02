@@ -25,8 +25,6 @@ class CommentViewContorller: UICollectionViewController
             return textfield
     }()
     
-    
-    
     lazy var containerView: UIView =
         {
             let container  = UIView()
@@ -45,6 +43,15 @@ class CommentViewContorller: UICollectionViewController
             ])
             
             return container
+    }()
+    
+    
+    lazy var postButton: UIButton =
+    {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
     }()
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
