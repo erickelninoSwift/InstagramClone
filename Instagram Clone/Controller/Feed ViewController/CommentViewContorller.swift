@@ -145,7 +145,7 @@ extension CommentViewContorller: UICollectionViewDelegateFlowLayout
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 70)
+        return CGSize(width: collectionView.frame.width, height: 80)
     }
     
 }
@@ -191,6 +191,7 @@ extension CommentViewContorller
             self.commentTetxfield.text = ""
             print("DEBUG: COMMENT WAS SUCCESSFULLY ADDED")
             self.commentTetxfield.placeholder = "Type in you comment here"
+            self.collectionView.reloadData()
            
         }
     }
