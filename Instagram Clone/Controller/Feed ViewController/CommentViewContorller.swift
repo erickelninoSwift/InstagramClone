@@ -7,26 +7,28 @@
 //
 
 import UIKit
-
+import Firebase
 
 private let collectionviewcellID = "CollectionViewID"
 
 class CommentViewContorller: UICollectionViewController
 {
     
-    
+    var selectedPost: Post?
+    var AllComment = [Comment]()
+
     lazy var commentTetxfield: UITextField =
-    {
+        {
             let textfield = UITextField()
             textfield.translatesAutoresizingMaskIntoConstraints = false
             textfield.borderStyle = .roundedRect
             textfield.placeholder = "Type in you comment here"
-           textfield.textColor = .darkGray
+            textfield.textColor = .darkGray
             textfield.backgroundColor = .white
             
             return textfield
     }()
- 
+    
     lazy var postButton: UIButton =
         {
             let button = UIButton(type: .system)
@@ -36,6 +38,7 @@ class CommentViewContorller: UICollectionViewController
             button.heightAnchor.constraint(equalToConstant: 30).isActive = true
             button.widthAnchor.constraint(equalToConstant: 80).isActive = true
             button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+            button.layer.cornerRadius = 5
             
             button.backgroundColor = .darkGray
             button.setTitleColor(.white, for: .normal)
@@ -54,19 +57,19 @@ class CommentViewContorller: UICollectionViewController
             
             
             container.translatesAutoresizingMaskIntoConstraints = false
-            container.backgroundColor = .init(white: 0.7, alpha: 1)
+            container.backgroundColor = .white
             container.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
             
             
             NSLayoutConstraint.activate([commentTetxfield.centerYAnchor.constraint(equalTo: container.centerYAnchor),
                                          commentTetxfield.leadingAnchor.constraint(equalToSystemSpacingAfter: container.leadingAnchor, multiplier: 1),
-//
+                                         //
             ])
             
             NSLayoutConstraint.activate([postButton.leadingAnchor.constraint(equalToSystemSpacingAfter:commentTetxfield.trailingAnchor , multiplier: 1),
                                          postButton.centerYAnchor.constraint(equalTo: commentTetxfield.centerYAnchor),
                                          container.trailingAnchor.constraint(equalToSystemSpacingAfter: postButton.trailingAnchor, multiplier: 1)
-                                         
+                
             ])
             
             
@@ -81,13 +84,15 @@ class CommentViewContorller: UICollectionViewController
                                          container.trailingAnchor.constraint(equalToSystemSpacingAfter: separatorView.trailingAnchor, multiplier: 0),
                                          separatorView.topAnchor.constraint(equalTo: container.topAnchor)
             ])
-        
+            
             return container
     }()
     
     
-    override init(collectionViewLayout layout: UICollectionViewLayout) {
+    init(collectionViewLayout layout: UICollectionViewLayout , selectedPost: Post) {
+        self.selectedPost = selectedPost
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
+        fetchAllcomment()
     }
     
     required init?(coder: NSCoder) {
@@ -98,6 +103,7 @@ class CommentViewContorller: UICollectionViewController
         super.viewDidLoad()
         style()
         layout()
+        
     }
     
     override var inputAccessoryView: UIView?
@@ -128,13 +134,13 @@ extension CommentViewContorller: UICollectionViewDelegateFlowLayout
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return AllComment.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CommentCell.commentCellID, for: indexPath) as? CommentCell else
         {return UICollectionViewCell()}
-        
+        cell.CommentSlected = AllComment[indexPath.row]
         return cell
     }
     
@@ -162,7 +168,48 @@ extension CommentViewContorller
     
     @objc private func HandlepostButton()
     {
-        print("DEBUG: POST BUTTON PRESSED")
+        guard let post = selectedPost else {return}
+        guard let postId = post.post_ID else {return}
+        guard let comment = commentTetxfield.text else {return}
+        guard let currentuserid = Auth.auth().currentUser?.uid else {return}
+        let currentDate = Int(NSDate().timeIntervalSince1970)
+        
+        let datavalue = ["Post-ID": postId,"Comment": comment,"Comment_User_id": currentuserid,"creationDate": currentDate] as [String:Any]
+        self.postComment(postid: postId, valuedata: datavalue)
+    }
+    
+    
+    func postComment(postid: String , valuedata: [String:Any])
+    {
+        
+        Database.database().reference().child("Post-Comments").child(postid).childByAutoId().updateChildValues(valuedata) { (Error, databaseref) in
+            if let error  = Error
+            {
+                print("DEBUG: Error found while commenting on the post : \(error.localizedDescription)")
+                return
+            }
+            self.commentTetxfield.text = ""
+            print("DEBUG: COMMENT WAS SUCCESSFULLY ADDED")
+            self.commentTetxfield.placeholder = "Type in you comment here"
+           
+        }
+    }
+    
+    
+    func fetchAllcomment()
+    {
+        guard let post = selectedPost else {return}
+        guard let postId = post.post_ID else {return}
+        
+        Database.database().reference().child("Post-Comments").child(postId).observe(.childAdded) { datasnapshopt in
+            guard datasnapshopt.exists() else
+            { print("DEBUG: THERE WAS NO DATA")
+                return}
+            guard let currentcomment = datasnapshopt.value as? [String:Any] else {return}
+            let myComments = Comment(datavalue: currentcomment)
+            self.AllComment.append(myComments)
+            self.collectionView.reloadData()
+        }
     }
 }
 

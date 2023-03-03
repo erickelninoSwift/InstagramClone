@@ -175,8 +175,9 @@ extension FeedController
 extension FeedController: FeedCellDelegate
 {
     func FeedCommentbuttonTapped(cell: FeedCell) {
-        
-        let controller = CommentViewContorller(collectionViewLayout: UICollectionViewFlowLayout())
+    
+        guard let post = cell.selectedPost else {return}
+        let controller = CommentViewContorller(collectionViewLayout: UICollectionViewFlowLayout(), selectedPost: post)
         controller.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(controller, animated: true)
         

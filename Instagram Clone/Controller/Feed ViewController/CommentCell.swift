@@ -12,6 +12,15 @@ class CommentCell: UICollectionViewCell
 {
     static let commentCellID = "CommentCellIdentifier"
     
+    
+    var CommentSlected: Comment?
+    {
+        didSet
+        {
+            configureComment()
+        }
+    }
+    
     lazy var profileImageView : CustomImageView =
         {
             let profileimage = CustomImageView()
@@ -31,14 +40,6 @@ class CommentCell: UICollectionViewCell
     {
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
-            
-            let attributed = NSAttributedString(string: "Some test Comments", attributes: [.font: UIFont.systemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
-             let attributed1 = NSAttributedString(string: " 2d", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
-            let MutabelAtributted = NSMutableAttributedString(string: "Eriik Elnino ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14),.foregroundColor:UIColor.black])
-            MutabelAtributted.append(attributed)
-            MutabelAtributted.append(attributed1)
-            
-            label.attributedText = MutabelAtributted
             return label
     }()
 
@@ -64,6 +65,7 @@ class CommentCell: UICollectionViewCell
         super.init(frame: frame)
         style()
         layout()
+        configureComment()
     }
     
     required init?(coder: NSCoder) {
@@ -93,5 +95,21 @@ extension CommentCell
     private func layout()
     {
         
+    }
+    
+    
+     func configureComment()
+    {
+        guard let comment = CommentSlected else {return}
+//        guard let user = comment.user else {return}
+//        guard let imageUrl = user.profileImage else {return}
+        
+        let attributed = NSAttributedString(string: "\(comment.commentText ?? "")", attributes: [.font: UIFont.systemFont(ofSize: 16),.foregroundColor:UIColor.darkGray])
+         let attributed1 = NSAttributedString(string: " 2d", attributes: [.font: UIFont.systemFont(ofSize: 14),.foregroundColor:UIColor.lightGray])
+        let MutabelAtributted = NSMutableAttributedString(string: "Eriik Elnino  ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14),.foregroundColor:UIColor.black])
+        MutabelAtributted.append(attributed)
+        MutabelAtributted.append(attributed1)
+        self.commentLabel.attributedText = MutabelAtributted
+//        self.profileImageView.loadImage(with: imageUrl)
     }
 }
