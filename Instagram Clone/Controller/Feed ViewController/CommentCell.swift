@@ -27,9 +27,9 @@ class CommentCell: UICollectionViewCell
             profileimage.translatesAutoresizingMaskIntoConstraints = false
             profileimage.contentMode = .scaleAspectFill
             profileimage.clipsToBounds = true
-            profileimage.heightAnchor.constraint(equalToConstant: 60).isActive = true
-            profileimage.widthAnchor.constraint(equalToConstant: 60).isActive = true
-            profileimage.layer.cornerRadius = 60 / 2
+            profileimage.heightAnchor.constraint(equalToConstant: 40).isActive = true
+            profileimage.widthAnchor.constraint(equalToConstant: 40).isActive = true
+            profileimage.layer.cornerRadius = 40 / 2
             profileimage.backgroundColor = .lightGray
             
             return profileimage
@@ -41,6 +41,17 @@ class CommentCell: UICollectionViewCell
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             return label
+    }()
+    
+    
+    lazy var viewseparator: UIView =
+    {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        view.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+        
+        return view
     }()
 
     
@@ -80,6 +91,7 @@ extension CommentCell
        
         self.addSubview(profileImageView)
         self.addSubview(commentLabel)
+        self.addSubview(viewseparator)
         
         NSLayoutConstraint.activate([profileImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 2),
                                      profileImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
@@ -88,10 +100,14 @@ extension CommentCell
         NSLayoutConstraint.activate([commentLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: profileImageView.trailingAnchor, multiplier: 2),
                                      commentLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor)
         ])
+        
+        NSLayoutConstraint.activate([viewseparator.leadingAnchor.constraint(equalToSystemSpacingAfter: profileImageView.trailingAnchor, multiplier: 2),
+                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: viewseparator.trailingAnchor, multiplier: 0),
+                                     self.bottomAnchor.constraint(equalToSystemSpacingBelow: viewseparator.bottomAnchor, multiplier: 0)
+        ])
 
     }
-    
-    
+
     private func layout()
     {
         

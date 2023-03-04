@@ -17,14 +17,15 @@ class CommentViewContorller: UICollectionViewController
     var selectedPost: Post?
     var AllComment = [Comment]()
 
-    lazy var commentTetxfield: UITextField =
+    lazy var commentTetxfield: UITextView =
         {
-            let textfield = UITextField()
+            let textfield = UITextView()
             textfield.translatesAutoresizingMaskIntoConstraints = false
-            textfield.borderStyle = .roundedRect
-            textfield.placeholder = "Type in you comment here"
+            
             textfield.textColor = .darkGray
-            textfield.backgroundColor = .white
+            textfield.font = UIFont.systemFont(ofSize: 14)
+            textfield.isScrollEnabled = false
+            
             
             return textfield
     }()
@@ -58,11 +59,11 @@ class CommentViewContorller: UICollectionViewController
             
             container.translatesAutoresizingMaskIntoConstraints = false
             container.backgroundColor = .white
-            container.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+            container.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: commentTetxfield.frame.height)
             
             
             NSLayoutConstraint.activate([commentTetxfield.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-                                         commentTetxfield.leadingAnchor.constraint(equalToSystemSpacingAfter: container.leadingAnchor, multiplier: 1),
+                                         commentTetxfield.leadingAnchor.constraint(equalToSystemSpacingAfter: container.leadingAnchor, multiplier: 1)
                                          //
             ])
             
@@ -145,7 +146,7 @@ extension CommentViewContorller: UICollectionViewDelegateFlowLayout
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 80)
+        return CGSize(width: collectionView.frame.width, height: 60)
     }
     
 }
@@ -190,7 +191,7 @@ extension CommentViewContorller
             }
             self.commentTetxfield.text = ""
             print("DEBUG: COMMENT WAS SUCCESSFULLY ADDED")
-            self.commentTetxfield.placeholder = "Type in you comment here"
+           
             self.collectionView.reloadData()
            
         }
