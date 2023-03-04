@@ -36,24 +36,27 @@ class CommentCell: UICollectionViewCell
     }()
     
     
-    lazy var commentLabel: UILabel =
-    {
-            let label = UILabel()
+    lazy var commentLabel: UITextView =
+        {
+            let label = UITextView()
             label.translatesAutoresizingMaskIntoConstraints = false
+            label.isScrollEnabled = false
+            label.textColor = .darkGray
+            label.isEditable = false
             return label
     }()
     
     
     lazy var viewseparator: UIView =
-    {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.heightAnchor.constraint(equalToConstant: 2).isActive = true
-        view.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
-        
-        return view
+        {
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.heightAnchor.constraint(equalToConstant: 2).isActive = true
+            view.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+            
+            return view
     }()
-
+    
     
     lazy var postButton: UIButton =
         {
@@ -76,7 +79,7 @@ class CommentCell: UICollectionViewCell
         super.init(frame: frame)
         style()
         layout()
-//        configureComment()
+        //        configureComment()
     }
     
     required init?(coder: NSCoder) {
@@ -88,7 +91,7 @@ extension CommentCell
 {
     private func style()
     {
-       
+        
         self.addSubview(profileImageView)
         self.addSubview(commentLabel)
         self.addSubview(viewseparator)
@@ -97,17 +100,21 @@ extension CommentCell
                                      profileImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
         ])
         
-        NSLayoutConstraint.activate([commentLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: profileImageView.trailingAnchor, multiplier: 2),
-                                     commentLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor)
+        NSLayoutConstraint.activate([commentLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.topAnchor, multiplier: 2),
+                                     self.bottomAnchor.constraint(equalToSystemSpacingBelow: commentLabel.bottomAnchor, multiplier: 2),
+                                     commentLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: profileImageView.trailingAnchor, multiplier: 2),
+                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: commentLabel.trailingAnchor, multiplier: 2),
+                                     commentLabel.heightAnchor.constraint(equalToConstant: 300)
+            
         ])
         
         NSLayoutConstraint.activate([viewseparator.leadingAnchor.constraint(equalToSystemSpacingAfter: profileImageView.trailingAnchor, multiplier: 2),
                                      self.trailingAnchor.constraint(equalToSystemSpacingAfter: viewseparator.trailingAnchor, multiplier: 0),
                                      self.bottomAnchor.constraint(equalToSystemSpacingBelow: viewseparator.bottomAnchor, multiplier: 0)
         ])
-
+        
     }
-
+    
     private func layout()
     {
         
