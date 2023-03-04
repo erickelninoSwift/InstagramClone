@@ -145,17 +145,17 @@ extension CommentViewContorller: UICollectionViewDelegateFlowLayout
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
-        let dummyCell = CommentCell(frame: frame)
-        dummyCell.CommentSlected = AllComment[indexPath.item]
-        dummyCell.layoutIfNeeded()
-        
-        let targetSize = CGSize(width: view.frame.width, height: 1000)
-        let estimated = dummyCell.systemLayoutSizeFitting(targetSize)
-        
-        let height = max(65, estimated.height)
-        return CGSize(width: view.frame.width, height: height)
+//
+//        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 500)
+//        let dummyCell = CommentCell(frame: frame)
+//        dummyCell.CommentSlected = AllComment[indexPath.item]
+//        dummyCell.layoutIfNeeded()
+//
+//        let targetSize = CGSize(width: view.frame.width, height: 1000)
+//        let estimated = dummyCell.systemLayoutSizeFitting(targetSize)
+//
+//        let height = max(65, estimated.height)
+        return CGSize(width: view.frame.width, height: 80)
     }
     
 }
@@ -172,7 +172,10 @@ extension CommentViewContorller
     
     private func layout()
     {
-        
+        self.collectionView.alwaysBounceVertical = true
+        self.collectionView.keyboardDismissMode = .interactive
+        self.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
+        self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
     }
     
     

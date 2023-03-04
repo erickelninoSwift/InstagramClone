@@ -100,11 +100,10 @@ extension CommentCell
                                      profileImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
         ])
         
-        NSLayoutConstraint.activate([commentLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.topAnchor, multiplier: 2),
-                                     self.bottomAnchor.constraint(equalToSystemSpacingBelow: commentLabel.bottomAnchor, multiplier: 2),
-                                     commentLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: profileImageView.trailingAnchor, multiplier: 2),
-                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: commentLabel.trailingAnchor, multiplier: 2),
-                                     commentLabel.heightAnchor.constraint(equalToConstant: 300)
+        NSLayoutConstraint.activate([commentLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: profileImageView.trailingAnchor, multiplier: 1),
+                                     self.trailingAnchor.constraint(equalToSystemSpacingAfter: commentLabel.trailingAnchor, multiplier: 1),
+                                     commentLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor)
+                                    
             
         ])
         
